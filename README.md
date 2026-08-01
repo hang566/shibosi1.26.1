@@ -1,57 +1,16 @@
 # 市舶司（bate）
 ----------------------
-## 静态版本
+## 静态版本演示
 請選擇路線
-<style>
-         * {
-             margin: 0;
-             padding: 0;
-             box-sizing: border-box;
-             font-family: system-ui, -apple-system, sans-serif;
-         }
-         body {
-    
-             background-color: #f7f8fa;
-         }
-         /* Cloudflare 主按钮样式（橙色主色） */
-         .cf-btn-primary {
-             display: inline-block;
-             padding: 12px 28px;
-             background-color: #F38020;
-             color: #ffffff;
-             text-decoration: none;
-             font-size: 15px;
-             font-weight: 500;
-             border-radius: 10px; /* 圆角 */
-             transition: all 0.25s ease;
-             border: none;
-             cursor: pointer;
-         }
-         .cf-btn-primary:hover {
-             background-color: #e07010;
-             transform: translateY(-2px);
-             box-shadow: 0 4px 12px rgba(243, 128, 32, 0.3);
-         }
-         
-         /* 按钮间距 */
-         .btn-wrap a {
-             margin-right: 16px;
-         }
-     </style>
- </head>
- <body>
-     <div class="btn-wrap">
-         <!-- 主橙色链接按钮 -->
-         <a href="https://search-tool-123.pages.dev" target="_blank" class="cf-btn-primary">
-路線1🟢順暢</a>
-       <br>
-       <a href="https://search-tool-123.pages.dev" target="_blank" class="cf-btn-primary">
-路線2🟢順暢</a>
-       <br>
-       <a href="https://search-tool-123.pages.dev" target="_blank" class="cf-btn-primary">
-路線3🟢順暢</a>
+<a href="https://search-tool-123.pages.dev" style="display:inline-block; padding:10px 24px; background:#F38020; color:#fff; text-decoration:none; border-radius:10px; font-weight:500;">线路1 🟢 順暢</a>
+ <br>
+ <a href="https://search-tool-123.pages.dev" style="display:inline-block; padding:10px 24px; background:#F38020; color:#fff; text-decoration:none; border-radius:10px; font-weight:500;">线路2 🟢 順暢</a>
+ <br>
+ <a href="https://search-tool-123.pages.dev" style="display:inline-block; padding:10px 24px; background:#F38020; color:#fff; text-decoration:none; border-radius:10px; font-weight:500;">线路3 🟢 順暢</a>
+ <br>
+ 
 *如果不能連接或不能載圖，請嘗試切換路線
-
+<br>
 ## 技术栈
 - 前端
   - html
@@ -80,5 +39,5 @@
 - ### 积分页面（积分不为货币，不得在社区流动）
   展示当前积分，提示如何获得积分，积分变更记录和在华合规提示。
 --------------------
-正在播放  《I Want Break Free》          ━━━━━━━━━━━━━━━━─────── 3:43   
+正在播放  《I Want Break Free》          ━━━━━━━━━━━━━─────── 3:43   
 ⇆          ◁      ❚❚      ▷
