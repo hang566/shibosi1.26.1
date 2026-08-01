@@ -1,16 +1,13 @@
 # 市舶司（beta）
 ----------------------
-## 静态版本演示
-請選擇路線
-<br>
 ## 靜態版本演示
 請選擇路線
 <br>
-[![線路1 🟢 順暢](https://img.shields.io/badge/線路1-順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
+[![線路1 🟢 順暢](https://img.shields.io/badge/線路1-🟢順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
  <br>
-[![線路2 🟢 順暢](https://img.shields.io/badge/線路2-順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
+[![線路2 🟢 順暢](https://img.shields.io/badge/線路2-🟢順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
  <br>
-[![線路3 🟢 順暢](https://img.shields.io/badge/線路3-順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
+[![線路3 🟢 順暢](https://img.shields.io/badge/線路3-🟢順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
 
  <br>
  
