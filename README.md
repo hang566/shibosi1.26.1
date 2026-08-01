@@ -2,11 +2,16 @@
 ----------------------
 ## 静态版本演示
 請選擇路線
-<a href="https://search-tool-123.pages.dev" style="display:inline-block; padding:10px 24px; background:#F38020; color:#fff; text-decoration:none; border-radius:10px; font-weight:500;">线路1 🟢 順暢</a>
+<br>
+## 靜態版本演示
+請選擇路線
+<br>
+[![線路1 🟢 順暢](https://img.shields.io/badge/線路1-順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
  <br>
- <a href="https://search-tool-123.pages.dev" style="display:inline-block; padding:10px 24px; background:#F38020; color:#fff; text-decoration:none; border-radius:10px; font-weight:500;">线路2 🟢 順暢</a>
+[![線路2 🟢 順暢](https://img.shields.io/badge/線路2-順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
  <br>
- <a href="https://search-tool-123.pages.dev" style="display:inline-block; padding:10px 24px; background:#F38020; color:#fff; text-decoration:none; border-radius:10px; font-weight:500;">线路3 🟢 順暢</a>
+[![線路3 🟢 順暢](https://img.shields.io/badge/線路3-順暢-%23F38020?style=flat-square)](https://search-tool-123.pages.dev)
+
  <br>
  
 *如果不能連接或不能載圖，請嘗試切換路線
