@@ -1,0 +1,63 @@
+/* 公共基础按钮 */
+button {
+    /* 清除原生默认样式 */
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    /* 基础尺寸与圆角 */
+    border-radius: 8px;
+    padding: 8px 16px;
+    /* 上下、左右内边距 */
+
+    /* 文字统一 */
+    font-size: 14px;
+    color: var(--btn-text);
+    text-align: center;
+
+    /* 平滑过渡动画 */
+    transition: background-color 0.2s ease;
+
+    /* 基础背景 */
+    background-color: var(--btn-bg);
+}
+
+/* 鼠标悬浮 */
+button:hover {
+    background-color: var(--btn-hover);
+}
+
+/* 点击按下效果 */
+button:active {
+    opacity: 0.9;
+}
+
+/* 禁用状态 */
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* ==========风险按钮========== */
+.ButtonRisk{
+    background-color: #F53F3F;
+}
+
+ 
+/* ==========引导按钮========== */
+.GuideButton{
+    background-color: #00B42A;
+}
+
+
+/* ==========信息按钮========== */
+
+
+/* ==========警告按钮========== */
+.WarningButton{
+    background-color: #FFC107;
+}
+
+

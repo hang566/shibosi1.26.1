@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>灯光走廊 - 解谜小游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #1a1a2e;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #4cc9f0;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .game-container {
+            background-color: #16213e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .tile {
+            width: 90px;
+            height: 90px;
+            background-color: #0f3460;
+            border: 2px solid #4cc9f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4cc9f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .tile:hover {
+            background-color: #19456b;
+            transform: scale(1.05);
+        }
+
+        .tile.lit {
+            background-color: #f7b731;
+            border-color: #f7b731;
+            color: #1a1a2e;
+            box-shadow: 0 0 20px #f7b731;
+        }
+
+        .tile.hint {
+            animation: pulse 0.8s ease-in-out infinite;
+            border-color: #a855f7;
+            box-shadow: 0 0 25px #a855f7;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #resetBtn {
+            background-color: #e94560;
+            color: white;
+        }
+
+        #resetBtn:hover {
+            background-color: #ff6b81;
+        }
+
+        #undoBtn {
+            background-color: #2ed573;
+            color: #1a1a2e;
+        }
+
+        #undoBtn:hover:not(:disabled) {
+            background-color: #7bed9f;
+        }
+
+        #undoBtn:disabled {
+            background-color: #576574;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #newGoalBtn {
+            background-color: #4cc9f0;
+            color: #1a1a2e;
+        }
+
+        #newGoalBtn:hover {
+            background-color: #7ed6df;
+        }
+
+        #hintBtn {
+            background-color: #a855f7;
+            color: white;
+        }
+
+        #hintBtn:hover {
+            background-color: #c084fc;
+        }
+
+        .status {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .win-message {
+            color: #2ed573;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .goal-display {
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #a0a0a0;
+        }
+
+        .goal-lit {
+            color: #f7b731;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>✨ 灯光走廊 ✨</h1>
+    <p class="subtitle">踩踏地砖，点亮/熄灭自身和相邻地砖，达成目标状态即可获胜！</p>
+
+    <div class="game-container">
+        <div class="grid" id="grid">
+            <div class="tile" data-index="0">A</div>
+            <div class="tile" data-index="1">B</div>
+            <div class="tile" data-index="2">C</div>
+            <div class="tile" data-index="3">D</div>
+            <div class="tile" data-index="4">E</div>
+            <div class="tile" data-index="5">F</div>
+            <div class="tile" data-index="6">G</div>
+            <div class="tile" data-index="7">H</div>
+            <div class="tile" data-index="8">I</div>
+        </div>
+
+        <div class="status">
+            踩踏次数: <span id="stepCount">0</span>
+            <div class="goal-display">
+                目标状态: 只有 <span id="goalTile" class="goal-lit">E</span> 地砖亮起
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="resetBtn">🔄 重置游戏</button>
+            <button id="newGoalBtn">🎲 新目标</button>
+        </div>
+        <div class="controls">
+            <button id="undoBtn" disabled>↩️ 上一步</button>
+            <button id="hintBtn">💡 提示</button>
+        </div>
+
+        <div class="win-message" id="winMessage">🎉 恭喜通关！你用了 <span id="winSteps">0</span> 步达成目标！</div>
+    </div>
+
+    <script src="../../../js/pointsSystem.js"></script>
+<script>
+        // 游戏状态
+        const tiles = document.querySelectorAll('.tile');
+        const stepCountEl = document.getElementById('stepCount');
+        const winMessageEl = document.getElementById('winMessage');
+        const winStepsEl = document.getElementById('winSteps');
+        const resetBtn = document.getElementById('resetBtn');
+        const undoBtn = document.getElementById('undoBtn');
+        const newGoalBtn = document.getElementById('newGoalBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const goalTileEl = document.getElementById('goalTile');
+
+        // 历史记录栈（用于撤销）
+        let historyStack = [];
+
+        // 相邻地砖索引（0-8对应A-I）
+        const neighbors = [
+            [1, 3],          // A (0)
+            [0, 2, 4],       // B (1)
+            [1, 5],          // C (2)
+            [0, 4, 6],       // D (3)
+            [1, 3, 5, 7],    // E (4)
+            [2, 4, 8],       // F (5)
+            [3, 7],          // G (6)
+            [4, 6, 8],       // H (7)
+            [5, 7]           // I (8)
+        ];
+
+        const tileLabels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        let currentState = new Array(9).fill(false); // false: 不亮, true: 亮
+        let goalState = new Array(9).fill(false);
+        let stepCount = 0;
+
+        // 初始化游戏
+        function initGame() {
+            // 重置状态
+            currentState = new Array(9).fill(false);
+            stepCount = 0;
+            historyStack = [];
+            stepCountEl.textContent = stepCount;
+            winMessageEl.style.display = 'none';
+            undoBtn.disabled = true;
+
+            // 更新界面
+            updateTiles();
+        }
+
+        // 生成随机目标状态
+        function generateRandomGoal() {
+            // 先全部设为不亮
+            goalState = new Array(9).fill(false);
+
+            // 随机选择1-3个地砖作为目标亮起
+            const numGoals = Math.floor(Math.random() * 3) + 1;
+            for (let i = 0; i < numGoals; i++) {
+                const index = Math.floor(Math.random() * 9);
+                goalState[index] = true;
+            }
+
+            // 更新目标显示
+            const litGoals = [];
+            goalState.forEach((state, index) => {
+                if (state) litGoals.push(tileLabels[index]);
+            });
+            goalTileEl.textContent = litGoals.join(', ');
+        }
+
+        // 更新地砖显示
+        function updateTiles() {
+            tiles.forEach((tile, index) => {
+                if (currentState[index]) {
+                    tile.classList.add('lit');
+                } else {
+                    tile.classList.remove('lit');
+                }
+            });
+        }
+
+        // 踩踏地砖
+        function pressTile(index) {
+            // 清除所有提示效果
+            tiles.forEach(tile => tile.classList.remove('hint'));
+
+            // 保存当前状态到历史记录（用于撤销）
+            historyStack.push([...currentState]);
+
+            // 翻转自身状态
+            currentState[index] = !currentState[index];
+
+            // 翻转相邻地砖状态
+            neighbors[index].forEach(neighborIndex => {
+                currentState[neighborIndex] = !currentState[neighborIndex];
+            });
+
+            stepCount++;
+            stepCountEl.textContent = stepCount;
+            updateTiles();
+
+            // 更新撤销按钮状态
+            undoBtn.disabled = historyStack.length === 0;
+
+            // 检查是否达成目标
+            checkWin();
+        }
+
+        // 撤销上一步
+        function undo() {
+            if (historyStack.length === 0) return;
+
+            // 从历史栈中恢复上一个状态
+            currentState = historyStack.pop();
+            stepCount--;
+            stepCountEl.textContent = stepCount;
+            updateTiles();
+
+            // 更新撤销按钮状态
+            undoBtn.disabled = historyStack.length === 0;
+
+            // 清除提示效果
+            tiles.forEach(tile => tile.classList.remove('hint'));
+        }
+
+        // 检查胜利条件
+        function checkWin() {
+            const isWin = currentState.every((state, index) => state === goalState[index]);
+            if (isWin) {
+                winStepsEl.textContent = stepCount;
+                winMessageEl.style.display = 'block';
+                
+                // 计算积分奖励
+                // 基础奖励 100 积分，步数越少奖励越多
+                const basePoints = 100;
+                const maxBonus = 50; // 最多额外奖励50积分
+                const stepsBonus = Math.max(0, maxBonus - (stepCount - 5) * 5);
+                const totalPoints = basePoints + stepsBonus;
+                
+                // 添加积分
+                if (window.PointsSystem) {
+                    PointsSystem.addPoints(PointsSystem.GAME_KEYS.LIGHT_CORRIDOR, totalPoints);
+                    PointsSystem.addWin(PointsSystem.GAME_KEYS.LIGHT_CORRIDOR);
+                    
+                    // 在胜利消息中显示获得的积分
+                    winMessageEl.innerHTML = `🎉 恭喜通关！你用了 <span id="winSteps">${stepCount}</span> 步达成目标！<br>获得 <span style="color:#f7b731;font-weight:bold;">${totalPoints}</span> 积分！`;
+                }
+            }
+        }
+
+        // 获取提示 - 使用BFS算法找到最短路径
+        function getHint() {
+            // 清除之前的提示
+            tiles.forEach(tile => tile.classList.remove('hint'));
+
+            // 如果已经达成目标，不需要提示
+            if (currentState.every((state, index) => state === goalState[index])) {
+                return;
+            }
+
+            // 将状态转换为字符串以便存储和比较
+            const stateToString = (state) => state.join(',');
+            const startState = stateToString(currentState);
+            const targetState = stateToString(goalState);
+
+            // BFS队列：[状态字符串, 到达此状态的路径]
+            const queue = [[startState, []]];
+            const visited = new Set([startState]);
+
+            // 模拟点击地砖后的状态
+            const flipTile = (stateStr, tileIndex) => {
+                const state = stateStr.split(',').map(s => s === 'true');
+                state[tileIndex] = !state[tileIndex];
+                neighbors[tileIndex].forEach(neighborIndex => {
+                    state[neighborIndex] = !state[neighborIndex];
+                });
+                return stateToString(state);
+            };
+
+            // BFS搜索最短路径
+            while (queue.length > 0) {
+                const [current, path] = queue.shift();
+
+                // 尝试点击每个地砖
+                for (let i = 0; i < 9; i++) {
+                    const nextState = flipTile(current, i);
+                    const nextPath = [...path, i];
+
+                    // 找到目标状态
+                    if (nextState === targetState) {
+                        // 在建议的地砖上添加提示动画
+                        const firstMove = nextPath[0];
+                        tiles[firstMove].classList.add('hint');
+
+                        // 5秒后移除提示效果
+                        setTimeout(() => {
+                            tiles[firstMove].classList.remove('hint');
+                        }, 5000);
+                        return;
+                    }
+
+                    // 如果未访问过，加入队列
+                    if (!visited.has(nextState)) {
+                        visited.add(nextState);
+                        queue.push([nextState, nextPath]);
+                    }
+                }
+            }
+        }
+
+        // 事件监听
+        tiles.forEach((tile, index) => {
+            tile.addEventListener('click', () => {
+                pressTile(index);
+            });
+        });
+
+        resetBtn.addEventListener('click', initGame);
+        undoBtn.addEventListener('click', undo);
+        hintBtn.addEventListener('click', getHint);
+        newGoalBtn.addEventListener('click', () => {
+            generateRandomGoal();
+            initGame();
+        });
+
+        // 初始设置
+        generateRandomGoal();
+        initGame();
+    </script>
+</body>
+
+</html>

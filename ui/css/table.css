@@ -1,0 +1,263 @@
+/* ===== 表格全局默认样式 ===== */
+/* 直接作用于 table / th / td / tr / thead / tbody / caption */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.95rem;
+  color: #1e2a3a;
+  background-color: #ffffff;
+  border: 1px solid #dce4ec;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* 表头 */
+thead {
+  background-color: #f0f4f9;
+  border-bottom: 2px solid #d0d9e3;
+}
+
+th {
+  padding: 0.9rem 1.2rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #1f3a4f;
+  background-color: #f0f4f9;
+  border-bottom: 2px solid #d0d9e3;
+}
+
+/* 表格体单元格 */
+td {
+  padding: 0.85rem 1.2rem;
+  border-bottom: 1px solid #e8edf3;
+  vertical-align: middle;
+  background-color: #ffffff;
+}
+
+/* 最后一行去掉下边框 */
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 行悬停效果 */
+tbody tr:hover td {
+  background-color: #f6faff;
+}
+
+/* 斑马纹（交替行颜色） */
+tbody tr:nth-child(even) td {
+  background-color: #fafcfe;
+}
+
+tbody tr:nth-child(even):hover td {
+  background-color: #f2f8ff;
+}
+
+/* 表头中的 th 不继承斑马纹 */
+thead tr:nth-child(even) th {
+  background-color: #f0f4f9;
+}
+
+/* 表格标题 caption（可选） */
+caption {
+  caption-side: bottom;
+  padding: 0.6rem 0.2rem 0.2rem;
+  font-size: 0.8rem;
+  color: #6b7f92;
+  text-align: right;
+  letter-spacing: 0.2px;
+}
+
+/* ===== 如果表格内部有 <thead> <tbody> <tfoot> 的额外优化 ===== */
+tfoot td {
+  background-color: #f5f8fc;
+  border-top: 2px solid #d0d9e3;
+  font-weight: 500;
+  padding: 0.7rem 1.2rem;
+}
+
+/* ===== 小屏适配 ===== */
+@media (max-width: 700px) {
+  table {
+    font-size: 0.82rem;
+    border-radius: 8px;
+  }
+  th,
+  td {
+    padding: 0.6rem 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  table {
+    font-size: 0.72rem;
+  }
+  th,
+  td {
+    padding: 0.4rem 0.4rem;
+  }
+}
+
+/* ===== 表格样式变体 ===== */
+
+/* 带边框表格 */
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dce4ec;
+}
+
+.table-bordered {
+  border: 2px solid #dce4ec;
+}
+
+/* 条纹表格 */
+.table-striped tbody tr:nth-child(even) td {
+  background-color: #fafcfe;
+}
+
+.table-striped tbody tr:nth-child(even):hover td {
+  background-color: #f2f8ff;
+}
+
+/* 鼠标悬停表格 */
+.table-hover tbody tr:hover td {
+  background-color: #eef5ff;
+}
+
+/* 黑色背景表格 */
+.table-dark {
+  background-color: #1e2a3a;
+  border-color: #3a4a5c;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.table-dark thead {
+  background-color: #2d3a4a;
+  border-bottom-color: #4a5a6c;
+}
+
+.table-dark th {
+  background-color: #2d3a4a;
+  color: #c8d4e0;
+  border-bottom-color: #4a5a6c;
+}
+
+.table-dark td {
+  background-color: #1e2a3a;
+  color: #e8edf3;
+  border-bottom-color: #3a4a5c;
+}
+
+.table-dark tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-dark tbody tr:hover td {
+  background-color: #2d3a4a;
+}
+
+/* 黑色条纹表格 */
+.table-dark.table-striped tbody tr:nth-child(even) td {
+  background-color: #253040;
+}
+
+.table-dark.table-striped tbody tr:nth-child(even):hover td {
+  background-color: #2d3a4a;
+}
+
+/* 无边框表格 */
+.table-borderless {
+  border: none;
+  box-shadow: none;
+}
+
+.table-borderless th,
+.table-borderless td {
+  border: none;
+}
+
+.table-borderless thead {
+  border-bottom: none;
+}
+
+/* 语义化颜色类 - 行级别 */
+.table-success td {
+  background-color: #f0fdf4 !important;
+  color: #166534;
+}
+
+.table-success:hover td {
+  background-color: #dcfce7 !important;
+}
+
+.table-warning td {
+  background-color: #fffbeb !important;
+  color: #92400e;
+}
+
+.table-warning:hover td {
+  background-color: #fef3c7 !important;
+}
+
+.table-danger td {
+  background-color: #fef2f2 !important;
+  color: #991b1b;
+}
+
+.table-danger:hover td {
+  background-color: #fee2e2 !important;
+}
+
+/* 语义化颜色类 - 单元格级别 */
+.table-info {
+  background-color: #ecfeff !important;
+  color: #0e7490;
+}
+
+/* 表头颜色 */
+.table-header-primary thead {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-bottom-color: #4f46e5;
+}
+
+.table-header-primary th {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #ffffff;
+  border-bottom-color: #4f46e5;
+}
+
+/* 较小的表格 */
+.table-sm {
+  font-size: 0.8rem;
+}
+
+.table-sm th {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+}
+
+.table-sm td {
+  padding: 0.35rem 0.7rem;
+}
+
+/* 响应式表格容器 */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+}
+
+.table-responsive table {
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}

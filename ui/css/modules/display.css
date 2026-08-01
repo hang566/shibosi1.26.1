@@ -1,0 +1,385 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+th {
+  background: var(--block-bg);
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+tbody tr:hover td {
+  background: rgba(0, 122, 255, 0.05);
+}
+
+tbody tr:nth-child(even) td {
+  background: var(--bg);
+}
+
+.list {
+  list-style: none;
+  margin: 12px 0;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.list-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.list-item:hover {
+  background: var(--block-bg);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-group {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+}
+
+.list-group-item {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--card-bg);
+}
+
+.list-group-item:first-child {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.list-group-item:last-child {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.list-group-item:hover {
+  background: var(--block-bg);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--main);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.avatar-sm {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.avatar-lg {
+  width: 56px;
+  height: 56px;
+  font-size: 20px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--block-bg);
+  font-size: 12px;
+  margin: 4px;
+}
+
+.tag-success {
+  background: rgba(0, 180, 42, 0.1);
+  color: var(--success);
+}
+
+.tag-warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: var(--warning);
+}
+
+.tag-danger {
+  background: rgba(245, 63, 63, 0.1);
+  color: var(--danger);
+}
+
+.tag-info {
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--main);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--main);
+  color: #fff;
+  font-size: 12px;
+  padding: 0 6px;
+  margin-left: 4px;
+}
+
+.badge-success {
+  background: var(--success);
+}
+
+.badge-warning {
+  background: var(--warning);
+}
+
+.badge-danger {
+  background: var(--danger);
+}
+
+.progress {
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--main);
+  border-radius: var(--radius-sm);
+  width: 60%;
+  transition: width 0.5s ease;
+}
+
+.progress-bar-success {
+  background: var(--success);
+}
+
+.progress-bar-warning {
+  background: var(--warning);
+}
+
+.progress-bar-danger {
+  background: var(--danger);
+}
+
+.tree {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+}
+
+.tree-item {
+  padding: 6px 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tree-item:hover {
+  color: var(--main);
+}
+
+.tree-children {
+  margin-left: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.tree-toggle {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  margin-right: 6px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.tree-toggle:hover {
+  background: var(--block-bg);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-line);
+  margin: 16px 0;
+}
+
+.hr-dashed {
+  background: none;
+  border-top: 1px dashed var(--border);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-placeholder);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.media {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.media-object {
+  flex-shrink: 0;
+}
+
+.media-body {
+  flex: 1;
+}
+
+.media-heading {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.media-text {
+  color: var(--text-sub);
+  font-size: 0.9em;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 16px auto;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.carousel-item img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: var(--radius-md);
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.carousel-caption h4 {
+  margin: 0 0 8px;
+}
+
+.carousel-caption p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.carousel-control:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-control-prev {
+  left: 10px;
+}
+
+.carousel-control-next {
+  right: 10px;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.carousel-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.carousel-indicator.active {
+  background: #fff;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.85em;
+  }
+
+  th,
+  td {
+    padding: 8px 10px;
+  }
+
+  .list-item {
+    padding: 10px 12px;
+  }
+}

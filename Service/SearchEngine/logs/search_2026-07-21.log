@@ -1,0 +1,112 @@
+[INFO] 2026/07/21 01:42:49 SEARCH query="hello" engine=Baidu results=0 duration=546.8811ms status=success
+[INFO] 2026/07/21 01:42:49 SEARCH query="hello" engine=Bing results=3 duration=692.6362ms status=success
+[INFO] 2026/07/21 01:42:50 SEARCH query="hello" engine=Sogou results=1 duration=1.2019688s status=success
+[INFO] 2026/07/21 01:42:57 SEARCH query="hello" engine=Google results=0 duration=8.1010381s status=error: Get "https://www.google.com/search?num=3&q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:42:57 SEARCH query="hello" engine=DuckDuckGo results=0 duration=8.1010381s status=error: Get "https://html.duckduckgo.com/html/?q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:42:57 SEARCH COMPLETE query="hello" total=3 engines=map[Bing:3 Sogou:1]
+[INFO] 2026/07/21 01:43:06 SEARCH query="world" engine=Baidu results=0 duration=207.408ms status=success
+[INFO] 2026/07/21 01:43:06 SEARCH query="world" engine=Bing results=5 duration=319.5905ms status=success
+[INFO] 2026/07/21 01:43:06 SEARCH query="world" engine=Sogou results=0 duration=328.2536ms status=success
+[INFO] 2026/07/21 01:43:13 SEARCH query="world" engine=Google results=0 duration=8.1021304s status=error: Get "https://www.google.com/search?num=5&q=world": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:43:13 SEARCH query="world" engine=DuckDuckGo results=0 duration=8.1021304s status=error: Get "https://html.duckduckgo.com/html/?q=world": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:43:13 SEARCH COMPLETE query="world" total=5 engines=map[Bing:5]
+[INFO] 2026/07/21 01:43:14 CACHE HIT query="world"
+[INFO] 2026/07/21 01:44:11 SEARCH query="哔哩哔哩" engine=Sogou results=0 duration=302.0206ms status=success
+[INFO] 2026/07/21 01:44:11 SEARCH query="哔哩哔哩" engine=Bing results=9 duration=312.5368ms status=success
+[INFO] 2026/07/21 01:44:11 SEARCH query="哔哩哔哩" engine=Baidu results=0 duration=380.9586ms status=success
+[INFO] 2026/07/21 01:44:19 SEARCH query="哔哩哔哩" engine=Google results=0 duration=8.1018824s status=error: Get "https://www.google.com/search?num=10&q=%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:44:19 SEARCH query="哔哩哔哩" engine=DuckDuckGo results=0 duration=8.1025476s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:44:19 SEARCH COMPLETE query="哔哩哔哩" total=9 engines=map[Bing:9]
+[INFO] 2026/07/21 01:44:30 SEARCH query="1" engine=Baidu results=0 duration=177.8446ms status=success
+[INFO] 2026/07/21 01:44:30 SEARCH query="1" engine=Sogou results=0 duration=287.8998ms status=success
+[INFO] 2026/07/21 01:44:30 SEARCH query="1" engine=Bing results=9 duration=316.1316ms status=success
+[INFO] 2026/07/21 01:44:38 SEARCH query="1" engine=DuckDuckGo results=0 duration=8.1018755s status=error: Get "https://html.duckduckgo.com/html/?q=1": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:44:38 SEARCH query="1" engine=Google results=0 duration=8.1021958s status=error: Get "https://www.google.com/search?num=10&q=1": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:44:38 SEARCH COMPLETE query="1" total=9 engines=map[Bing:9]
+[INFO] 2026/07/21 01:46:27 SEARCH query="哔哩哔哩" engine=Sogou results=0 duration=409.9528ms status=success
+[INFO] 2026/07/21 01:46:27 SEARCH query="哔哩哔哩" engine=Baidu results=0 duration=481.2314ms status=success
+[INFO] 2026/07/21 01:46:27 SEARCH query="哔哩哔哩" engine=Bing results=5 duration=609.613ms status=success
+[INFO] 2026/07/21 01:46:34 SEARCH query="哔哩哔哩" engine=Google results=0 duration=8.1011428s status=error: Get "https://www.google.com/search?num=5&q=%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:46:34 SEARCH query="哔哩哔哩" engine=DuckDuckGo results=0 duration=8.1011428s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:46:34 SEARCH COMPLETE query="哔哩哔哩" total=5 engines=map[Bing:5]
+[INFO] 2026/07/21 01:46:54 CACHE HIT query="1"
+[INFO] 2026/07/21 01:46:59 CACHE HIT query="1"
+[INFO] 2026/07/21 01:47:05 CACHE HIT query="哔哩哔哩"
+[INFO] 2026/07/21 01:47:22 SEARCH query="hello" engine=Baidu results=0 duration=273.1807ms status=success
+[INFO] 2026/07/21 01:47:22 SEARCH query="hello" engine=Sogou results=0 duration=284.3863ms status=success
+[INFO] 2026/07/21 01:47:22 SEARCH query="hello" engine=Bing results=10 duration=317.7681ms status=success
+[INFO] 2026/07/21 01:47:30 SEARCH query="hello" engine=DuckDuckGo results=0 duration=8.1014894s status=error: Get "https://html.duckduckgo.com/html/?q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:47:30 SEARCH query="hello" engine=Google results=0 duration=8.1014894s status=error: Get "https://www.google.com/search?num=10&q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:47:30 SEARCH COMPLETE query="hello" total=10 engines=map[Bing:10]
+[INFO] 2026/07/21 01:47:58 SEARCH query="hello" engine=Sogou results=0 duration=289.6575ms status=success
+[INFO] 2026/07/21 01:47:58 SEARCH query="hello" engine=Bing results=5 duration=317.0111ms status=success
+[INFO] 2026/07/21 01:47:58 SEARCH query="hello" engine=Baidu results=0 duration=418.1115ms status=success
+[INFO] 2026/07/21 01:48:06 SEARCH query="hello" engine=DuckDuckGo results=0 duration=8.1012371s status=error: Get "https://html.duckduckgo.com/html/?q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:48:06 SEARCH query="hello" engine=Google results=0 duration=8.1012371s status=error: Get "https://www.google.com/search?num=5&q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:48:06 SEARCH COMPLETE query="hello" total=5 engines=map[Bing:5]
+[INFO] 2026/07/21 01:48:55 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:48:57 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:48:58 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:48:58 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:48:58 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:49:11 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:49:11 CACHE HIT query="hello"
+[INFO] 2026/07/21 01:49:20 SEARCH query="引擎" engine=Bing results=9 duration=389.1673ms status=success
+[INFO] 2026/07/21 01:49:20 SEARCH query="引擎" engine=Baidu results=0 duration=389.7303ms status=success
+[INFO] 2026/07/21 01:49:20 SEARCH query="引擎" engine=Sogou results=0 duration=401.552ms status=success
+[INFO] 2026/07/21 01:49:28 SEARCH query="引擎" engine=Google results=0 duration=8.1009015s status=error: Get "https://www.google.com/search?num=10&q=%E5%BC%95%E6%93%8E": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:49:28 SEARCH query="引擎" engine=DuckDuckGo results=0 duration=8.1004073s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%BC%95%E6%93%8E": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:49:28 SEARCH COMPLETE query="引擎" total=9 engines=map[Bing:9]
+[INFO] 2026/07/21 01:49:51 CACHE HIT query="引擎"
+[INFO] 2026/07/21 01:53:32 SEARCH query="测试" engine=Sogou results=0 duration=495.3905ms status=success
+[INFO] 2026/07/21 01:53:32 SEARCH query="测试" engine=Baidu results=0 duration=510.3912ms status=success
+[INFO] 2026/07/21 01:53:33 SEARCH query="测试" engine=Bing results=3 duration=660.3905ms status=success
+[INFO] 2026/07/21 01:53:36 SEARCH query="引擎" engine=Baidu results=0 duration=178.6236ms status=success
+[INFO] 2026/07/21 01:53:36 SEARCH query="引擎" engine=Sogou results=0 duration=299.4351ms status=success
+[INFO] 2026/07/21 01:53:36 SEARCH query="引擎" engine=Bing results=9 duration=316.277ms status=success
+[INFO] 2026/07/21 01:53:40 SEARCH query="测试" engine=DuckDuckGo results=0 duration=8.1010949s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:53:40 SEARCH query="测试" engine=Google results=0 duration=8.1010949s status=error: Get "https://www.google.com/search?num=3&q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:53:40 SEARCH COMPLETE query="测试" total=3 engines=map[Bing:3]
+[INFO] 2026/07/21 01:53:44 SEARCH query="引擎" engine=DuckDuckGo results=0 duration=8.1015447s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%BC%95%E6%93%8E": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:53:44 SEARCH query="引擎" engine=Google results=0 duration=8.1015447s status=error: Get "https://www.google.com/search?num=10&q=%E5%BC%95%E6%93%8E": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:53:44 SEARCH COMPLETE query="引擎" total=9 engines=map[Bing:9]
+[INFO] 2026/07/21 01:54:18 CACHE HIT query="引擎"
+[INFO] 2026/07/21 01:54:18 CACHE HIT query="引擎"
+[INFO] 2026/07/21 01:54:18 CACHE HIT query="引擎"
+[INFO] 2026/07/21 01:54:19 CACHE HIT query="引擎"
+[INFO] 2026/07/21 01:54:29 SEARCH query="你好" engine=Sogou results=0 duration=299.2899ms status=success
+[INFO] 2026/07/21 01:54:29 SEARCH query="你好" engine=Baidu results=0 duration=323.6689ms status=success
+[INFO] 2026/07/21 01:54:29 SEARCH query="你好" engine=Bing results=10 duration=329.1889ms status=success
+[INFO] 2026/07/21 01:54:37 SEARCH query="你好" engine=DuckDuckGo results=0 duration=8.104083s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:54:37 SEARCH query="你好" engine=Google results=0 duration=8.1054369s status=error: Get "https://www.google.com/search?num=10&q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:54:37 SEARCH COMPLETE query="你好" total=10 engines=map[Bing:10]
+[INFO] 2026/07/21 01:56:16 SEARCH query="hello" engine=Sogou results=0 duration=427.1324ms status=success
+[INFO] 2026/07/21 01:56:16 SEARCH query="hello" engine=Baidu results=0 duration=428.1328ms status=success
+[INFO] 2026/07/21 01:56:16 SEARCH query="hello" engine=Bing results=3 duration=570.1418ms status=success
+[INFO] 2026/07/21 01:56:17 SEARCH query="hello" engine=DuckDuckGo results=0 duration=1.5667922s status=error: Get "https://html.duckduckgo.com/html/?q=hello": read tcp 192.168.10.228:6883->39.109.122.128:443: wsarecv: An existing connection was forcibly closed by the remote host.
+[INFO] 2026/07/21 01:56:24 SEARCH query="hello" engine=Google results=0 duration=8.1155051s status=error: Get "https://www.google.com/search?num=3&q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:56:24 SEARCH COMPLETE query="hello" total=3 engines=map[Bing:3]
+[INFO] 2026/07/21 01:59:44 SEARCH query="hello" engine=Sogou results=0 duration=483.0338ms status=success
+[INFO] 2026/07/21 01:59:44 SEARCH query="hello" engine=Baidu results=0 duration=484.0337ms status=success
+[INFO] 2026/07/21 01:59:44 SEARCH query="hello" engine=Bing results=3 duration=665.9459ms status=success
+[INFO] 2026/07/21 01:59:45 SEARCH query="hello" engine=DuckDuckGo results=0 duration=1.6518159s status=error: Get "https://html.duckduckgo.com/html/?q=hello": read tcp 192.168.10.228:6968->39.109.122.128:443: wsarecv: An existing connection was forcibly closed by the remote host.
+[INFO] 2026/07/21 01:59:52 SEARCH query="hello" engine=Google results=0 duration=8.1023106s status=error: Get "https://www.google.com/search?num=3&q=hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 01:59:52 SEARCH COMPLETE query="hello" total=3 engines=map[Bing:3]
+[INFO] 2026/07/21 02:04:08 SEARCH query="你好" engine=Baidu results=0 duration=378.2456ms status=success
+[INFO] 2026/07/21 02:04:08 SEARCH query="你好" engine=Sogou results=0 duration=390.9523ms status=success
+[INFO] 2026/07/21 02:04:08 SEARCH query="你好" engine=Bing results=10 duration=532.5655ms status=success
+[INFO] 2026/07/21 02:04:16 SEARCH query="你好" engine=DuckDuckGo results=0 duration=8.1031361s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 02:04:16 SEARCH query="你好" engine=Google results=0 duration=8.1031361s status=error: Get "https://www.google.com/search?num=10&q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 02:04:16 SEARCH COMPLETE query="你好" total=10 engines=map[Bing:10]
+[INFO] 2026/07/21 02:05:13 SEARCH query="你好" engine=Sogou results=0 duration=312.6338ms status=success
+[INFO] 2026/07/21 02:05:13 SEARCH query="你好" engine=Bing results=5 duration=326.6346ms status=success
+[INFO] 2026/07/21 02:05:13 SEARCH query="你好" engine=Baidu results=0 duration=455.7379ms status=success
+[INFO] 2026/07/21 02:05:21 SEARCH query="你好" engine=DuckDuckGo results=0 duration=8.1021097s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 02:05:21 SEARCH query="你好" engine=Google results=0 duration=8.1021097s status=error: Get "https://www.google.com/search?num=5&q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 02:05:21 SEARCH COMPLETE query="你好" total=5 engines=map[Bing:5]
+[INFO] 2026/07/21 02:13:07 SEARCH query="你好" engine=Baidu results=0 duration=494.9304ms status=success
+[INFO] 2026/07/21 02:13:07 SEARCH query="你好" engine=Bing results=10 duration=600.7885ms status=success
+[INFO] 2026/07/21 02:13:08 SEARCH query="你好" engine=Sogou results=5 duration=1.3004583s status=success
+[INFO] 2026/07/21 02:13:14 SEARCH query="你好" engine=DuckDuckGo results=0 duration=8.1007551s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 02:13:14 SEARCH query="你好" engine=Google results=0 duration=8.1007551s status=error: Get "https://www.google.com/search?num=10&q=%E4%BD%A0%E5%A5%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/21 02:13:14 SEARCH COMPLETE query="你好" total=10 engines=map[Bing:10 Sogou:5]

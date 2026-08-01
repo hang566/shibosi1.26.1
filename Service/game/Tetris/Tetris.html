@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tetris 方块消除</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="startView" class="view">
+        <div class="start-card">
+            <h1>Tetris</h1>
+            <p class="subtitle">经典方块消除游戏</p>
+            <div class="high-score">历史最高分：<span id="startHigh">0</span></div>
+
+            <div class="set-group">
+                <h4>选择难度</h4>
+                <div class="diff-buttons">
+                    <button class="diff-btn active" data-speed="1000">简单</button>
+                    <button class="diff-btn" data-speed="800">标准</button>
+                    <button class="diff-btn" data-speed="500">困难</button>
+                </div>
+            </div>
+
+            <div class="set-group">
+                <h4>辅助预设</h4>
+                <div class="switch-row">
+                    <input type="checkbox" id="startShadow" checked>
+                    <label for="startShadow">落点虚影辅助</label>
+                </div>
+                <div class="switch-row">
+                    <input type="checkbox" id="startSlow">
+                    <label for="startSlow">新手慢速缓冲</label>
+                </div>
+                <div class="switch-row">
+                    <input type="checkbox" id="startBlind">
+                    <label for="startBlind">色盲高对比配色</label>
+                </div>
+            </div>
+
+            <button class="start-main-btn" id="enterGameBtn">进入游戏</button>
+
+            <div class="rule-text">
+                操作：←→移动 | ↑旋转 | ↓软降<br>
+                空格硬降落 | C暂存方块<br>
+                消除4行获得额外高分
+            </div>
+        </div>
+    </div>
+
+    <div id="gameView" class="view view-hidden">
+        <div class="game-wrap">
+            <canvas id="gameBox" width="300" height="600"></canvas>
+            <div class="mask" id="gameMask">暂停</div>
+            <div class="game-over-overlay" id="gameOverOverlay">
+                <div class="game-over-content">
+                    <h2>游戏结束</h2>
+                    <div class="game-over-stats">
+                        <div>得分：<span id="finalScore">0</span></div>
+                        <div>消除总行：<span id="finalLines">0</span></div>
+                        <div>等级：<span id="finalLevel">0</span></div>
+                    </div>
+                    <button class="btn-main" id="retryBtn">再来一局</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="panel">
+                <h4>📊 游戏数据</h4>
+                <div class="info-row">得分 <span id="score">0</span></div>
+                <div class="info-row">消除总行 <span id="lines">0</span></div>
+                <div class="info-row">等级 <span id="level">1</span></div>
+                <div class="info-row">下落速度 <span id="speedTxt">标准</span></div>
+                <div class="divider"></div>
+                <div class="info-row">单次消行 <span id="clearOnce">0</span></div>
+                <div class="info-row">硬降得分 <span id="hardScore">0</span></div>
+                <div class="info-row">最高分 <span id="highScore">0</span></div>
+            </div>
+
+            <div class="panel">
+                <h4>👀 预览面板</h4>
+                <div>下一块</div>
+                <canvas id="nextCanvas" class="canvas-mini" width="120" height="120"></canvas>
+                <div style="margin-top:8px">暂存 Hold(C)</div>
+                <canvas id="holdCanvas" class="canvas-mini" width="120" height="120"></canvas>
+            </div>
+
+            <div class="panel">
+                <h4>🎮 操作按钮</h4>
+                <div class="btn-grid">
+                    <button class="btn-main" id="restartBtn">重新开始</button>
+                    <button class="btn-sec" id="pauseBtn">暂停</button>
+                    <button class="btn-warn" id="hardDropBtn">硬降落(空格)</button>
+                    <button class="btn-sec" id="holdBtn">暂存方块(C)</button>
+                </div>
+                <button class="btn-sec back-home" id="backHomeBtn">返回首页</button>
+                <div class="divider"></div>
+                <div style="font-size:13px;opacity:0.8">
+                    ←→移动 | ↑旋转 | ↓软降<br>
+                    空格直落 | C切换暂存
+                </div>
+                <div class="touch-container">
+                    <div class="touch-grid">
+                        <div></div>
+                        <button class="touch-btn" id="tUp">↑</button>
+                        <div></div>
+                        <button class="touch-btn" id="tLeft">←</button>
+                        <button class="touch-btn" id="tDown">↓</button>
+                        <button class="touch-btn" id="tRight">→</button>
+                        <div></div>
+                        <button class="touch-btn" id="tHard">⬇</button>
+                        <button class="touch-btn" id="tHold">C</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/pointsSystem.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

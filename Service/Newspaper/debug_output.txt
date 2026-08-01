@@ -1,0 +1,62 @@
+Loaded page from: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper\home.html
+Loaded admin page from: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper\admin.html
+[2026-07-29 19:29:08.077] [INFO] [system] 日志系统初始化完成
+Auto cleanup completed at 2026-07-29 19:29:08
+========================================
+  市舶司 - 昨日晚报服务
+========================================
+访问地址: http://localhost:8082
+健康检查: http://localhost:8082/api/health
+API列表:
+  GET  /api/news          - 获取新闻列表
+  GET  /api/news/:id      - 获取新闻详情
+  GET  /api/search?q=..   - 搜索新闻
+  GET  /api/categories    - 获取分类列表
+  GET  /api/sources       - 获取新闻源
+  POST /api/fetch         - 抓取新闻
+  POST /api/fetch?source_id=X - 抓取指定源
+  POST /api/export        - 导出新闻
+  GET  /api/stats         - 获取统计信息
+  POST /api/clean?days=30 - 清理旧数据
+========================================
+[2026-07-29 19:29:20.645] [INFO] [fetcher] 开始抓取单个源: 36氪
+[DEBUG] SaveNewsBatch: 收到 30 条新闻待保存
+[DEBUG] SaveNewsBatch: 完成 - 成功=30, 跳过=0, 失败=0
+[DEBUG] SaveNewsBatch: Commit成功, 返回 saved=30
+[2026-07-29 19:29:21.312] [INFO] [fetcher] 成功保存 30 条新闻 [36氪]
+[2026-07-29 19:29:33.156] [INFO] [fetcher] 开始抓取 15 个新闻源
+[2026-07-29 19:29:33.482] [INFO] [fetcher] 抓取成功 [人民网-时政]: 获取 100 条新闻
+[2026-07-29 19:29:33.802] [INFO] [fetcher] 抓取成功 [人民网-财经]: 获取 100 条新闻
+[2026-07-29 19:29:34.052] [INFO] [fetcher] 抓取成功 [人民网-体育]: 获取 100 条新闻
+[2026-07-29 19:29:34.397] [INFO] [fetcher] 抓取成功 [新华网-时政]: 获取 300 条新闻
+[2026-07-29 19:29:34.816] [INFO] [fetcher] 抓取成功 [新华网-财经]: 获取 300 条新闻
+[2026-07-29 19:29:35.219] [INFO] [fetcher] 抓取成功 [中国新闻网]: 获取 30 条新闻
+[2026-07-29 19:29:35.900] [INFO] [fetcher] 抓取成功 [36氪]: 获取 30 条新闻
+[2026-07-29 19:29:36.329] [INFO] [fetcher] 抓取成功 [少数派]: 获取 10 条新闻
+[2026-07-29 19:29:51.528] [ERROR] [fetcher] 请求失败 [V2EX]: Get "https://www.v2ex.com/feed": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[2026-07-29 19:29:51.667] [ERROR] [fetcher] 抓取失败 [V2EX]: 网络请求失败: Get "https://www.v2ex.com/feed": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[2026-07-29 19:30:06.773] [ERROR] [fetcher] 请求失败 [豆瓣读书]: Get "https://feedx.net/rss/douban.xml": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[2026-07-29 19:30:06.888] [ERROR] [fetcher] 抓取失败 [豆瓣读书]: 网络请求失败: Get "https://feedx.net/rss/douban.xml": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[2026-07-29 19:30:12.765] [INFO] [fetcher] 抓取成功 [Hacker News]: 获取 20 条新闻
+[2026-07-29 19:30:14.628] [ERROR] [fetcher] XML解析失败 [GitHub Trending]: expected element type <rss> but have <html> (响应前200字符: 
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  
+  data-color-mode="auto" data-light-theme="light" data-dark-theme="dark"
+  data-a11y-animated-images="system" data-a11y-link-underlines="true"
+  
+  >
+
+
+
+
+  <head)
+[2026-07-29 19:30:14.743] [ERROR] [fetcher] 抓取失败 [GitHub Trending]: XML解析错误: expected element type <rss> but have <html>
+[2026-07-29 19:30:14.791] [INFO] [fetcher] 抓取完成: 成功 9 个源, 失败 3 个源, 共获取 990 条新闻
+[2026-07-29 19:30:14.816] [INFO] [fetcher] 准备保存 990 条新闻
+[DEBUG] SaveNewsBatch: 收到 990 条新闻待保存
+[DEBUG] SaveNewsBatch: 完成 - 成功=960, 跳过=30, 失败=0
+[DEBUG] SaveNewsBatch: Commit成功, 返回 saved=960
+[2026-07-29 19:30:15.349] [INFO] [fetcher] 成功保存 960 条新闻

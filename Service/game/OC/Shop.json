@@ -1,0 +1,409 @@
+[
+    {
+        "id": "apple",
+        "name": "苹果",
+        "icon": "🍎",
+        "type": "food",
+        "price": 10,
+        "effect": {"hunger": 15, "mood": 5},
+        "desc": "新鲜美味的苹果",
+        "expireHours": 24
+    },
+    {
+        "id": "bread",
+        "name": "面包",
+        "icon": "🍞",
+        "type": "food",
+        "price": 15,
+        "effect": {"hunger": 25},
+        "desc": "松软可口的面包",
+        "expireHours": 12
+    },
+    {
+        "id": "meat",
+        "name": "烤肉",
+        "icon": "🍖",
+        "type": "food",
+        "price": 30,
+        "effect": {"hunger": 40, "energy": 10},
+        "desc": "香喷喷的烤肉",
+        "expireHours": 8
+    },
+    {
+        "id": "cake",
+        "name": "蛋糕",
+        "icon": "🍰",
+        "type": "food",
+        "price": 50,
+        "effect": {"hunger": 30, "mood": 20},
+        "desc": "甜甜的蛋糕",
+        "expireHours": 24
+    },
+    {
+        "id": "milk",
+        "name": "牛奶",
+        "icon": "🥛",
+        "type": "food",
+        "price": 12,
+        "effect": {"hunger": 10, "energy": 15},
+        "desc": "新鲜的牛奶",
+        "expireHours": 24
+    },
+    {
+        "id": "egg",
+        "name": "鸡蛋",
+        "icon": "🥚",
+        "type": "food",
+        "price": 8,
+        "effect": {"hunger": 12, "energy": 8},
+        "desc": "营养丰富的鸡蛋",
+        "expireHours": 48
+    },
+    {
+        "id": "fish",
+        "name": "鲜鱼",
+        "icon": "🐟",
+        "type": "food",
+        "price": 25,
+        "effect": {"hunger": 35, "energy": 5},
+        "desc": "新鲜的鱼",
+        "expireHours": 6
+    },
+    {
+        "id": "candy",
+        "name": "糖果",
+        "icon": "�",
+        "type": "food",
+        "price": 15,
+        "effect": {"mood": 25, "hunger": 5},
+        "desc": "甜甜的糖果",
+        "expireHours": 30
+    },
+    {
+        "id": "medicine_health",
+        "name": "生命药剂",
+        "icon": "🧪",
+        "type": "medicine",
+        "price": 60,
+        "effect": {"life": 30},
+        "desc": "恢复生命的药水",
+        "expireHours": 72
+    },
+    {
+        "id": "medicine_energy",
+        "name": "活力药剂",
+        "icon": "⚗️",
+        "type": "medicine",
+        "price": 45,
+        "effect": {"energy": 40},
+        "desc": "恢复活力的药水",
+        "expireHours": 72
+    },
+    {
+        "id": "medicine_mood",
+        "name": "快乐药剂",
+        "icon": "�",
+        "type": "medicine",
+        "price": 50,
+        "effect": {"mood": 45},
+        "desc": "提升心情的药水",
+        "expireHours": 72
+    },
+    {
+        "id": "medicine_all",
+        "name": "全能药剂",
+        "icon": "💊",
+        "type": "medicine",
+        "price": 120,
+        "effect": {"life": 20, "hunger": 20, "energy": 20, "mood": 20},
+        "desc": "全面恢复的高级药水",
+        "expireHours": 96
+    },
+    {
+        "id": "herb_ginseng",
+        "name": "人参",
+        "icon": "🌿",
+        "type": "medicine",
+        "price": 80,
+        "effect": {"life": 25, "energy": 15},
+        "desc": "珍贵的中药材",
+        "expireHours": 168
+    },
+    {
+        "id": "herb_lingzhi",
+        "name": "灵芝",
+        "icon": "�",
+        "type": "medicine",
+        "price": 100,
+        "effect": {"life": 35, "mood": 10},
+        "desc": "千年灵芝",
+        "expireHours": 168
+    },
+    {
+        "id": "herb_tao",
+        "name": "蟠桃",
+        "icon": "🍑",
+        "type": "medicine",
+        "price": 150,
+        "effect": {"life": 50, "mood": 30},
+        "desc": "仙桃园的蟠桃",
+        "expireHours": 48
+    },
+    {
+        "id": "balloon",
+        "name": "气球",
+        "icon": "🎈",
+        "type": "toy",
+        "price": 20,
+        "effect": {"mood": 25},
+        "desc": "五颜六色的气球",
+        "durability": 5,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "gamepad",
+        "name": "游戏手柄",
+        "icon": "🎮",
+        "type": "equipment",
+        "price": 80,
+        "effect": {"mood": 40, "energy": -15},
+        "desc": "好玩的游戏手柄",
+        "durability": 20,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "book",
+        "name": "故事书",
+        "icon": "📚",
+        "type": "equipment",
+        "price": 40,
+        "effect": {"mood": 15, "energy": -10},
+        "desc": "有趣的故事书",
+        "durability": 30,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "music",
+        "name": "音乐盒",
+        "icon": "🎵",
+        "type": "equipment",
+        "price": 50,
+        "effect": {"mood": 35},
+        "desc": "播放美妙音乐",
+        "durability": 25,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "brush",
+        "name": "梳子",
+        "icon": "🪮",
+        "type": "equipment",
+        "price": 30,
+        "effect": {"mood": 10},
+        "desc": "精致的梳子",
+        "durability": 15,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "mirror",
+        "name": "镜子",
+        "icon": "🪞",
+        "type": "equipment",
+        "price": 45,
+        "effect": {"mood": 20},
+        "desc": "精美的镜子",
+        "durability": 50,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "bed",
+        "name": "舒适小床",
+        "icon": "🛏️",
+        "type": "equipment",
+        "price": 150,
+        "effect": {"energy": 70, "mood": 15},
+        "desc": "舒适的小床，恢复效果更好",
+        "durability": 100,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "sofa",
+        "name": "沙发",
+        "icon": "🛋️",
+        "type": "equipment",
+        "price": 120,
+        "effect": {"energy": 30, "mood": 25},
+        "desc": "柔软的沙发",
+        "durability": 80,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "flower",
+        "name": "鲜花",
+        "icon": "🌸",
+        "type": "gift",
+        "price": 35,
+        "effect": {"mood": 30},
+        "desc": "美丽的鲜花",
+        "expireHours": 48
+    },
+    {
+        "id": "heart",
+        "name": "爱心",
+        "icon": "💝",
+        "type": "gift",
+        "price": 100,
+        "effect": {"life": 20, "mood": 50},
+        "desc": "满满的爱心"
+    },
+    {
+        "id": "chocolate",
+        "name": "巧克力",
+        "icon": "🍫",
+        "type": "gift",
+        "price": 45,
+        "effect": {"mood": 35, "hunger": 15},
+        "desc": "甜蜜的巧克力",
+        "expireHours": 30
+    },
+    {
+        "id": "rose",
+        "name": "玫瑰花",
+        "icon": "🌹",
+        "type": "gift",
+        "price": 60,
+        "effect": {"mood": 45},
+        "desc": "浪漫的玫瑰花",
+        "expireHours": 36
+    },
+    {
+        "id": "ring",
+        "name": "戒指",
+        "icon": "💍",
+        "type": "equipment",
+        "price": 200,
+        "effect": {"mood": 30},
+        "desc": "珍贵的戒指，永久提升心情",
+        "durability": 0,
+        "durabilityDrop": 0
+    },
+    {
+        "id": "necklace",
+        "name": "项链",
+        "icon": "📿",
+        "type": "equipment",
+        "price": 180,
+        "effect": {"life": 10},
+        "desc": "精美的项链，缓慢恢复生命",
+        "durability": 0,
+        "durabilityDrop": 0
+    },
+    {
+        "id": "backpack_small",
+        "name": "小背包",
+        "icon": "🎒",
+        "type": "upgrade",
+        "price": 100,
+        "effect": {},
+        "desc": "增加6个背包格子",
+        "upgradeType": "backpack",
+        "upgradeValue": 6
+    },
+    {
+        "id": "backpack_medium",
+        "name": "中型背包",
+        "icon": "🎒",
+        "type": "upgrade",
+        "price": 250,
+        "effect": {},
+        "desc": "增加12个背包格子",
+        "upgradeType": "backpack",
+        "upgradeValue": 12
+    },
+    {
+        "id": "backpack_large",
+        "name": "大背包",
+        "icon": "🎒",
+        "type": "upgrade",
+        "price": 500,
+        "effect": {},
+        "desc": "增加20个背包格子",
+        "upgradeType": "backpack",
+        "upgradeValue": 20
+    },
+    {
+        "id": "coffee",
+        "name": "咖啡",
+        "icon": "☕",
+        "type": "food",
+        "price": 25,
+        "effect": {"energy": 30, "hunger": -5},
+        "desc": "提神醒脑的咖啡",
+        "expireHours": 24
+    },
+    {
+        "id": "tea",
+        "name": "茶",
+        "icon": "🍵",
+        "type": "food",
+        "price": 20,
+        "effect": {"energy": 20, "mood": 10},
+        "desc": "清香的茶",
+        "expireHours": 24
+    },
+    {
+        "id": "water_bottle",
+        "name": "水瓶",
+        "icon": "🥤",
+        "type": "equipment",
+        "price": 25,
+        "effect": {"hunger": 5, "energy": 5},
+        "desc": "可重复使用的水瓶",
+        "durability": 50,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "pillow",
+        "name": "抱枕",
+        "icon": "🛌",
+        "type": "equipment",
+        "price": 35,
+        "effect": {"energy": 15, "mood": 10},
+        "desc": "柔软的抱枕",
+        "durability": 30,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "paint",
+        "name": "画笔",
+        "icon": "🖌️",
+        "type": "equipment",
+        "price": 40,
+        "effect": {"mood": 25},
+        "desc": "画画用的画笔",
+        "durability": 20,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "camera",
+        "name": "相机",
+        "icon": "📷",
+        "type": "equipment",
+        "price": 200,
+        "effect": {"mood": 35},
+        "desc": "记录美好瞬间的相机",
+        "durability": 60,
+        "durabilityDrop": 1
+    },
+    {
+        "id": "headphones",
+        "name": "耳机",
+        "icon": "🎧",
+        "type": "equipment",
+        "price": 150,
+        "effect": {"mood": 40},
+        "desc": "沉浸式音乐体验",
+        "durability": 80,
+        "durabilityDrop": 1
+    }
+]

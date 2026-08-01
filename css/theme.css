@@ -1,0 +1,15 @@
+.theme-dark .weather-content-card {
+    background: rgba(30,30,30,0.85);
+}
+
+.theme-blue .weather-content-card {
+    background: rgba(240,247,255,0.82);
+}
+
+.theme-red .weather-content-card {
+    background: rgba(255,245,245,0.82);
+}
+
+.theme-green .weather-content-card {
+    background: rgba(242,255,245,0.82);
+}

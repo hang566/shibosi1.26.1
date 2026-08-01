@@ -1,0 +1,199 @@
+h1 {
+    font-size: 2.25rem;
+}
+
+/* 36px */
+h2 {
+    font-size: 1.75rem;
+}
+
+/* 28px */
+h3 {
+    font-size: 1.5rem;
+}
+
+/* 24px */
+h4 {
+    font-size: 1.25rem;
+}
+
+/* 20px */
+h5 {
+    font-size: 1.125rem;
+}
+
+/* 18px */
+h6 {
+    font-size: 1rem;
+}
+
+/* 16px */
+
+
+
+b {
+    font-weight: bold;
+    
+}
+
+i {
+    font-style: italic;
+}
+
+u {
+    text-decoration: underline;
+}
+
+s {
+    text-decoration: line-through;
+}
+
+
+/* ===================================== */
+/* ============================================================
+   维度一：手绘质感（核心效果，与颜色无关）
+   ============================================================ */
+.highlight {
+  /* 内边距保持呼吸感 */
+  padding: 0.1em 0.3em;
+  
+  /* 边缘柔和，模仿手绘圆角 */
+  border-radius: 4px 8px 8px 4px;
+  
+  /* 轻微倾斜，更像手画 */
+  transform: rotate(-0.5deg);
+  display: inline-block;
+  
+  /* 文字颜色加深，突出显示 */
+  color: #1a1a1a;
+  
+  /* 过渡动画 */
+  transition: all 0.2s ease;
+  
+  /* 注意：这里不设 background，由颜色类单独控制 */
+}
+
+/* ============================================================
+   维度二：颜色控制（只负责颜色，不干扰手绘质感）
+   ============================================================ */
+
+/* 黄色 - 默认标记色 */
+.markYellow {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 238, 0, 0.7) 0%,
+    rgba(255, 210, 0, 0.5) 30%,
+    rgba(255, 238, 0, 0.8) 60%,
+    rgba(255, 200, 0, 0.4) 85%,
+    rgba(255, 238, 0, 0.6) 100%
+  );
+}
+
+/* 绿色 */
+.markGreen {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 255, 0, 0.7) 0%,
+    rgba(0, 210, 0, 0.5) 30%,
+    rgba(0, 255, 0, 0.8) 60%,
+    rgba(0, 200, 0, 0.4) 85%,
+    rgba(0, 255, 0, 0.6) 100%
+  );
+}
+
+/* 红色 */
+.markRed {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 0, 0, 0.7) 0%,
+    rgba(210, 0, 0, 0.5) 30%,
+    rgba(255, 0, 0, 0.8) 60%,
+    rgba(200, 0, 0, 0.4) 85%,
+    rgba(255, 0, 0, 0.6) 100%
+  );
+}
+
+/* 蓝色 */
+.markBlue {
+  background: linear-gradient(
+    120deg,
+    rgba(0, 0, 255, 0.7) 0%,
+    rgba(0, 0, 210, 0.5) 30%,
+    rgba(0, 0, 255, 0.8) 60%,
+    rgba(0, 0, 200, 0.4) 85%,
+    rgba(0, 0, 255, 0.6) 100%
+  );
+}
+
+/* 橙色（额外示例） */
+.markOrange {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 165, 0, 0.7) 0%,
+    rgba(230, 140, 0, 0.5) 30%,
+    rgba(255, 165, 0, 0.8) 60%,
+    rgba(210, 120, 0, 0.4) 85%,
+    rgba(255, 165, 0, 0.6) 100%
+  );
+}
+
+/* 紫色（额外示例） */
+.markPurple {
+  background: linear-gradient(
+    120deg,
+    rgba(180, 0, 255, 0.7) 0%,
+    rgba(150, 0, 210, 0.5) 30%,
+    rgba(180, 0, 255, 0.8) 60%,
+    rgba(130, 0, 200, 0.4) 85%,
+    rgba(180, 0, 255, 0.6) 100%
+  );
+}
+
+/* ============================================================
+   可选：hover 微交互（两个维度叠加生效）
+   ============================================================ */
+.highlight:hover {
+  filter: brightness(0.95) saturate(1.1);
+  transform: rotate(-0.3deg) scale(1.02);
+}
+
+/* ============================================================
+   深色模式适配
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  .highlight {
+    color: #f0f0f0;
+  }
+}
+
+/* ===================================== */
+
+ins {
+    text-decoration: insert;
+}
+
+del {
+    text-decoration: delete;
+}
+
+small {
+    font-size: 0.875rem;
+}
+
+big {
+    font-size: 1.25rem;
+}
+
+sub {
+    font-size: 0.75rem;
+}
+
+sup {
+    font-size: 0.75rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+

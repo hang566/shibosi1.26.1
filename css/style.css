@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== 悬浮透明滚动条（不占像素，视觉优雅） ===== */
+
+* {
+  scrollbar-width: thin;
+}
+
+/* ===== 根治滚动条切割像素（全站生效） ===== */
+
+/* 1. 针对 Firefox 彻底隐藏宽度 */
+* {
+  scrollbar-width: none;
+}
+
+/* 2. 针对 IE / 旧版 Edge 彻底隐藏 */
+* {
+  -ms-overflow-style: none;
+}
+
+/* 3. 针对 Chrome / Safari / 新版 Edge 彻底隐藏 */
+*::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  display: none !important;
+}
+
+/* 4. 保证页面依然能正常滚动（滚轮/拖拽完全不受影响） */
+html, body {
+  overflow-y: auto;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transform: translateZ(0);
+}
+
+:root {
+    --searchICON: rgba(255, 255, 255, 0.95);
+    --searchText: #ffffff;
+    /* 多层阴影：近层描边 + 中层晕染 + 远层柔化，任意背景下都可读 */
+    --searchTextShadow:
+        0 0 1px rgba(0,0,0,1),
+        0 1px 2px rgba(0,0,0,0.9),
+        0 2px 6px rgba(0,0,0,0.6),
+        0 0 12px rgba(0,0,0,0.35);
+    --searchIconShadow:
+        drop-shadow(0 0 1px rgba(0,0,0,1))
+        drop-shadow(0 1px 3px rgba(0,0,0,0.85));
+}
+
+/* ===== "了解未来的功能"弹窗美化 ===== */
+.new-features-content {
+    padding: 20px 24px;
+}
+
+.new-features-content .feature-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text, #fff);
+    margin-bottom: 4px;
+}
+
+.new-features-content .feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.new-features-content hr {
+    border: none;
+    border-top: 1px solid var(--border, rgba(255,255,255,0.08));
+    margin: 12px 0 14px;
+}
+
+.new-features-content .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.new-features-content .feature-list li {
+    position: relative;
+    padding: 8px 8px 8px 24px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text, #fff);
+    opacity: 0.88;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.new-features-content .feature-list li:hover {
+    background: var(--block-bg, rgba(255,255,255,0.05));
+}
+
+.new-features-content .feature-list li::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--main, #ff8c00);
+    box-shadow: 0 0 6px var(--main, #ff8c00);
+}
+
+.new-features-content .feature-text {
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text, #fff);
+    opacity: 0.85;
+    background: var(--block-bg, rgba(255,255,255,0.04));
+    border-left: 3px solid var(--main, #ff8c00);
+    border-radius: 0 8px 8px 0;
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 · 市舶司</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+        }
+        .auth-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .auth-header {
+            padding: 32px 32px 0;
+            text-align: center;
+        }
+        .auth-header .logo {
+            font-size: 42px;
+            margin-bottom: 8px;
+        }
+        .auth-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+        .auth-header p {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 20px;
+        }
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin: 0 32px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 14px 0;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 500;
+            color: #999;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.25s ease;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+        .auth-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        .auth-tab:hover { color: #667eea; }
+        .auth-body { padding: 28px 32px 32px; }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+        .form-group input:focus {
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .form-group input::placeholder { color: #bbb; }
+        .form-error {
+            font-size: 12px;
+            color: #F53F3F;
+            margin-top: 6px;
+            display: none;
+        }
+        .form-error.show { display: block; }
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+            margin-top: 8px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.35);
+        }
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .guest-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #999;
+        }
+        .guest-link a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .guest-link a:hover { text-decoration: underline; }
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            animation: toastIn 0.3s ease;
+            pointer-events: auto;
+        }
+        .toast.success { background: #00B42A; }
+        .toast.error { background: #F53F3F; }
+        .toast.warning { background: #FFC107; }
+        .toast.info { background: #667eea; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sync-dialog {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        .sync-dialog.show { display: flex; }
+        .sync-dialog .dialog-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px;
+            max-width: 360px;
+            width: 90%;
+            text-align: center;
+        }
+        .sync-dialog h3 { font-size: 17px; margin-bottom: 10px; color: #1a1a1a; }
+        .sync-dialog p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 20px; }
+        .sync-dialog .dialog-actions { display: flex; gap: 10px; }
+        .sync-dialog button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .sync-dialog .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+        .sync-dialog .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+        .sync-dialog button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo" id="authLogo">登录</div>
+                <h1>欢迎回来</h1>
+                <p>登录市舶司，开启知识探索之旅</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">登录</button>
+                <button class="auth-tab" data-tab="register">注册</button>
+            </div>
+
+            <div class="auth-body">
+                <!-- 登录表单 -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <input type="text" id="loginUsername" placeholder="请输入用户名" autocomplete="username" required>
+                        <div class="form-error" id="loginUsernameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="loginPassword" placeholder="请输入密码" autocomplete="current-password" required>
+                        <div class="form-error" id="loginPasswordError"></div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="loginBtn">登录</button>
+                    <div class="guest-link">
+                        <a onclick="guestLogin()">访客登录</a> · 无需注册即可体验
+                    </div>
+                </form>
+
+                <!-- 注册表单 -->
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <input type="text" id="registerUsername" placeholder="3-20 位字符" autocomplete="username" required>
+                        <div class="form-error" id="registerUsernameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>邮箱</label>
+                        <input type="email" id="registerEmail" placeholder="选填，用于找回密码" autocomplete="email">
+                        <div class="form-error" id="registerEmailError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="registerPassword" placeholder="至少 6 位" autocomplete="new-password" required>
+                        <div class="form-error" id="registerPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>确认密码</label>
+                        <input type="password" id="registerPassword2" placeholder="再次输入密码" autocomplete="new-password" required>
+                        <div class="form-error" id="registerPassword2Error"></div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="registerBtn">注册账号</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="sync-dialog" id="syncDialog">
+        <div class="dialog-box">
+            <h3>检测到本地数据</h3>
+            <p id="syncDialogMsg">您有一些本地收藏和历史记录，是否同步到云端？</p>
+            <div class="dialog-actions">
+                <button class="btn-secondary" id="syncSkipBtn">跳过</button>
+                <button class="btn-primary" id="syncConfirmBtn">同步到云端</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/userAccount.js"></script>
+    <script src="../../js/syncManager.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // API base (consistent with userAccount.js / syncManager.js)
+        function getApiBase() {
+            return (window.__APP_CONFIG__ && window.__APP_CONFIG__.apiBase) || 'http://localhost:8084';
+        }
+
+        // DOM elements
+        const els = {
+            tabs: document.querySelectorAll('.auth-tab'),
+            authLogo: document.getElementById('authLogo'),
+            authHeaderH1: document.querySelector('.auth-header h1'),
+            authHeaderP: document.querySelector('.auth-header p'),
+            loginForm: document.getElementById('loginForm'),
+            registerForm: document.getElementById('registerForm'),
+            loginUsername: document.getElementById('loginUsername'),
+            loginPassword: document.getElementById('loginPassword'),
+            registerUsername: document.getElementById('registerUsername'),
+            registerEmail: document.getElementById('registerEmail'),
+            registerPassword: document.getElementById('registerPassword'),
+            registerPassword2: document.getElementById('registerPassword2'),
+            loginBtn: document.getElementById('loginBtn'),
+            registerBtn: document.getElementById('registerBtn'),
+            toastContainer: document.getElementById('toastContainer'),
+            syncDialog: document.getElementById('syncDialog'),
+            syncDialogMsg: document.getElementById('syncDialogMsg'),
+            syncSkipBtn: document.getElementById('syncSkipBtn'),
+            syncConfirmBtn: document.getElementById('syncConfirmBtn')
+        };
+
+        // Tab switching
+        els.tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                const target = tab.dataset.tab;
+                els.tabs.forEach(function (t) { t.classList.toggle('active', t === tab); });
+                els.loginForm.classList.toggle('active', target === 'login');
+                els.registerForm.classList.toggle('active', target === 'register');
+                // 更新 logo 和标题
+                if (target === 'login') {
+                    els.authLogo.textContent = '登录';
+                    els.authHeaderH1.textContent = '欢迎回来';
+                    els.authHeaderP.textContent = '登录市舶司，开启知识探索之旅';
+                } else {
+                    els.authLogo.textContent = '注册';
+                    els.authHeaderH1.textContent = '创建账号';
+                    els.authHeaderP.textContent = '加入市舶司，开启知识探索之旅';
+                }
+                clearErrors();
+            });
+        });
+
+        function clearErrors() {
+            document.querySelectorAll('.form-error').forEach(function (e) {
+                e.classList.remove('show');
+                e.textContent = '';
+            });
+        }
+
+        function showError(inputId, msg) {
+            const errEl = document.getElementById(inputId + 'Error');
+            if (errEl) {
+                errEl.textContent = msg;
+                errEl.classList.add('show');
+            }
+        }
+
+        function showToast(msg, type) {
+            type = type || 'info';
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.textContent = msg;
+            els.toastContainer.appendChild(toast);
+            setTimeout(function () {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(function () { toast.remove(); }, 300);
+            }, 2500);
+        }
+
+        function getRedirectUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const redirect = params.get('redirect');
+            if (redirect) return redirect;
+            const basePath = window.location.pathname.replace(/[^/]*$/, '');
+            return basePath + 'user.html';
+        }
+
+        // ============ saveAndRedirect — uses ShiboSiAccount.saveAuth ============
+        function saveAndRedirect(token, user) {
+            // Use unified account component (triggers notifyChange + SyncManager.handleLogin)
+            if (window.ShiboSiAccount && ShiboSiAccount.saveAuth) {
+                ShiboSiAccount.saveAuth(token, user);
+            } else {
+                // Fallback: manual save
+                localStorage.setItem('shibosi_token', token);
+                try { sessionStorage.setItem('shibosi_user_cache_v1', JSON.stringify(user)); } catch (e) {}
+                try { localStorage.setItem('shibosi_login_at', String(Date.now())); } catch (e) {}
+                // Still trigger sync via SyncManager if available
+                if (window.SyncManager && typeof SyncManager.handleLogin === 'function') {
+                    SyncManager.handleLogin(user).catch(function() {});
+                }
+            }
+
+            // Check local data to sync
+            const localData = checkLocalData();
+            const hasLocalData = localData.count > 0;
+
+            if (hasLocalData && window.SyncManager) {
+                showSyncConfirmDialog(user, localData);
+            } else {
+                showToast('登录成功，正在跳转...', 'success');
+                setTimeout(function () {
+                    window.location.href = getRedirectUrl();
+                }, 800);
+            }
+        }
+
+        function checkLocalData() {
+            try {
+                const favorites = JSON.parse(localStorage.getItem('shibosi_favorites') || '[]');
+                const history = JSON.parse(localStorage.getItem('shibosi_history') || '[]');
+                const points = parseInt(localStorage.getItem('game_total_points') || '0', 10);
+                const hasSettings = !!localStorage.getItem('shibosi_settings');
+                const hasShortcuts = !!localStorage.getItem('shibosi_shortcuts');
+                const hasGroups = !!localStorage.getItem('shibosi_groups');
+                const count = favorites.length + history.length + (points > 0 ? 1 : 0) +
+                    (hasSettings ? 1 : 0) + (hasShortcuts ? 1 : 0) + (hasGroups ? 1 : 0);
+                return {
+                    count: count,
+                    favoritesCount: favorites.length,
+                    historyCount: history.length,
+                    points: points,
+                    hasSettings: hasSettings,
+                    hasShortcuts: hasShortcuts,
+                    hasGroups: hasGroups
+                };
+            } catch (e) {
+                return { count: 0 };
+            }
+        }
+
+        function showSyncConfirmDialog(user, localData) {
+            const parts = [];
+            if (localData.favoritesCount) parts.push(localData.favoritesCount + ' 条收藏');
+            if (localData.historyCount) parts.push(localData.historyCount + ' 条历史');
+            if (localData.points) parts.push(localData.points + ' 积分');
+            if (localData.hasSettings) parts.push('设置');
+            if (localData.hasShortcuts) parts.push('快捷方式');
+            if (localData.hasGroups) parts.push('分组');
+            els.syncDialogMsg.textContent = '检测到本地数据：' + parts.join('、') + '。是否同步到云端？';
+            els.syncDialog.classList.add('show');
+
+            els.syncConfirmBtn.onclick = function () {
+                els.syncDialog.classList.remove('show');
+                if (window.SyncManager && typeof SyncManager.handleLogin === 'function') {
+                    SyncManager.handleLogin(user).catch(function() {});
+                }
+                showToast('同步中...', 'info');
+                setTimeout(function () {
+                    window.location.href = getRedirectUrl();
+                }, 1500);
+            };
+            els.syncSkipBtn.onclick = function () {
+                els.syncDialog.classList.remove('show');
+                showToast('已跳过同步', 'warning');
+                setTimeout(function () {
+                    window.location.href = getRedirectUrl();
+                }, 800);
+            };
+        }
+
+        // ============ 登录 ============
+        els.loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const username = els.loginUsername.value.trim();
+            const password = els.loginPassword.value;
+
+            clearErrors();
+
+            if (!username) { showError('loginUsername', '请输入用户名'); return; }
+            if (!password) { showError('loginPassword', '请输入密码'); return; }
+
+            els.loginBtn.disabled = true;
+            els.loginBtn.innerHTML = '<span class="spinner"></span> 登录中...';
+
+            try {
+                const resp = await fetch(getApiBase() + '/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username, password: password })
+                });
+
+                const data = await resp.json();
+
+                if (resp.ok && data && (data.code === 0 || data.code === 200 || !data.code)) {
+                    const payload = data.data || data;
+                    const token = payload.access_token || payload.AccessToken || payload.token || payload.Token
+                        || (payload.data && (payload.data.access_token || payload.data.token));
+                    const user = payload.user || payload.User || (payload.data && (payload.data.user || payload.data.User)) || payload;
+                    if (!token) {
+                        showToast('登录失败：后端未返回令牌 (' + JSON.stringify(data).slice(0, 80) + ')', 'error');
+                        els.loginBtn.disabled = false;
+                        els.loginBtn.innerHTML = '<span>登录</span>';
+                        return;
+                    }
+                    showToast('登录成功', 'success');
+                    saveAndRedirect(token, user);
+                } else {
+                    const msg = (data && (data.message || data.msg)) || (resp.ok ? '登录失败' : 'HTTP ' + resp.status) || '用户名或密码错误';
+                    showToast(msg, 'error');
+                    els.loginBtn.disabled = false;
+                    els.loginBtn.innerHTML = '<span>登录</span>';
+                }
+            } catch (err) {
+                console.warn('登录请求失败，尝试本地登录', err);
+                const errMsg = err && err.message ? err.message : String(err);
+                showToast('连接后端失败 (' + errMsg.slice(0, 40) + ')，使用本地账户', 'warning');
+                // 离线模式：尝试本地账户
+                const users = JSON.parse(localStorage.getItem('shibosi_users') || '[]');
+                const localUser = users.find(function (u) {
+                    return u.username === username && btoa(password) === u.password;
+                });
+                if (localUser) {
+                    const localToken = 'local_' + btoa(username + ':' + Date.now());
+                    showToast('网络离线，使用本地账户', 'warning');
+                    saveAndRedirect(localToken, localUser);
+                } else {
+                    showToast('网络连接失败，请检查网络', 'error');
+                    els.loginBtn.disabled = false;
+                    els.loginBtn.innerHTML = '<span>登录</span>';
+                }
+            }
+        });
+
+        // ============ 注册 ============
+        els.registerForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const username = els.registerUsername.value.trim();
+            const email = els.registerEmail.value.trim();
+            const password = els.registerPassword.value;
+            const password2 = els.registerPassword2.value;
+
+            clearErrors();
+
+            if (!username || username.length < 3) { showError('registerUsername', '用户名至少 3 位'); return; }
+            if (username.length > 20) { showError('registerUsername', '用户名不超过 20 位'); return; }
+            if (password.length < 6) { showError('registerPassword', '密码至少 6 位'); return; }
+            if (password !== password2) { showError('registerPassword2', '两次密码不一致'); return; }
+
+            if (email) {
+                const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRe.test(email)) { showError('registerEmail', '邮箱格式不正确'); return; }
+            }
+
+            els.registerBtn.disabled = true;
+            els.registerBtn.innerHTML = '<span class="spinner"></span> 注册中...';
+
+            try {
+                const resp = await fetch(getApiBase() + '/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username, password: password, email: email })
+                });
+
+                const data = await resp.json();
+
+                if (resp.ok && data && (data.code === 0 || data.code === 200)) {
+                    showToast('注册成功，正在登录...', 'success');
+                    const loginResp = await fetch(getApiBase() + '/api/v1/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: username, password: password })
+                    });
+                    const loginData = await loginResp.json();
+                    if (loginResp.ok && loginData && (loginData.code === 0 || loginData.code === 200 || !loginData.code)) {
+                        const payload = loginData.data || loginData;
+                        const token = payload.access_token || payload.AccessToken || payload.token || payload.Token
+                            || (payload.data && (payload.data.access_token || payload.data.token));
+                        const user = payload.user || payload.User || (payload.data && (payload.data.user || payload.data.User)) || payload;
+                        if (!token) {
+                            showToast('登录失败，请手动登录', 'warning');
+                            setTimeout(function () {
+                                els.tabs[0].click();
+                                els.loginUsername.value = username;
+                            }, 800);
+                            return;
+                        }
+                        saveAndRedirect(token, user);
+                    } else {
+                        showToast('注册成功，请登录', 'success');
+                        setTimeout(function () {
+                            els.tabs[0].click();
+                            els.loginUsername.value = username;
+                        }, 1000);
+                    }
+                } else {
+                    showToast((data && (data.msg || data.message)) || '注册失败，请稍后重试', 'error');
+                    els.registerBtn.disabled = false;
+                    els.registerBtn.innerHTML = '<span>注册账号</span>';
+                }
+            } catch (err) {
+                console.warn('注册请求失败，尝试本地注册', err);
+                showToast('网络请求失败，创建本地账户...', 'warning');
+                const localUser = {
+                    id: Date.now(),
+                    username: username,
+                    nickname: username,
+                    role: 'user',
+                    avatar: '',
+                    bio: '',
+                    email: email,
+                    status: 1,
+                    created_at: new Date().toISOString(),
+                    last_login: new Date().toISOString(),
+                    points: 0
+                };
+                const localToken = 'local_' + btoa(username + ':' + Date.now());
+                try {
+                    const users = JSON.parse(localStorage.getItem('shibosi_users') || '[]');
+                    users.push({ ...localUser, password: btoa(password) });
+                    localStorage.setItem('shibosi_users', JSON.stringify(users));
+                } catch (e) {}
+                saveAndRedirect(localToken, localUser);
+            }
+        });
+
+        // ============ 访客登录 ============
+        window.guestLogin = function () {
+            const guestUser = {
+                id: 0,
+                username: 'guest_' + Math.random().toString(36).slice(2, 8),
+                nickname: '访客',
+                role: 'guest',
+                avatar: '',
+                bio: '您正在以访客身份浏览',
+                status: 1,
+                isGuest: true,
+                created_at: new Date().toISOString(),
+                last_login: new Date().toISOString(),
+                points: parseInt(localStorage.getItem('game_total_points') || '0', 10)
+            };
+            const guestToken = 'guest_' + btoa(guestUser.username + ':' + Date.now());
+            saveAndRedirect(guestToken, guestUser);
+        };
+
+        // ============ 初始化 ============
+        function init() {
+            const token = localStorage.getItem('shibosi_token');
+            if (token) {
+                showToast('已登录，正在跳转...', 'success');
+                setTimeout(function () {
+                    window.location.href = getRedirectUrl();
+                }, 500);
+                return;
+            }
+            // URL 恢复用户名
+            const params = new URLSearchParams(window.location.search);
+            const userParam = params.get('username');
+            if (userParam) {
+                els.loginUsername.value = userParam;
+                els.tabs[0].click();
+            }
+        }
+
+        // DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

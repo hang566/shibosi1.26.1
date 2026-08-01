@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#333333">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title id="pageTitle">欢迎回来👏，这里是市舶司</title>
+    <link rel="icon" href="favicon.ico">
+    <!-- ui -->
+    <link href="ui/css/modules/base.css" rel="stylesheet">
+    <link href="ui/css/modules/display.css" rel="stylesheet">
+    <link href="ui/css/modules/feedback.css" rel="stylesheet">
+    <link href="ui/css/modules/forms.css" rel="stylesheet">
+    <link href="ui/css/modules/layout.css" rel="stylesheet">
+    <link href="ui/css/modules/navigation.css" rel="stylesheet">
+    <link href="ui/css/modules/tabs-browser.css" rel="stylesheet">
+    <link href="ui/css/modules/variables.css" rel="stylesheet">
+
+    <link href="css/search.css" rel="stylesheet">
+    <link href="css/weather.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link href="css/apps.css" rel="stylesheet">
+    <link href="css/QuickSettings.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body
+    style="background-color: var(--bg)/**background: url(&quot;https://api.paugram.com/bing/&quot;)**/ center center / cover fixed;">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-brand">市舶司</div>
+        <button class="navbar-toggle" id="navbar-toggle" onclick="toggleNavbar()" aria-label="切换导航菜单"
+            aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="navbar-nav" id="navbar-nav">
+            <li id="userAccountSlot" style="display:flex;align-items:center;justify-content:flex-end;order:999;"></li>
+
+
+
+            <li>
+                <a href="Service/game/home.html">
+                    <button class="points-display"
+                        style="border: 2px solid var(--main); background-color: var(--trbg); border-radius: 20px; padding: 8px 16px;">
+                        <b id="points">积分</b>
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="Service/Scraper/Scraper.html">
+                    <button>搜罗器</button>
+                </a>
+            </li>
+            <li>
+                <button onclick="openModal('set'); toggleNavbar()">设置</button>
+            </li>
+            <!-- <li>
+                <button onclick="openModal('NewFeatures'); toggleNavbar()">了解为了的功能</button>
+            </li> -->
+            <li>
+                <button id="installBtn" onclick="installApp(); toggleNavbar()"
+                    style="display:none;background-color: black;color: white;">安装</button>
+            </li>
+        </ul>
+    </nav>
+
+
+    <!-- ? -->
+    <div style="padding-top: 20%;padding-bottom: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+        <!-- 服务 -->
+        <div class="glass SearchBox" id="mainSearchBox">
+            <!-- 标题 -->
+            <div class="searchInputBox">
+                <h1>市舶司</h1>
+            </div>
+
+            <!-- 搜索框 -->
+            <div class="searchInputBox" style="margin: 0;">
+                <button id="btn" class="searchInput" style="background-color: rgba(255, 255, 255, 0);border: 0;">
+                    <svg style="fill: var(--searchICON);" width="25px" xmlns="http://www.w3.org/2000/svg"
+                        id="mdi-auto-fix" viewBox="0 0 24 24">
+                        <path
+                            d="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,20 0.9,19.35 1.29,18.96L12.96,7.29C13.35,6.9 14,6.9 14.37,7.29Z" />
+                    </svg>
+                </button>
+
+                <input style="height: 60px;border: 0;" type="text" id="searchQuery"
+                    class="searchInput search-input searchQuery" placeholder="搜索或输入 /go 快速跳转…">
+
+                <!-- 搜索按钮 -->
+                <button onclick="redirectToSearch()" class="btn searchInput"
+                    style="background-color: rgba(188, 143, 143, 0);border: 0;">
+                    <svg style="fill: var(--searchICON);" width="25px" id="图层_1" data-name="图层 1"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 271.67 273.37">
+                        <path
+                            d="M104,35a72,72,0,1,1-72,72,72.08,72.08,0,0,1,72-72m0-20h0a92,92,0,0,0-92,92h0a92,92,0,0,0,92,92h0a92,92,0,0,0,92-92h0a92,92,0,0,0-92-92Z"
+                            transform="translate(-12 -15)" />
+                        <path class="cls-1"
+                            d="M267.73,278.37a5.87,5.87,0,0,1-4.37-1.91l-80.12-86.79a5.94,5.94,0,0,1,8.74-8.06l80.11,86.79a5.86,5.86,0,0,1,1.57,4.27,5.92,5.92,0,0,1-5.93,5.7Z"
+                            transform="translate(-12 -15)" />
+                        <path
+                            d="M187.61,169.7a15.94,15.94,0,0,0-11.71,26.75L256,283.24a16,16,0,0,0,22.53.91h0a16,16,0,0,0,.9-22.53l-80.11-86.79a15.9,15.9,0,0,0-11.72-5.13Z"
+                            transform="translate(-12 -15)" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+                <!-- 本地搜索引擎结果面板 -->
+        <div class="glass SearchBox search-engine-panel" id="searchEnginePanel" style="display:none;margin-top:8px;">
+            <div class="se-panel-header">
+                <div class="se-panel-title">
+                    <span>市舶司</span>
+                    <span class="se-panel-meta" id="sePanelMeta"></span>
+                </div>
+                <div class="se-panel-actions">
+                    <button class="se-btn" id="seBackBtn" onclick="closeSearchEngine()">关闭</button>
+                    <button class="se-btn se-btn-main" onclick="openFullSearchEngine()">前往完整界面 →</button>
+                </div>
+            </div>
+            <div id="seKeywordFeedback"></div>
+            <div id="seCustomEngines"></div>
+            <div id="seResultsContainer" class="se-results-container"></div>
+            <div id="sePagination" class="se-pagination"></div>
+        </div>
+
+        <!-- 快速跳转建议框 -->
+        <div id="cmdSuggest"
+            style="display:none;position:fixed;max-height:260px;overflow-y:auto;background:var(--gs-bg);color:var(--gs-text);border-radius:0 0 16px 16px;border:1px solid var(--gs-border);border-top:0;z-index:9999;padding:0;box-shadow:0 12px 48px rgba(0,0,0,0.4);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
+            <div class="suggest-header"
+                style="padding:6px 16px 10px;font-size:11px;color:var(--gs-hint);border-bottom:1px solid var(--gs-border);">
+                快速跳转提示 (↑↓选择 Tab 补全)</div>
+            <div id="suggestList" style="display:flex;flex-direction:column;"></div>
+        </div>
+
+
+
+        <div class="glass SearchBox search-card-untop" style="display:none;">
+            <div class="modal-body">
+
+                <div>
+
+                    <b style="text-align: left;">搜索引擎</b>
+                    <select id="searchEngine">
+                        <option value="local">市舶司</option>
+                        <option value="localGO">市舶司 GO</option>
+                        <option value="bing">Bing</option>
+                        <option value="baidu">百度</option>
+                        <option value="sogou">搜狗</option>
+                        <option value="360">360</option>
+                        <option value="yande">Yandex</option>
+                        <option value="douyin">抖音</option>
+                        <option value="bilibili">哔哩哔哩</option>
+                        <option value="360ai">360AI</option>
+                        <option value="magi">magi</option>
+                        <option value="tx">腾讯下载</option>
+                        <option value="163music">网易云音乐</option>
+                        <option value="qqmusic">QQ音乐</option>
+                        <option value="duckduckgo">DuckDuckGo</option>
+                        <option value="github">GitHub</option>
+                        <option value="google">Google</option>
+                    </select>
+                </div>
+
+                <!-- 浏览器标签页：指令 / 自定义引擎 / 搜索记录 -->
+                <div class="panel-tabs-wrapper" style="margin-top:8px;">
+                    <div class="tabs-browser">
+                        <button class="tab-browser active" onclick="switchSubTab('sub-tab1', this)">指令</button>
+                        <button class="tab-browser" onclick="switchSubTab('sub-tab2', this)">自定义引擎</button>
+                        <button class="tab-browser" onclick="switchSubTab('sub-tab3', this)">搜索记录</button>
+                    </div>
+                    <div class="tabs-content">
+
+                        <!-- Tab 1: 指令辅助 -->
+                        <div id="sub-tab1" class="tab-pane active">
+                            <p style="font-size:13px;color:var(--text);opacity:0.6;margin-bottom:12px;">点击下方指令可自动填入搜索框，按
+                                Enter 执行</p>
+                            <div class="cmd-helper-grid" id="cmdHelperGrid">
+                                <span class="cmd-chip" onclick="insertCmd('/go ')"><b>/go</b> <span
+                                        class="chip-desc">快速跳转</span></span>
+                                <span class="cmd-chip" onclick="insertCmd('/Email')"><b>/Email</b> <span
+                                        class="chip-desc">打开邮箱</span></span>
+                                <span class="cmd-chip" onclick="insertCmd('/s ')"><b>/s</b> <span
+                                        class="chip-desc">切换引擎</span></span>
+                            </div>
+
+                            <hr style="margin:14px 0;">
+
+                            <h4 style="margin:0 0 8px;font-size:13px;">快速跳转</h4>
+                            <p style="font-size:11px;color:var(--text);opacity:0.4;margin:0 0 8px;">输入关键词或点击下方标签快速跳转</p>
+                            <div id="cmdTargetList">
+                                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                                    <span class="cmd-chip" onclick="insertCmd('/go 抖音')">抖音</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 哔哩哔哩')">哔哩哔哩</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 百度')">百度</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 知乎')">知乎</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go GitHub')">GitHub</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 微博')">微博</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 小红书')">小红书</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 淘宝')">淘宝</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 京东')">京东</span>
+                                    <span class="cmd-chip" onclick="insertCmd('/go 美团')">美团</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: 自定义引擎 -->
+                        <div id="sub-tab2" class="tab-pane">
+                            <input type="text" id="customEngineId" placeholder="标识（英文，如 myEngine）">
+                            <input type="text" id="customEngineName" placeholder="显示名称（如 我的引擎）">
+                            <input type="text" id="customEngineUrl"
+                                placeholder="URL（用 %s 表示关键词，如 https://xxx/search?q=%s）">
+                            <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                                <button onclick="addCustomEngine()" class="btn-add">添加引擎</button>
+                                <span id="engineMsg" class="msg-tip"></span>
+                            </div>
+
+                            <hr style="margin:12px 0;">
+
+                            <div id="customEngineList">
+                                <p class="history-empty-msg">暂无自定义引擎</p>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: 搜索记录 -->
+                        <div id="sub-tab3" class="tab-pane">
+                            <div class="history-header">
+                                <span class="hint-text">点击记录可重新搜索</span>
+                                <button onclick="SearchHistoryManager.clearAll()" class="btn-clear">清空全部</button>
+                            </div>
+                            <div class="history-scroll-area" id="searchHistoryList">
+                                <p class="history-empty-msg">暂无搜索记录</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 应用 -->
+        <div class="glass SearchBox toggleable-card" id="appCard">
+
+            <!-- 应用 -->
+            <div class="searchInputBox app-section">
+                <!-- 应用菜单 -->
+                <div>
+                    <span>应用</span>
+                    <div>
+                        <button onclick="openModal('addAppModal')">添加</button>
+                    </div>
+
+                </div>
+
+                <div id="appList">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="weather-card-wrapper toggleable-card" id="weatherCard" style="margin-top: 8px;">
+            <div class="weather-title-row">
+                <span class="weather-title">天气</span>
+                <span class="weather-subtitle">uapis.cn</span>
+            </div>
+            <div class="weather-content-card" id="weatherContent">
+                <p class="weather-loading">正在获取天气...</p>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="bg-overlay" id="bgOverlay"></div>
+    <div class="QuickSettingsBox glass">
+        <div class="QuickSettingsLogo">
+            <svg style="width: 30px;height: 30px;fill: var(--text);" xmlns="http://www.w3.org/2000/svg"
+                id="mdi-android-studio" viewBox="0 0 24 24">
+                <path
+                    d="M11,2H13V4H13.5A1.5,1.5 0 0,1 15,5.5V9L14.56,9.44L16.2,12.28C17.31,11.19 18,9.68 18,8H20C20,10.42 18.93,12.59 17.23,14.06L20.37,19.5L20.5,21.72L18.63,20.5L15.56,15.17C14.5,15.7 13.28,16 12,16C10.72,16 9.5,15.7 8.44,15.17L5.37,20.5L3.5,21.72L3.63,19.5L9.44,9.44L9,9V5.5A1.5,1.5 0 0,1 10.5,4H11V2M9.44,13.43C10.22,13.8 11.09,14 12,14C12.91,14 13.78,13.8 14.56,13.43L13.1,10.9H13.09C12.47,11.5 11.53,11.5 10.91,10.9H10.9L9.44,13.43M12,6A1,1 0 0,0 11,7A1,1 0 0,0 12,8A1,1 0 0,0 13,7A1,1 0 0,0 12,6Z" />
+            </svg>
+            <span>快速设置</span>
+            <hr>
+            <div class="QuickSettingsContent">
+                <button id="fullBtn" class="qs-btn" onclick="toggleFullscreen()">全屏显示</button>
+                <button id="toggleSearch" class="qs-btn">隐藏搜索框</button>
+                <button class="qs-btn" onclick="refreshBg()">刷新壁纸</button>
+                <button id="toggleCards" class="qs-btn">隐藏所有卡片</button>
+                <hr>
+
+                <h4>自定义搜索框</h4>
+                <hr>
+
+                <div class="qs-row clickable" onclick="toggleSearchLogo()">
+                    <span class="qs-label">显示标识</span>
+                    <label class="switch" onclick="event.stopPropagation()">
+                        <input type="checkbox" id="switchLogo" checked onchange="toggleSearchLogo()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="qs-row">
+                    <span class="qs-label">标识类型</span>
+                    <div style="display: flex; gap: 10px;">
+                        <label class="radio-item">
+                            <input type="radio" name="logoType" value="text" checked onchange="updateLogoType()">
+                            <span>文字</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="logoType" value="image" onchange="updateLogoType()">
+                            <span>图片</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="qs-row" id="logoTextRow">
+                    <span class="qs-label">标识文字</span>
+                    <input type="text" id="logoText" value="市舶司" style="width: 100px; font-size: 12px;"
+                        oninput="updateLogoText()">
+                </div>
+
+                <div class="qs-row">
+                    <span class="qs-label">文字大小</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="range" id="logoSize" min="20" max="100" value="68" style="width: 80px;"
+                            oninput="updateLogoSize()">
+                        <span id="logoSizeValue" style="font-size: 11px; width: 35px;">68px</span>
+                    </div>
+                </div>
+
+                <div class="qs-row" id="logoImageRow" style="display: none;">
+                    <span class="qs-label">上传图片</span>
+                    <input type="file" id="logoImageInput" accept="image/*" style="font-size: 10px;"
+                        onchange="uploadLogoImage()">
+                </div>
+
+                <div class="qs-row">
+                    <span class="qs-label">背景透明度</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="range" id="searchOpacity" min="0" max="100" value="25" style="width: 80px;"
+                            oninput="updateSearchOpacity()">
+                        <span id="opacityValue" style="font-size: 11px; width: 35px;">25%</span>
+                    </div>
+                </div>
+
+                <div class="qs-row">
+                    <span class="qs-label">搜索框宽度</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="range" id="searchWidth" min="200" max="600" value="400" step="10"
+                            style="width: 80px;" oninput="updateSearchWidth()">
+                        <span id="widthValue" style="font-size: 11px; width: 45px;">400px</span>
+                    </div>
+                </div>
+
+                <div class="qs-row">
+                    <span class="qs-label">搜索框圆角</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="range" id="searchRadius" min="0" max="50" value="25" style="width: 80px;"
+                            oninput="updateSearchRadius()">
+                        <span id="radiusValue" style="font-size: 11px; width: 35px;">25px</span>
+                    </div>
+                </div>
+
+                <div class="qs-row">
+                    <span class="qs-label">占位符文字</span>
+                    <input type="text" id="searchPlaceholder" value="输入搜索内容" style="width: 100px; font-size: 12px;"
+                        oninput="updateSearchPlaceholder()">
+                </div>
+
+                <div class="qs-row clickable">
+                    <span class="qs-label">魔法棒</span>
+                    <label class="switch">
+                        <input type="checkbox" id="switchAutoSlash" checked onchange="toggleAutoSlash()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="qs-row">
+                    <button id="resetSearchSettings" onclick="resetSearchSettings()"
+                        style="width: 100%; padding: 5px; font-size: 11px; border-radius: 4px; border: 1px solid var(--border); background: var(--trbg); color: var(--text); cursor: pointer;">
+                        恢复默认
+                    </button>
+                </div>
+
+                <hr>
+                <h4>卡片控制</h4>
+                <hr>
+                <div class="qs-row clickable" onclick="scrollToCard('weatherCard', event)">
+                    <span class="qs-label">天气</span>
+                    <label class="switch" onclick="event.stopPropagation()">
+                        <input type="checkbox" id="switchWeather" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="qs-row clickable" onclick="scrollToCard('appCard', event)">
+                    <span class="qs-label">常用应用</span>
+                    <label class="switch" onclick="event.stopPropagation()">
+                        <input type="checkbox" id="switchApp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <!-- 设置 -->
+    <div class="modal" id="set">
+        <div class="modal-content" style="max-width: 90%;width: 600px;height: 80%;">
+            <div class="modal-header">
+                <h3>设置</h3>
+                <button class="modal-close" onclick="closeModal('set')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs-browser">
+                    <button class="tab-browser " onclick="switchTab('tab1', event)">颜色主题</button>
+                    <button class="tab-browser" onclick="switchTab('background', event)">背景图片</button>
+                    <button class="tab-browser active" onclick="switchTab('tab3', event)">新版本</button>
+                    <button class="tab-browser" onclick="switchTab('help', event)">帮助中心</button>
+                </div>
+                <div class="tabs-content">
+                    <div class="tab-pane " id="tab1">
+
+                        <div class="theme-grid">
+                            <button onclick="setTheme('light')">浅色</button>
+                            <button onclick="setTheme('dark')">深色</button>
+                            <button onclick="setTheme('system')">跟随系统</button>
+                            <button onclick="setTheme('time')">时间自动</button>
+                            <button onclick="resetTheme()">重置</button>
+                        </div>
+                        <div class="theme-grid">
+                            <button onclick="setTheme('red')">红色</button>
+                            <button onclick="setTheme('blue')">蓝色</button>
+                            <button onclick="setTheme('green')">绿色</button>
+                            <button onclick="setTheme('purple')">紫色</button>
+                            <button onclick="setTheme('orange')">橙色</button>
+                        </div>
+                        <div class="theme-grid">
+                            <button onclick="setTheme('high-contrast')">高对比度</button>
+                            <button onclick="setTheme('eye-care')">护眼模式</button>
+                            <button onclick="setTheme('sunset')">日落</button>
+                            <button onclick="setTheme('ocean')">海洋</button>
+                            <button onclick="setTheme('forest')">森林</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="background">
+                        <button onclick="setBg('bing')">必应每日壁纸</button>
+                        <br>
+                        <button onclick="setBg('sina')">随机动漫壁纸(新浪壁纸)</button>
+                        <br>
+                        <button onclick="setBg('hd')">高清壁纸</button>
+                        <br>
+                        <button onclick="setBg('loveanimer')">Loveanimer壁纸</button>
+                        <br>
+                        <button onclick="setBg('loveanimer-2')">Loveanimer-动漫</button>
+                        <br>
+                        <button onclick="setBg('loveanimer-3')">Loveanimer-风景</button>
+                        <br>
+                        <button onclick="setBg('loveanimer-4')">Loveanimer-游戏</button>
+                        <br>
+                        <button onclick="setBg('360-1')">4K专区-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-2')">美女模特-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-3')">爱情美图-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-4')">风景-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-5')">小清新-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-6')">动漫-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-7')">明星-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-8')">萌宠-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-9')">游戏-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-10')">汽车-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-11')">炫酷-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-12')">军事-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-13')">劲爆-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-14')">纹理-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-15')">文字-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('360-16')">限时-360壁纸</button>
+                        <br>
+                        <button onclick="setBg('none')">跟随主题颜色（无背景)</button>
+                        <hr>
+                        <label class="switch">
+                            <input type="checkbox" id="bgSwitch">
+                            <span class="slider"></span>
+                        </label>
+                        <button onclick="selectImage()" style="margin-left:8px">选择壁纸</button>
+                        <hr>
+                        <div class="card">
+                            <h4>警告</h4>
+                            <p>因为所有第三方api我们无法保证稳定性</p>
+                        </div>
+                        <div class="card">
+                            <h4>感谢</h4>
+                            <p>这个功能依赖第三方api
+                            <ul>
+                                <li>随机动漫壁纸,必应壁纸 - 保罗|API(https://api.paugram.com/)</li>
+                                <li>查询必应壁纸历史,获取必应每日壁纸 - UApiPro - 免费API服务平台 | 100+公共API接口 | UAPI(https://uapis.cn/)</li>
+                                <li>高清壁纸 - 壁纸 API v2.0 — 免费高清壁纸接口文档(https://wp.upx8.com/)</li>
+                                <li>360壁纸 - OIAPUI(https://oiapi.net/)</li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="tab-pane active" id="tab3">
+                        <style scoped>
+                            .welcome-hero {
+                                text-align: center;
+                                padding: 20px 0 30px;
+                                position: relative;
+                                overflow: hidden;
+                            }
+
+                            .welcome-title {
+                                font-size: 28px;
+                                font-weight: 700;
+                                background: linear-gradient(135deg, var(--main) 0%, var(--success) 50%, var(--warning) 100%);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                background-clip: text;
+                                animation: titleGlow 3s ease-in-out infinite;
+                                margin: 0;
+                            }
+
+                            @keyframes titleGlow {
+
+                                0%,
+                                100% {
+                                    filter: brightness(1);
+                                }
+
+                                50% {
+                                    filter: brightness(1.1);
+                                }
+                            }
+
+                            .version-badge {
+                                display: inline-block;
+                                margin-top: 8px;
+                                padding: 4px 12px;
+                                background: rgba(0, 0, 0, 0.05);
+                                border: 1px solid var(--border);
+                                border-radius: 20px;
+                                font-size: 12px;
+                                color: var(--text-placeholder);
+                            }
+
+                            .welcome-desc {
+                                font-size: 14px;
+                                color: var(--text-sub);
+                                margin-top: 12px;
+                                animation: fadeInUp 0.6s ease;
+                            }
+
+                            .features-grid {
+                                display: grid;
+                                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                                gap: 16px;
+                                padding: 10px 0;
+                            }
+
+                            .feature-card {
+                                background: var(--card-bg);
+                                border: 1px solid var(--border);
+                                border-radius: var(--radius-lg);
+                                padding: 16px;
+                                text-align: center;
+                                transition: var(--transition);
+                                animation: fadeInUp 0.5s ease backwards;
+                            }
+
+                            .feature-card:nth-child(2) {
+                                animation-delay: 0.1s;
+                            }
+
+                            .feature-card:nth-child(3) {
+                                animation-delay: 0.2s;
+                            }
+
+                            .feature-card:nth-child(4) {
+                                animation-delay: 0.3s;
+                            }
+
+                            .feature-card:hover {
+                                transform: translateY(-2px);
+                                box-shadow: var(--shadow);
+                                border-color: var(--main);
+                            }
+
+                            .feature-icon {
+                                font-size: 28px;
+                                margin-bottom: 8px;
+                            }
+
+                            .feature-title {
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: var(--text);
+                                margin: 0 0 4px;
+                            }
+
+                            .feature-desc {
+                                font-size: 12px;
+                                color: var(--text-placeholder);
+                                margin: 0;
+                            }
+
+                            .changelog-section {
+                                margin-top: 20px;
+                                padding-top: 20px;
+                                border-top: 1px solid var(--border);
+                            }
+
+                            .changelog-title {
+                                font-size: 15px;
+                                font-weight: 600;
+                                color: var(--text);
+                                margin: 0 0 12px;
+                            }
+
+                            .changelog-list {
+                                list-style: none;
+                                padding: 0;
+                                margin: 0;
+                            }
+
+                            .changelog-item {
+                                display: flex;
+                                align-items: flex-start;
+                                padding: 8px 0;
+                                font-size: 13px;
+                                color: var(--text-sub);
+                                border-bottom: 1px solid var(--border-line);
+                            }
+
+                            .changelog-item:last-child {
+                                border-bottom: none;
+                            }
+
+                            .changelog-dot {
+                                width: 8px;
+                                height: 8px;
+                                border-radius: 50%;
+                                background: var(--main);
+                                margin-right: 10px;
+                                margin-top: 6px;
+                                flex-shrink: 0;
+                            }
+
+                            @keyframes fadeInUp {
+                                from {
+                                    opacity: 0;
+                                    transform: translateY(10px);
+                                }
+
+                                to {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                }
+                            }
+                        </style>
+                        <div class="welcome-hero">
+                            <h2 class="welcome-title">全新版本</h2>
+                            <span class="version-badge">v1.26.1</span>
+                            <p class="welcome-desc">欢迎使用全新版本的市舶司，体验更流畅的交互体验</p>
+                        </div>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">✨</div>
+                                <h5 class="feature-title">全新界面</h5>
+                                <p class="feature-desc">现代化设计语言</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">⚡</div>
+                                <h5 class="feature-title">性能优化</h5>
+                                <p class="feature-desc">更快的响应速度</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🎮</div>
+                                <h5 class="feature-title">游戏中心</h5>
+                                <p class="feature-desc">丰富的休闲游戏</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🎨</div>
+                                <h5 class="feature-title">主题定制</h5>
+                                <p class="feature-desc">20+ 精美主题</p>
+                            </div>
+                        </div>
+                        <div class="changelog-section">
+                            <h5 class="changelog-title">更新日志</h5>
+                            <ul class="changelog-list">
+                                <li class="changelog-item"><span class="changelog-dot"></span>优化积分系统，支持游戏与搜索积分</li>
+                                <li class="changelog-item"><span class="changelog-dot"></span>新增多款休闲小游戏</li>
+                                <li class="changelog-item"><span class="changelog-dot"></span>改进应用管理功能</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="help">
+                        <h4>帮助中心</h4>
+                        <hr>
+                        <p>遇见无法更新？</p>
+                        <a href="help/home.html">点击这里</a>
+                        <hr>
+                        <p>关于积分</p>
+                        <a href="Service/PointsDetails/PointsDetails.html">积分明细</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('set')">取消</button>
+                <button class="btn-main" onclick="closeModal('set'); showToast('操作成功！', 2000, 'success')">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 了解未来的新功能弹窗 -->
+    <div class="modal" id="NewFeatures">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>了解未来的功能</h3>
+                <button class="modal-close" onclick="closeModal('NewFeatures')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs-browser">
+                    <button class="tab-browser active" onclick="switchTab('nf-searchEngine', event)">搜索引擎</button>
+                    <button class="tab-browser" onclick="switchTab('nf-aiAnalysis', event)">AI分析</button>
+                    <button class="tab-browser" onclick="switchTab('nf-dataUnity', event)">数据统一</button>
+                    <button class="tab-browser" onclick="switchTab('nf-helpOther', event)">帮助我们</button>
+                </div>
+                <div class="tabs-content new-features-content">
+                    <div class="tab-pane active" id="nf-searchEngine">
+                        <h4 class="feature-title">
+                            <span class="feature-icon" style="background: var(--gs-badge-app);">🔍</span>
+                            搜索引擎
+                        </h4>
+                        <hr>
+                        <ul class="feature-list">
+                            <li>安全、有效，剔除广告、钓鱼网站和跟踪器</li>
+                            <li>更自由的搜索方式</li>
+                            <li>算法解析和总结分析</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="nf-aiAnalysis">
+                        <h4 class="feature-title">
+                            <span class="feature-icon" style="background: var(--gs-badge-page);">🤖</span>
+                            AI分析
+                        </h4>
+                        <hr>
+                        <ul class="feature-list">
+                            <li>智能分析用户需求</li>
+                            <li>提供个性化建议</li>
+                            <li>支持多语言</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="nf-dataUnity">
+                        <h4 class="feature-title">
+                            <span class="feature-icon" style="background: var(--gs-badge-cmd);">📊</span>
+                            数据统一
+                        </h4>
+                        <hr>
+                        <ul class="feature-list">
+                            <li>统一管理用户数据</li>
+                            <li>跨平台同步数据</li>
+                            <li>数据加密保护</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="nf-helpOther">
+                        <h4 class="feature-title">
+                            <span class="feature-icon" style="background: var(--main);">❤️</span>
+                            帮助我们
+                        </h4>
+                        <hr>
+                        <p class="feature-text">一切都离不开你和我。独立开发，意味着我对每一行代码负责，也对每一位使用者负责。请你支持或建议我们，让这份坚持走得更远。我们，等你加入。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('NewFeatures')">取消</button>
+                <button class="btn-main" onclick="closeModal('NewFeatures'); showToast('操作成功！', 2000, 'success')">确定</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="addAppModal">
+        <div class="modal-content" style="max-width: 90%;width: 600px;height: 80%;">
+            <div class="modal-header">
+                <h3>添加应用</h3>
+                <button class="modal-close" onclick="closeModal('addAppModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="addName">应用名称</label>
+                    <input type="text" id="addName" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="addUrl">应用URL</label>
+                    <input type="text" id="addUrl" name="url" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="addIcon">应用图标</label>
+                    <input type="text" id="addIcon" name="icon" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="addDesc">描述</label>
+                    <input type="text" id="addDesc" name="desc" class="form-control" placeholder="简短描述">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('addAppModal')">取消</button>
+                <button class="btn-main"
+                    onclick="addApp(); closeModal('addAppModal'); showToast('操作成功！', 2000, 'success')">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editAppModal">
+        <div class="modal-content" style="max-width: 90%;width: 600px;height: 80%;">
+            <div class="modal-header">
+                <h3>编辑应用</h3>
+                <button class="modal-close" onclick="closeModal('editAppModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editName">应用名称</label>
+                    <input type="text" id="editName" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUrl">应用URL</label>
+                    <input type="text" id="editUrl" name="url" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editIcon">应用图标</label>
+                    <input type="text" id="editIcon" name="icon" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="editDesc">描述</label>
+                    <input type="text" id="editDesc" name="desc" class="form-control" placeholder="简短描述">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('editAppModal')">取消</button>
+                <button class="btn-main"
+                    onclick="editApp(); closeModal('editAppModal'); showToast('操作成功！', 2000, 'success')">确定</button>
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .game-float-btn {
+            position: fixed;
+            left: 16px;
+            bottom: 16px;
+            z-index: 999;
+        }
+
+        .game-main-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(50, 50, 60, 0.6);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 8px 14px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .game-main-btn:hover {
+            background: rgba(60, 60, 75, 0.8);
+            color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-main-btn .game-icon {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .game-float-btn {
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .game-main-btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+
+            .game-main-btn .game-icon {
+                font-size: 14px;
+            }
+        }
+    </style>
+
+    <div class="game-float-btn">
+        <a href="Service/game/OC/oc.html" class="game-main-btn">
+            <span class="game-icon">🎭</span>
+            <span>OC养成</span>
+        </a>
+    </div>
+
+    <script src="js/pwa.js"></script>
+    <script src="js/pointsSystem.js"></script>
+    <script src="js/syncManager.js"></script>
+    <script src="js/userAccount.js" defer></script>
+    <script src="js/background.js"></script>
+    <script src="js/search/utils.js"></script>
+    <script src="js/search/search.js"></script>
+    <script src="js/search/instruction/Email.js"></script>
+    <script src="js/search/instruction/go.js"></script>
+    <script src="js/search/searchPoints.js"></script>
+    <script src="js/search/globalSearch.js"></script>
+    <script src="js/card/weather.js"></script>
+    <script src="js/titleManager.js"></script>
+
+    <!-- js -->
+    <script src="ui/js/modules/captcha.js"></script>
+    <script src="ui/js/modules/carousel.js"></script>
+    <script src="ui/js/modules/feedback.js"></script>
+    <script src="ui/js/modules/modal.js"></script>
+    <script src="js/app.js"></script>
+    <script src="ui/js/modules/tabs.js"></script>
+    <script src="ui/js/modules/scrollspy.js"></script>
+    <script src="ui/js/modules/theme.js"></script>
+    <script>
+        function toggleNavbar() {
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const isActive = navbarNav.classList.toggle('active');
+            navbarToggle.classList.toggle('active');
+            navbarToggle.setAttribute('aria-expanded', isActive);
+        }
+
+        function closeNavbar() {
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.getElementById('navbar-toggle');
+            navbarNav.classList.remove('active');
+            navbarToggle.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+        }
+
+        document.addEventListener('click', function (e) {
+            const navbar = document.querySelector('.navbar');
+            if (!navbar.contains(e.target)) {
+                closeNavbar();
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                closeNavbar();
+            }
+        });
+
+        function updatePointsDisplay() {
+            const pointsElement = document.getElementById('points');
+            if (pointsElement && window.PointsSystem) {
+                PointsSystem.loadPoints();
+                const total = PointsSystem.getTotalPoints();
+                pointsElement.textContent = `🏆 ${total} 积分`;
+            }
+        }
+
+        function checkDailyLogin() {
+            const today = new Date().toDateString();
+            const lastLogin = localStorage.getItem('last_login_date');
+
+            if (lastLogin !== today) {
+                if (window.PointsSystem) {
+                    PointsSystem.addPoints(PointsSystem.GAME_KEYS.DAILY_LOGIN, 100);
+                    localStorage.setItem('last_login_date', today);
+                    if (typeof showToast === 'function') {
+                        showToast('🎉 每日登录奖励 +100 积分', 3000, 'success');
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            checkDailyLogin();
+            updatePointsDisplay();
+
+            if (window.PointsSystem) {
+                PointsSystem.onUpdate(function (total) {
+                    updatePointsDisplay();
+                });
+            }
+        });
+
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) {
+                updatePointsDisplay();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

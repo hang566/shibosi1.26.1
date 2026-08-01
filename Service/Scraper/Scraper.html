@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>资料收集器 · 市舶司</title>
+
+    <!-- UI 设计系统模块 -->
+    <link href="../../ui/css/modules/variables.css" rel="stylesheet">
+    <link href="../../ui/css/modules/base.css" rel="stylesheet">
+    <link href="../../ui/css/modules/display.css" rel="stylesheet">
+    <link href="../../ui/css/modules/feedback.css" rel="stylesheet">
+    <link href="../../ui/css/modules/forms.css" rel="stylesheet">
+    <link href="../../ui/css/modules/layout.css" rel="stylesheet">
+    <link href="../../ui/css/modules/navigation.css" rel="stylesheet">
+
+    <!-- 项目全局样式 -->
+    <link href="../../css/search.css" rel="stylesheet">
+    <link href="../../css/weather.css" rel="stylesheet">
+    <link href="../../css/theme.css" rel="stylesheet">
+    <link href="../../css/apps.css" rel="stylesheet">
+    <link href="../../css/QuickSettings.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <!-- 用户账户组件 -->
+    <script src="../../js/userAccount.js" defer></script>
+
+    <style>
+        /* ====== Scraper 专属样式（仅保留 UI 模块未覆盖的部分） ====== */
+
+        /* ---------- 整体布局容器（桌面端为侧边栏预留空间） ---------- */
+        .scraper-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: margin-left .28s ease;
+        }
+
+        .scraper-layout.with-sidebar {
+            margin-left: 260px;
+        }
+
+        .scraper-layout.collapsed-sidebar {
+            margin-left: 0;
+        }
+
+        /* ---------- 顶部导航栏 ---------- */
+        .scraper-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            box-sizing: border-box;
+        }
+
+        .scraper-header-bar .brand {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scraper-header-bar .search-wrapper {
+            flex: 1;
+            max-width: 480px;
+        }
+
+        .scraper-header-bar .search-wrapper input {
+            width: 100%;
+        }
+
+        .scraper-header-bar .points-badge {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--main);
+            white-space: nowrap;
+            background: var(--block-bg);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ---------- 主体布局 ---------- */
+        .scraper-body {
+            display: block;
+            flex: 1;
+            padding: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: 0;
+            box-sizing: border-box;
+        }
+
+        .sidebar-toggle-header {
+            display: inline-flex;
+            width: 32px;
+            height: 32px;
+            background: var(--block-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-sub);
+            font-size: 14px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            padding: 0;
+        }
+
+        .sidebar-toggle-header:hover {
+            color: var(--main);
+            border-color: var(--main);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 500;
+            transform: translateX(0);
+            transition: transform .28s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 400;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .28s ease;
+        }
+
+        .sidebar-mask.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar .panel,
+        .sidebar .panel .btn,
+        .sidebar .panel .btn-main,
+        .sidebar .panel .btn-danger,
+        .sidebar button {
+            min-width: 0;
+        }
+
+        .sidebar .panel {
+            margin: 0;
+            padding: 14px;
+        }
+
+        .sidebar .panel .btn,
+        .sidebar .panel .btn-main,
+        .sidebar .panel .btn-danger {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .sidebar .panel .btn:last-child,
+        .sidebar .panel .btn-main:last-child,
+        .sidebar .panel .btn-danger:last-child {
+            margin-bottom: 0;
+        }
+
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-line);
+        }
+
+        .main-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .main-content .card {
+            margin: 0;
+            flex: 1;
+            min-width: 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ---------- 内容头部 ---------- */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+            min-width: 0;
+        }
+
+        .content-header h1 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .content-header .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-header .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--main);
+            color: #fff;
+            font-size: 12px;
+            padding: 0 6px;
+        }
+
+        .browser-status {
+            font-size: 12px;
+            color: var(--text-placeholder);
+            transition: opacity 0.3s ease;
+        }
+
+        .browser-status.ok {
+            color: var(--success);
+        }
+
+        .browser-status.err {
+            color: var(--danger);
+        }
+
+        .view-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ---------- 视图切换 ---------- */
+        .view-toggle {
+            display: flex;
+            background: var(--block-bg);
+            border-radius: var(--radius-md);
+            padding: 2px;
+        }
+
+        .view-toggle button {
+            background: transparent;
+            border: none;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-placeholder);
+            min-width: auto;
+            transition: var(--transition);
+        }
+
+        .view-toggle button.active {
+            background: var(--card-bg);
+            color: var(--main);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ---------- 分类/标签筛选芯片 ---------- */
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: transparent;
+            padding: 0;
+        }
+
+        .category-chip {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1.5px solid transparent;
+            background: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-sub);
+        }
+
+        .category-chip:hover {
+            transform: translateY(-1px);
+        }
+
+        .category-chip.active {
+            border-color: currentColor;
+            font-weight: 600;
+        }
+
+        .tag-chip {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-sub);
+        }
+
+        .tag-chip:hover {
+            border-color: var(--main);
+            color: var(--main);
+        }
+
+        .tag-chip.active {
+            background: var(--main);
+            color: #fff;
+            border-color: var(--main);
+        }
+
+        /* ---------- 资料条目 ---------- */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+        }
+
+        .item-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .item {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            transition: border-color 0.15s, box-shadow 0.15s;
+            cursor: grab;
+        }
+
+        .item:active {
+            cursor: grabbing;
+        }
+
+        .item:hover {
+            border-color: var(--main);
+            box-shadow: var(--shadow);
+        }
+
+        .item.dragging {
+            opacity: 0.5;
+            border-color: var(--main);
+        }
+
+        .item-compact .item {
+            padding: 7px 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item-grid .item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .item-compact .item-top {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .item-compact .item-title {
+            font-size: 13px;
+        }
+
+        .item-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .item-title a:hover {
+            color: var(--main);
+            text-decoration: underline;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+
+        .item-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-placeholder);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: var(--transition);
+            line-height: 1;
+            min-width: auto;
+        }
+
+        .item-action-btn:hover {
+            color: var(--main);
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .item-action-btn.danger:hover {
+            color: var(--danger);
+            background: rgba(245, 63, 63, 0.1);
+        }
+
+        .item-meta {
+            font-size: 11px;
+            color: var(--text-placeholder);
+            margin-top: 3px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 10px;
+        }
+
+        .item-compact .item-meta {
+            display: none;
+        }
+
+        .item-content {
+            margin-top: 5px;
+            font-size: 13px;
+            color: var(--text-sub);
+            background: var(--block-bg);
+            padding: 6px 10px;
+            border-radius: var(--radius-md);
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 60px;
+            overflow-y: auto;
+            border-left: 3px solid var(--border);
+        }
+
+        .item-grid .item-content {
+            max-height: 80px;
+        }
+
+        .item-compact .item-content {
+            display: none;
+        }
+
+        .item-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 5px;
+        }
+
+        .item-compact .item-tags {
+            display: none;
+        }
+
+        .item-tag {
+            background: rgba(0, 122, 255, 0.1);
+            color: var(--main);
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .item-note {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--text-sub);
+            background: var(--block-bg);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--main);
+            word-break: break-word;
+        }
+
+        .item-compact .item-note,
+        .item-grid .item-note {
+            display: none;
+        }
+
+        .item-note.empty {
+            color: var(--text-placeholder);
+            background: transparent;
+            border-left-color: transparent;
+            padding-left: 0;
+        }
+
+        .item-priority {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 11px;
+            padding: 1px 6px;
+            border-radius: 8px;
+            margin-left: 4px;
+        }
+
+        .priority-high {
+            background: rgba(245, 63, 63, 0.1);
+            color: var(--danger);
+        }
+
+        .priority-medium {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+
+        .priority-low {
+            background: rgba(0, 180, 42, 0.1);
+            color: var(--success);
+        }
+
+        /* ---------- 空状态 ---------- */
+        .empty-state-custom {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-placeholder);
+            font-size: 15px;
+        }
+
+        .empty-state-custom .empty-icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-custom .empty-hint {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* ---------- 底部 ---------- */
+        .scraper-footer {
+            flex-shrink: 0;
+            min-width: 0;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-line);
+            font-size: 12px;
+            color: var(--text-placeholder);
+            text-align: center;
+        }
+
+        /* ---------- 书签降级方案 ---------- */
+        .fallback-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .fallback-overlay.active {
+            display: flex;
+        }
+
+        .fallback-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            max-width: 90%;
+            width: 440px;
+        }
+
+        .fallback-card p {
+            font-size: 14px;
+            margin: 0 0 10px;
+        }
+
+        .fallback-card textarea {
+            width: 100%;
+            min-height: 60px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        /* ---------- 分类管理弹窗 ---------- */
+        .category-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-line);
+        }
+
+        .category-row .cat-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .category-row .cat-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        /* ---------- 滚动区 ---------- */
+        #listContainer {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            min-width: 0;
+            min-height: 60px;
+            padding: 4px 4px 4px 0;
+        }
+
+        #listContainer::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #listContainer::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        /* ---------- 响应式 ---------- */
+        @media (max-width: 950px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-toggle-header {
+                display: inline-flex;
+            }
+
+            .scraper-layout.with-sidebar {
+                margin-left: 0;
+            }
+
+            .scraper-body {
+                padding: 10px;
+            }
+
+            .scraper-header-bar {
+                padding: 8px 12px;
+                gap: 10px;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+
+            .scraper-header-bar .search-wrapper {
+                max-width: 100%;
+            }
+
+            .content-header {
+                padding: 4px 0;
+            }
+        }
+
+        @media (min-width: 951px) {
+            .sidebar-toggle-header {
+                display: inline-flex;
+            }
+
+            .sidebar-mask {
+                display: none;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .sidebar-toggle-header {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .scraper-header-bar {
+                flex-wrap: wrap;
+                padding: 8px 10px;
+                gap: 8px;
+            }
+
+            .scraper-header-bar .brand {
+                font-size: 15px;
+                order: 1;
+            }
+
+            .sidebar-toggle-header {
+                order: 0;
+            }
+
+            .scraper-header-bar .search-wrapper {
+                order: 3;
+                flex-basis: 100%;
+                max-width: 100%;
+            }
+
+            .scraper-header-bar .points-badge {
+                order: 2;
+                padding: 3px 10px;
+                font-size: 12px;
+            }
+
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .view-controls {
+                justify-content: flex-start;
+            }
+
+            .filter-chips {
+                gap: 4px;
+            }
+
+            .item {
+                padding: 10px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .scraper-body {
+                padding: 8px;
+            }
+
+            .item-title {
+                font-size: 13px;
+            }
+
+            .panel {
+                padding: 10px;
+            }
+
+            .panel-title {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scraper-layout">
+
+        <!-- ===== 顶部导航栏 ===== -->
+        <header class="scraper-header-bar">
+            <button class="sidebar-toggle-header" id="sidebarToggle" title="侧边栏">☰</button>
+            <div class="brand">
+                <div class="navbar-brand">
+                    <a href="../../index.html">市舶司</a>
+                </div>
+                <span>|</span>
+                资料收罗器
+            </div>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="搜索标题、内容、标签或分类..." />
+            </div>
+            <div class="points-badge">积分 <span id="pointsCount">0</span></div>
+            <!-- 用户账户容器 -->
+            <div id="user-account-slot" style="margin-left:8px;"></div>
+        </header>
+
+        <!-- ===== 主内容区 ===== -->
+        <div class="scraper-body">
+
+            <!-- 侧边栏 -->
+            <aside class="sidebar" id="sidebar">
+                <!-- 操作区 -->
+                <div class="panel">
+                    <div class="panel-title">工具</div>
+                    <button id="launchBtn" class="btn btn-main">启动画中画</button>
+                    <button id="refreshBtn" class="btn">刷新</button>
+                    <button id="exportAllBtn" class="btn btn-success">导出全部</button>
+                    <button id="manageCategoriesBtn" class="btn">分类管理</button>
+                    <button id="manageAlbumsBtn" class="btn">专辑管理</button>
+                    <button id="clearAllBtn" class="btn btn-danger">清空</button>
+                </div>
+
+                <!-- 专辑筛选 -->
+                <div class="panel">
+                    <div class="panel-title">专辑</div>
+                    <div class="filter-chips" id="albumFilter"></div>
+                    <button id="addAlbumBtn" class="btn" style="margin-top:8px;font-size:12px;">+ 创建专辑</button>
+                </div>
+
+                <!-- 分类筛选 -->
+                <div class="panel">
+                    <div class="panel-title">分类</div>
+                    <div class="filter-chips" id="categoryFilter"></div>
+                </div>
+
+                <!-- 标签筛选 -->
+                <div class="panel">
+                    <div class="panel-title">标签</div>
+                    <div class="filter-chips" id="tagFilter"></div>
+                </div>
+            </aside>
+
+            <!-- 侧边栏遮罩 -->
+            <div class="sidebar-mask" id="sidebarMask"></div>
+
+            <!-- 主内容 -->
+            <main class="main-content">
+                <div class="card">
+                    <div class="content-header">
+                        <div class="header-left">
+                            <div class="header-meta">
+                                <h1>已收集资料</h1>
+                                <span class="badge" id="itemCount">0</span>
+                            </div>
+                            <div class="browser-status" id="status">检测浏览器支持…</div>
+                        </div>
+                        <div class="view-controls">
+                            <div class="view-toggle">
+                                <button id="viewGrid" title="卡片视图">🗂️</button>
+                                <button id="viewList" title="列表视图" class="active">📋</button>
+                                <button id="viewCompact" title="紧凑视图">📜</button>
+                            </div>
+                            <select id="sortSelect">
+                                <option value="time-desc">最新优先</option>
+                                <option value="time-asc">最早优先</option>
+                                <option value="title-asc">标题 A-Z</option>
+                                <option value="title-desc">标题 Z-A</option>
+                                <option value="category">分类排序</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="listContainer">
+                        <div class="empty-state-custom">
+                            <span class="empty-icon">📭</span>
+                            还没有收集任何资料<br />
+                            <span class="empty-hint">点击「启动画中画」在浏览网页时收集</span>
+                        </div>
+                    </div>
+
+                    <div class="scraper-footer">
+                        支持 <strong>拖拽排序</strong> 调整顺序 · 点击 ⭐ 标记优先级
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ===== 画中画降级方案（浏览器不支持时显示） ===== -->
+    <div class="fallback-overlay" id="fallback">
+        <div class="fallback-card">
+            <p>⚠️ 您的浏览器不支持文档画中画 API，请使用最新版 <strong>Chrome / Edge</strong>（桌面端）。</p>
+            <p>您也可以将以下代码保存为书签，在任意网页点击使用：</p>
+            <textarea id="bookmarkCode" readonly></textarea>
+            <div class="btn-group" style="margin-top:12px;">
+                <button id="copyBtn" class="btn btn-main">复制书签代码</button>
+                <button id="closeFallbackBtn" class="btn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 分类管理弹窗 ===== -->
+    <div class="modal" id="manageCategoriesModal">
+        <div class="modal-content" style="max-width:500px;">
+            <div class="modal-header">
+                <h3>分类管理</h3>
+                <button class="modal-close" onclick="closeModal('manageCategoriesModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-item">
+                    <label class="form-label">添加新分类</label>
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="newCategoryName" placeholder="分类名称" style="flex:1;">
+                        <input type="color" id="newCategoryColor" value="#007aff"
+                            style="width:50px;cursor:pointer;min-width:auto;">
+                        <button id="addCategoryBtn" class="btn btn-main"
+                            style="min-width:auto;width:auto;max-width:80px;">添加</button>
+                    </div>
+                </div>
+                <div id="categoriesList" style="max-height:280px;overflow-y:auto;"></div>
+                <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+                    <button id="resetCategoriesBtn" class="btn btn-danger" style="width:100%;">恢复默认分类</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('manageCategoriesModal')" class="btn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 专辑管理弹窗 ===== -->
+    <div class="modal" id="manageAlbumsModal">
+        <div class="modal-content" style="max-width:500px;">
+            <div class="modal-header">
+                <h3>专辑管理</h3>
+                <button class="modal-close" onclick="closeModal('manageAlbumsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-item">
+                    <label class="form-label">创建新专辑</label>
+                    <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+                        <input type="text" id="newAlbumName" placeholder="专辑名称" style="flex:1;">
+                        <button id="addAlbumBtnModal" class="btn btn-main"
+                            style="min-width:auto;width:auto;max-width:80px;">创建</button>
+                    </div>
+                    <div style="display:flex;gap:14px;align-items:center;">
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                            <div id="colorDisplay"
+                                style="width:44px;height:44px;border-radius:12px;border:2px solid var(--border);background:#6c5ce7;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;transition:transform .15s;"
+                                title="点击自定义颜色">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    style="opacity:0.9;">
+                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                                </svg>
+                            </div>
+                            <span id="colorHexLabel"
+                                style="font-size:11px;color:var(--text-sub);font-family:monospace;">#6C5CE7</span>
+                            <input type="color" id="newAlbumColor" value="#6c5ce7"
+                                style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;">
+                        </div>
+                        <div id="presetColors" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;flex:1;">
+                        </div>
+                    </div>
+                </div>
+                <div id="albumsList" style="max-height:280px;overflow-y:auto;"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('manageAlbumsModal')" class="btn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 画中画模板 ===== -->
+    <template id="collectorTemplate">
+        <!DOCTYPE html>
+        <html lang="zh-CN">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>📚 收集器</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box
+                }
+
+                body {
+                    font-family: system-ui, sans-serif;
+                    padding: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    height: 100vh;
+                    overflow: hidden;
+                    background: var(--bg);
+                    color: var(--text)
+                }
+
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-shrink: 0
+                }
+
+                .header h1 {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: var(--text)
+                }
+
+                .close-btn {
+                    background: transparent;
+                    border: none;
+                    color: var(--text-placeholder);
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 2px 8px;
+                    line-height: 1
+                }
+
+                .close-btn:hover {
+                    color: var(--danger)
+                }
+
+                .page-info {
+                    background: var(--card-bg);
+                    border-radius: var(--radius-md);
+                    padding: 8px 10px;
+                    border: 1px solid var(--border);
+                    flex-shrink: 0
+                }
+
+                .page-info .label {
+                    font-size: 10px;
+                    font-weight: 600;
+                    color: var(--text-placeholder);
+                    text-transform: uppercase;
+                    letter-spacing: .4px
+                }
+
+                .page-info .title {
+                    font-size: 13px;
+                    color: var(--text);
+                    font-weight: 500;
+                    margin-top: 2px;
+                    word-break: break-all
+                }
+
+                .page-info .url {
+                    font-size: 11px;
+                    color: var(--main);
+                    text-decoration: none;
+                    margin-top: 1px;
+                    display: block
+                }
+
+                .page-info .url:hover {
+                    text-decoration: underline
+                }
+
+                .input-area {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    min-height: 0
+                }
+
+                .input-area textarea {
+                    flex: 1;
+                    width: 100%;
+                    border: 2px dashed var(--border);
+                    border-radius: var(--radius-lg);
+                    padding: 12px;
+                    font-size: 13px;
+                    font-family: inherit;
+                    background: var(--bg);
+                    color: var(--text);
+                    resize: none;
+                    outline: none;
+                    transition: border-color .2s
+                }
+
+                .input-area textarea:focus {
+                    border-color: var(--main)
+                }
+
+                .input-area textarea::placeholder {
+                    color: var(--text-placeholder)
+                }
+
+                .input-hint {
+                    font-size: 11px;
+                    color: var(--text-placeholder);
+                    text-align: center;
+                    margin-top: 6px;
+                    flex-shrink: 0
+                }
+
+                .meta-row {
+                    display: flex;
+                    gap: 8px;
+                    flex-shrink: 0
+                }
+
+                .meta-row select,
+                .meta-row input {
+                    flex: 1;
+                    border: 1px solid var(--border);
+                    border-radius: var(--radius-md);
+                    padding: 7px 10px;
+                    font-size: 12px;
+                    font-family: inherit;
+                    background: var(--bg);
+                    color: var(--text);
+                    outline: none
+                }
+
+                .meta-row select:focus,
+                .meta-row input:focus {
+                    border-color: var(--main);
+                    box-shadow: 0 0 0 2px rgba(0, 122, 255, .1)
+                }
+
+                .save-btn {
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    border-radius: var(--radius-lg);
+                    font-size: 14px;
+                    font-weight: 600;
+                    background: var(--main);
+                    color: #fff;
+                    cursor: pointer;
+                    transition: opacity .15s;
+                    flex-shrink: 0
+                }
+
+                .save-btn:hover {
+                    opacity: .9
+                }
+
+                .save-btn:active {
+                    opacity: .8
+                }
+
+                .toast {
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, .8);
+                    color: #fff;
+                    padding: 12px 24px;
+                    border-radius: var(--radius-md);
+                    font-size: 13px;
+                    font-weight: 500;
+                    opacity: 0;
+                    transition: opacity .3s;
+                    z-index: 9999;
+                    pointer-events: none
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="header">
+                <h1>📚 收集器</h1>
+                <button class="close-btn" id="closePip">✕</button>
+            </div>
+            <div class="page-info">
+                <div class="label">当前页面</div>
+                <div class="title" id="pageTitle">—</div>
+                <a href="#" class="url" id="pageUrl" target="_blank">—</a>
+            </div>
+            <div class="input-area">
+                <textarea id="selectionText" placeholder="粘贴或拖入文本内容…"></textarea>
+                <div class="input-hint">📥 支持拖拽和粘贴，自动追加</div>
+            </div>
+            <div class="meta-row">
+                <select id="albumSelect"></select>
+                <select id="categorySelect"></select>
+            </div>
+            <input type="text" id="tagInput" placeholder="标签（逗号分隔）…"
+                style="flex-shrink:0;border:1px solid var(--border);border-radius:var(--radius-md);padding:7px 10px;font-size:12px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;">
+            <button class="save-btn" id="saveBtn">💾 保存</button>
+            <script>
+                (function () {
+                    'use strict';
+                    const $ = s => document.querySelector(s);
+                    const pageTitle = $('#pageTitle'), pageUrl = $('#pageUrl'), selectionText = $('#selectionText'),
+                        albumSelect = $('#albumSelect'), categorySelect = $('#categorySelect'), tagInput = $('#tagInput'), saveBtn = $('#saveBtn'), closePip = $('#closePip');
+                    const SK = 'collector_items', CK = 'collector_categories', AK = 'collector_albums';
+                    let categories = [], albums = [];
+
+                    function storage() { return window.opener && window.opener.localStorage ? window.opener.localStorage : localStorage }
+
+                    function loadCategories() {
+                        if (window.COLLECTOR_DATA && window.COLLECTOR_DATA.categories) {
+                            categories = window.COLLECTOR_DATA.categories;
+                        } else {
+                            try { const r = storage().getItem(CK); if (r) categories = JSON.parse(r); else categories = [] } catch (_) { categories = [] }
+                        }
+                        if (!categories.length) { categories = [{ name: '学习', color: '#007aff' }, { name: '工作', color: '#ff9500' }, { name: '娱乐', color: '#af52de' }, { name: '生活', color: '#34c759' }, { name: '旅游', color: '#00bcd4' }, { name: '美食', color: '#ff3b30' }, { name: '其他', color: '#8e8e93' }] }
+                    }
+
+                    function loadAlbums() {
+                        if (window.COLLECTOR_DATA && window.COLLECTOR_DATA.albums) {
+                            albums = window.COLLECTOR_DATA.albums;
+                        } else {
+                            try { const r = storage().getItem(AK); if (r) albums = JSON.parse(r); else albums = [] } catch (_) { albums = [] }
+                        }
+                    }
+                    function esc(s) { if (!s) return ''; return String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]) }
+                    function showToast(msg) {
+                        const old = document.querySelector('.toast'); if (old) old.remove();
+                        const d = document.createElement('div'); d.textContent = msg; d.className = 'toast'; document.body.appendChild(d); requestAnimationFrame(() => d.style.opacity = '1');
+                        setTimeout(() => { d.style.opacity = '0'; setTimeout(() => d.remove(), 300) }, 1500)
+                    }
+
+                    function renderCategories() { let h = '<option value="">选择分类…</option>'; categories.forEach(c => { h += '<option value="' + esc(c.name) + '">' + esc(c.name) + '</option>' }); categorySelect.innerHTML = h }
+                    function renderAlbums() { let h = '<option value="">选择专辑…</option>'; albums.forEach(a => { h += '<option value="' + esc(a.id) + '">' + esc(a.name) + '</option>' }); albumSelect.innerHTML = h }
+                    function loadPageInfo() { try { const o = window.opener; if (o) { pageTitle.textContent = o.document.title || '无标题'; pageUrl.textContent = o.location.href; pageUrl.href = o.location.href; const sel = o.getSelection().toString().trim(); if (sel) selectionText.value = sel } else { pageTitle.textContent = '无法获取'; pageUrl.textContent = '#'; pageUrl.href = '#' } } catch (e) { pageTitle.textContent = '获取失败'; pageUrl.textContent = '#'; pageUrl.href = '#' } }
+
+                    function saveItem() {
+                        const sel = selectionText.value.trim();
+                        if (!sel) { showToast('请输入内容'); return }
+                        const o = window.opener;
+                        let title = '', url = '';
+                        if (o) { try { title = o.document.title || '无标题'; url = o.location.href } catch (e) { title = '[跨域] ' + (o.location.href || ''); url = o.location.href || '' } }
+                        if (!title && !url) { title = document.title || '无标题'; url = document.location.href }
+                        const raw = storage().getItem(SK);
+                        const items = raw ? JSON.parse(raw) : [];
+                        const albumId = albumSelect.value;
+                        const tagStr = tagInput.value.trim();
+                        const tags = tagStr ? tagStr.split(/[,，]/).map(function (t) { return t.trim() }).filter(function (t) { return t }) : [];
+                        const albumName = albumId ? (albums.find(function (a) { return a.id === albumId })?.name || '') : '';
+                        const newItem = {
+                            id: Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                            title: title,
+                            url: url,
+                            selected: sel,
+                            category: categorySelect.value,
+                            tags: tags,
+                            albumId: albumId,
+                            albumName: albumName,
+                            timestamp: Date.now()
+                        };
+                        items.push(newItem);
+                        storage().setItem(SK, JSON.stringify(items));
+                        showToast('✅ 已保存');
+                        if (window.opener && window.opener.ScraperApp) try { window.opener.ScraperApp.renderList() } catch (_) { }
+                        if (window.opener && window.opener.PointsSystem) window.opener.PointsSystem.addPoints(window.opener.PointsSystem.GAME_KEYS.COLLECTOR, 10);
+                        selectionText.value = ''; tagInput.value = ''; categorySelect.value = ''; albumSelect.value = '';
+                    }
+
+                    closePip.addEventListener('click', () => window.close());
+                    saveBtn.addEventListener('click', saveItem);
+                    selectionText.addEventListener('dragover', e => { e.preventDefault(); selectionText.style.borderColor = 'var(--main)' });
+                    selectionText.addEventListener('dragleave', e => { e.preventDefault(); selectionText.style.borderColor = '' });
+                    selectionText.addEventListener('drop', e => { e.preventDefault(); selectionText.style.borderColor = ''; const d = e.dataTransfer.getData('text/plain'); if (d) { selectionText.value = selectionText.value ? selectionText.value + '\n' + d : d; showToast('📥 已追加') } });
+                    selectionText.addEventListener('paste', e => { const text = e.clipboardData.getData('text'); if (text && selectionText.value) { e.preventDefault(); selectionText.value += '\n' + text; showToast('📥 已追加') } });
+
+                    // 接收主页面的更新通知
+                    window.addEventListener('message', function (e) {
+                        if (e.data && e.data.type === 'COLLECTOR_DATA_UPDATE') {
+                            if (e.data.albums) { albums = e.data.albums; renderAlbums() }
+                            if (e.data.categories) { categories = e.data.categories; renderCategories() }
+                        }
+                    });
+
+                    // 定期从主页面同步数据
+                    setInterval(function () {
+                        if (window.opener && !window.COLLECTOR_DATA) {
+                            try {
+                                const rawAlbums = window.opener.localStorage.getItem(AK);
+                                const rawCats = window.opener.localStorage.getItem(CK);
+                                if (rawAlbums) { albums = JSON.parse(rawAlbums); renderAlbums() }
+                                if (rawCats) { categories = JSON.parse(rawCats); renderCategories() }
+                            } catch (_) { }
+                        }
+                    }, 3000);
+
+                    loadCategories(); loadAlbums(); renderCategories(); renderAlbums(); loadPageInfo();
+                })();
+            </script>
+        </body>
+
+        </html>
+    </template>
+
+    <!-- ===== 业务逻辑脚本（主页面） ===== -->
+    <script>
+        (function () {
+            'use strict';
+
+            // ---- 全局变量 ----
+            const STORAGE_KEY = 'collector_items';
+            const CATEGORIES_KEY = 'collector_categories';
+            const ALBUMS_KEY = 'collector_albums';
+
+            const launchBtn = document.getElementById('launchBtn');
+            const statusEl = document.getElementById('status');
+            const fallback = document.getElementById('fallback');
+            const bookmarkCode = document.getElementById('bookmarkCode');
+            const copyBtn = document.getElementById('copyBtn');
+            const closeFallbackBtn = document.getElementById('closeFallbackBtn');
+            const listContainer = document.getElementById('listContainer');
+            const itemCount = document.getElementById('itemCount');
+            const pointsCount = document.getElementById('pointsCount');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const exportAllBtn = document.getElementById('exportAllBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const searchInput = document.getElementById('searchInput');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const tagFilter = document.getElementById('tagFilter');
+            const albumFilter = document.getElementById('albumFilter');
+            const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
+            const manageAlbumsBtn = document.getElementById('manageAlbumsBtn');
+            const addAlbumBtn = document.getElementById('addAlbumBtn');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const viewGrid = document.getElementById('viewGrid');
+            const viewList = document.getElementById('viewList');
+            const viewCompact = document.getElementById('viewCompact');
+            const sortSelect = document.getElementById('sortSelect');
+
+            let items = [];
+            let categories = [];
+            let albums = [];
+            let currentCategory = 'all';
+            let currentTag = 'all';
+            let currentAlbum = 'all';
+            let searchQuery = '';
+            let currentView = 'list';
+            let currentSort = 'time-desc';
+
+            const template = document.getElementById('collectorTemplate');
+            let COLLECTOR_HTML = template.innerHTML;
+
+            // ---- 积分 ----
+            function updatePoints() {
+                if (window.PointsSystem) {
+                    PointsSystem.loadPoints();
+                    const total = PointsSystem.getTotalPoints();
+                    pointsCount.textContent = `🏆 ${total} 积分`;
+                }
+            }
+
+            // ---- CSS 变量提取（注入画中画） ----
+            function getCSSVariables() {
+                const root = document.documentElement;
+                const vars = {};
+                ['--bg', '--trbg', '--text', '--text-sub', '--text-placeholder',
+                    '--border', '--border-line', '--block-bg', '--btn-bg', '--btn-hover',
+                    '--main', '--success', '--warning', '--danger', '--card-bg', '--shadow',
+                    '--radius-sm', '--radius-md', '--radius-lg'
+                ].forEach(name => {
+                    vars[name] = getComputedStyle(root).getPropertyValue(name).trim();
+                });
+                return vars;
+            }
+
+            function injectThemeIntoPip() {
+                const vars = getCSSVariables();
+                let cssVars = ':root{';
+                Object.keys(vars).forEach(k => { cssVars += k + ':' + vars[k] + ';'; });
+                cssVars += '}';
+                COLLECTOR_HTML = COLLECTOR_HTML.replace('</head>', '<style>' + cssVars + '</style></head>');
+            }
+
+            function generateBookmarklet() {
+                const vars = getCSSVariables();
+                let cssVars = ':root{';
+                Object.keys(vars).forEach(k => { cssVars += k + ':' + vars[k] + ';'; });
+                cssVars += '}';
+                const pipHtml = COLLECTOR_HTML.replace('</head>', '<style>' + cssVars + '</style></head>');
+                const escaped = JSON.stringify(pipHtml).slice(1, -1);
+                return `javascript:(function(){if(!('documentPictureInPicture'in window)){alert('您的浏览器不支持文档画中画 API，请使用最新版 Chrome/Edge。');return;}window.documentPictureInPicture.requestWindow({width:440,height:680}).then(pip=>{const doc=pip.document;doc.open();doc.write(\`${escaped}\`);doc.close();}).catch(err=>{alert('启动画中画失败：'+err.message);});})();`;
+            }
+
+            // ---- 数据读写 ----
+            function loadItems() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    items = raw ? JSON.parse(raw) : [];
+                    if (!Array.isArray(items)) items = [];
+                } catch (_) { items = []; }
+                items = items.filter(it => it && typeof it === 'object');
+                items.forEach(it => {
+                    if (!it.id) it.id = Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+                    if (!it.timestamp) it.timestamp = Date.now();
+                });
+            }
+
+            function loadCategories() {
+                try {
+                    const raw = localStorage.getItem(CATEGORIES_KEY);
+                    categories = raw ? JSON.parse(raw) : [];
+                } catch (_) { categories = []; }
+                if (!categories.length) {
+                    categories = [
+                        { name: '学习', color: '#007aff' },
+                        { name: '工作', color: '#ff9500' },
+                        { name: '娱乐', color: '#af52de' },
+                        { name: '生活', color: '#34c759' },
+                        { name: '旅游', color: '#00bcd4' },
+                        { name: '美食', color: '#ff3b30' },
+                        { name: '其他', color: '#8e8e93' }
+                    ];
+                    localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+                }
+            }
+
+            function saveItems() { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
+
+            function saveCategories() {
+                localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+                broadcastDataUpdate();
+            }
+
+            function loadAlbums() {
+                try {
+                    const raw = localStorage.getItem(ALBUMS_KEY);
+                    albums = raw ? JSON.parse(raw) : [];
+                } catch (_) { albums = []; }
+            }
+
+            function saveAlbums() {
+                localStorage.setItem(ALBUMS_KEY, JSON.stringify(albums));
+                broadcastDataUpdate();
+            }
+
+            // 向所有画中画窗口广播数据更新
+            function broadcastDataUpdate() {
+                const update = {
+                    type: 'COLLECTOR_DATA_UPDATE',
+                    albums: albums,
+                    categories: categories
+                };
+                // 尝试通过 window 发送给画中画
+                try {
+                    if (window.documentPictureInPicture && window.documentPictureInPicture.window) {
+                        window.documentPictureInPicture.window.postMessage(update, '*');
+                    }
+                } catch (_) { }
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[m]);
+            }
+
+            // ---- 标签/分类统计 ----
+            function getAllTags() {
+                const tagSet = new Set();
+                items.forEach(item => {
+                    if (item.tags && Array.isArray(item.tags)) item.tags.forEach(t => tagSet.add(t));
+                });
+                return [...tagSet].sort();
+            }
+
+            // ---- 筛选渲染 ----
+            function renderCategoryFilter() {
+                let html = '<button class="category-chip' + (currentCategory === 'all' ? ' active' : '') + '" data-category="all">全部</button>';
+                categories.forEach(cat => {
+                    html += '<button class="category-chip' + (currentCategory === cat.name ? ' active' : '') + '" data-category="' + escapeHtml(cat.name) + '" style="background:' + cat.color + '20;color:' + cat.color + '">' + escapeHtml(cat.name) + '</button>';
+                });
+                categoryFilter.innerHTML = html;
+            }
+
+            function renderTagFilter() {
+                const tags = getAllTags();
+                if (!tags.length) { tagFilter.style.display = 'none'; return; }
+                tagFilter.style.display = 'flex';
+                let html = '<button class="tag-chip' + (currentTag === 'all' ? ' active' : '') + '" data-tag="all">全部</button>';
+                tags.forEach(tag => {
+                    html += '<button class="tag-chip' + (currentTag === tag ? ' active' : '') + '" data-tag="' + escapeHtml(tag) + '">' + escapeHtml(tag) + '</button>';
+                });
+                tagFilter.innerHTML = html;
+            }
+
+            function renderAlbumFilter() {
+                let html = '<button class="category-chip' + (currentAlbum === 'all' ? ' active' : '') + '" data-album="all">全部</button>';
+                albums.forEach(album => {
+                    html += '<button class="category-chip' + (currentAlbum === album.id ? ' active' : '') + '" data-album="' + escapeHtml(album.id) + '" style="background:' + album.color + '20;color:' + album.color + '">' + escapeHtml(album.name) + '</button>';
+                });
+                albumFilter.innerHTML = html;
+            }
+
+            function sortItems(filtered) {
+                const sorted = [...filtered];
+                switch (currentSort) {
+                    case 'time-desc': sorted.sort((a, b) => b.timestamp - a.timestamp); break;
+                    case 'time-asc': sorted.sort((a, b) => a.timestamp - b.timestamp); break;
+                    case 'title-asc': sorted.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'zh-CN')); break;
+                    case 'title-desc': sorted.sort((a, b) => (b.title || '').localeCompare(a.title || '', 'zh-CN')); break;
+                    case 'category': sorted.sort((a, b) => (a.category || '').localeCompare(b.category || '', 'zh-CN')); break;
+                }
+                return sorted;
+            }
+
+            function filterItems() {
+                let filtered = items;
+                if (currentAlbum !== 'all') filtered = filtered.filter(it => it.albumId === currentAlbum);
+                if (currentCategory !== 'all') filtered = filtered.filter(it => it.category === currentCategory);
+                if (currentTag !== 'all') filtered = filtered.filter(it => it.tags && Array.isArray(it.tags) && it.tags.includes(currentTag));
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    filtered = filtered.filter(it =>
+                        (it.title || '').toLowerCase().includes(q) ||
+                        (it.selected || '').toLowerCase().includes(q) ||
+                        (it.note || '').toLowerCase().includes(q) ||
+                        (it.tags || []).join(' ').toLowerCase().includes(q) ||
+                        (it.category || '').toLowerCase().includes(q) ||
+                        (it.albumName || '').toLowerCase().includes(q)
+                    );
+                }
+                return sortItems(filtered);
+            }
+
+            function getPriorityHtml(priority) {
+                if (!priority) return '';
+                const cfg = {
+                    high: { cls: 'priority-high', text: '高' },
+                    medium: { cls: 'priority-medium', text: '中' },
+                    low: { cls: 'priority-low', text: '低' }
+                };
+                const c = cfg[priority];
+                return c ? '<span class="item-priority ' + c.cls + '">' + c.text + '</span>' : '';
+            }
+
+            function togglePriority(index) {
+                const priorities = ['', 'high', 'medium', 'low'];
+                const current = items[index].priority || '';
+                const nextIdx = (priorities.indexOf(current) + 1) % priorities.length;
+                items[index].priority = priorities[nextIdx];
+                saveItems();
+                renderList();
+                const text = priorities[nextIdx] ? ({ high: '高', medium: '中', low: '低' })[priorities[nextIdx]] : '无';
+                showToast('优先级已设为：' + text, 2000, 'success');
+            }
+
+            function renderList() {
+                const filtered = filterItems();
+                listContainer.className = currentView === 'grid' ? 'item-grid' : (currentView === 'compact' ? 'item-compact' : 'item-list');
+
+                if (!items.length) {
+                    listContainer.innerHTML = '<div class="empty-state-custom"><span class="empty-icon">📭</span>还没有收集任何资料<br /><span class="empty-hint">点击「启动画中画」在浏览网页时收集</span></div>';
+                    itemCount.textContent = '0';
+                    return;
+                }
+                if (!filtered.length) {
+                    listContainer.innerHTML = '<div class="empty-state-custom"><span class="empty-icon">🔍</span>没有找到匹配的资料<br /><span class="empty-hint">尝试调整搜索词或筛选条件</span></div>';
+                    itemCount.textContent = '0 / ' + items.length;
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach(item => {
+                    const realIndex = items.indexOf(item);
+                    const note = item.note || '';
+                    const noteHtml = note ? '<div class="item-note">' + escapeHtml(note) + '</div>' : '<div class="item-note empty">无备注</div>';
+                    const time = new Date(item.timestamp).toLocaleString();
+                    const selectedText = item.selected || '(无选中文本)';
+
+                    let categoryHtml = '';
+                    if (item.category) {
+                        const cat = categories.find(c => c.name === item.category);
+                        const color = cat ? cat.color : '#8e8e93';
+                        categoryHtml = '<div class="item-category" style="background:' + color + '20;color:' + color + '">📁 ' + escapeHtml(item.category) + '</div>';
+                    }
+
+                    let tagsHtml = '';
+                    if (item.tags && Array.isArray(item.tags) && item.tags.length) {
+                        tagsHtml = '<div class="item-tags">';
+                        item.tags.forEach(tag => { tagsHtml += '<span class="item-tag">' + escapeHtml(tag) + '</span>'; });
+                        tagsHtml += '</div>';
+                    }
+
+                    let albumHtml = '';
+                    if (item.albumId) {
+                        const album = albums.find(a => a.id === item.albumId);
+                        if (album) {
+                            albumHtml = '<div class="item-category" style="background:' + album.color + '20;color:' + album.color + '">📚 ' + escapeHtml(album.name) + '</div>';
+                        }
+                    }
+
+                    const priorityHtml = getPriorityHtml(item.priority);
+
+                    html += '<div class="item" data-index="' + realIndex + '" draggable="true">' +
+                        '<div class="item-top">' +
+                        '<div class="item-title"><a href="' + escapeHtml(item.url) + '" target="_blank">' + escapeHtml(item.title || '无标题') + '</a>' + priorityHtml + '</div>' +
+                        '<div class="item-actions">' +
+                        '<button class="item-action-btn" onclick="ScraperApp.togglePriority(' + realIndex + ')" title="切换优先级">⭐</button>' +
+                        '<button class="item-action-btn danger" data-index="' + realIndex + '" title="删除">✕</button>' +
+                        '</div></div>' +
+                        '<div class="item-meta"><span>🔗 ' + escapeHtml(item.url) + '</span><span>🕒 ' + time + '</span></div>' +
+                        '<div class="item-content">' + escapeHtml(selectedText) + '</div>' +
+                        albumHtml + categoryHtml + tagsHtml + noteHtml +
+                        '</div>';
+                });
+
+                listContainer.innerHTML = html;
+                itemCount.textContent = filtered.length + (filtered.length < items.length ? ' / ' + items.length : '');
+
+                // 删除按钮事件
+                listContainer.querySelectorAll('.item-action-btn.danger').forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const idx = parseInt(this.dataset.index);
+                        if (!isNaN(idx) && idx >= 0 && idx < items.length) {
+                            items.splice(idx, 1);
+                            saveItems();
+                            renderTagFilter();
+                            renderList();
+                            showToast('已删除', 2000, 'success');
+                        }
+                    });
+                });
+
+                setupDragAndDrop();
+            }
+
+            function setupDragAndDrop() {
+                const itemEls = listContainer.querySelectorAll('.item');
+                let draggedItem = null;
+                let draggedIndex = -1;
+
+                itemEls.forEach(el => {
+                    el.addEventListener('dragstart', function (e) {
+                        draggedItem = this;
+                        draggedIndex = parseInt(this.dataset.index);
+                        this.classList.add('dragging');
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+                    el.addEventListener('dragend', function () {
+                        this.classList.remove('dragging');
+                        draggedItem = null;
+                        draggedIndex = -1;
+                    });
+                    el.addEventListener('dragover', function (e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+                    el.addEventListener('drop', function (e) {
+                        e.preventDefault();
+                        if (draggedItem === this) return;
+                        const dropIndex = parseInt(this.dataset.index);
+                        if (isNaN(dropIndex) || isNaN(draggedIndex)) return;
+                        const [dragged] = items.splice(draggedIndex, 1);
+                        items.splice(dropIndex, 0, dragged);
+                        saveItems();
+                        renderList();
+                        showToast('顺序已调整', 2000, 'success');
+                    });
+                });
+            }
+
+            // ---- 工具栏操作 ----
+            function clearAll() {
+                if (!items.length) { showToast('已经是空的了', 2000, 'info'); return; }
+                showPopconfirm('确定要清空所有资料吗？此操作不可撤销！').then(confirmed => {
+                    if (confirmed) {
+                        items = [];
+                        saveItems();
+                        renderTagFilter();
+                        renderList();
+                        showToast('已清空', 2000, 'success');
+                    }
+                });
+            }
+
+            function exportAll() {
+                if (!items.length) { showToast('暂无资料可导出', 2000, 'info'); return; }
+                const json = JSON.stringify(items, null, 2);
+                const markdown = items.map((item, i) => {
+                    const date = new Date(item.timestamp).toLocaleString();
+                    const cat = item.category ? '\n- **分类**: ' + item.category : '';
+                    const pri = item.priority ? '\n- **优先级**: ' + ({ high: '高', medium: '中', low: '低' })[item.priority] : '';
+                    const tags = item.tags && item.tags.length ? '\n- **标签**: ' + item.tags.join(', ') : '';
+                    return '## ' + (i + 1) + '. ' + item.title + '\n- **URL**: ' + item.url + '\n- **内容**: ' + (item.selected || '(无)') + cat + pri + tags + '\n- **备注**: ' + (item.note || '(无)') + '\n- **时间**: ' + date + '\n';
+                }).join('\n---\n\n');
+                const bj = new Blob([json], { type: 'application/json' });
+                const bm = new Blob([markdown], { type: 'text/markdown' });
+                const uj = URL.createObjectURL(bj);
+                const um = URL.createObjectURL(bm);
+                const a = document.createElement('a');
+                a.href = uj; a.download = 'collection_' + Date.now() + '.json'; a.click();
+                setTimeout(() => {
+                    const b = document.createElement('a');
+                    b.href = um; b.download = 'collection_' + Date.now() + '.md'; b.click();
+                    URL.revokeObjectURL(uj); URL.revokeObjectURL(um);
+                }, 200);
+                showToast('已导出', 2000, 'success');
+            }
+
+            // ---- 浏览器支持检测 ----
+            function checkSupport() {
+                if ('documentPictureInPicture' in window) {
+                    statusEl.innerHTML = '✅ 浏览器支持文档画中画 API，可以启动！';
+                    statusEl.className = 'browser-status ok';
+                    launchBtn.disabled = false;
+                    fallback.classList.remove('active');
+                } else {
+                    statusEl.innerHTML = '❌ 当前浏览器不支持文档画中画 API。';
+                    statusEl.className = 'browser-status err';
+                    launchBtn.disabled = true;
+                    fallback.classList.add('active');
+                    bookmarkCode.value = generateBookmarklet();
+                }
+                setTimeout(() => {
+                    statusEl.style.opacity = '0';
+                    setTimeout(() => { statusEl.style.display = 'none'; }, 300);
+                }, 3000);
+            }
+
+            // ---- 启动画中画 ----
+            async function launch() {
+                try {
+                    injectThemeIntoPip();
+                    const pip = await window.documentPictureInPicture.requestWindow({ width: 440, height: 680 });
+                    const doc = pip.document;
+                    doc.open();
+                    pip.COLLECTOR_DATA = {
+                        albums: albums,
+                        categories: categories,
+                        timestamp: Date.now()
+                    };
+                    doc.write(COLLECTOR_HTML);
+                    doc.close();
+                    showToast('画中画收集器已启动', 2000, 'success');
+                } catch (err) {
+                    alert('启动画中画失败：' + err.message);
+                }
+            }
+
+            // ---- 分类管理 ----
+            function renderCategoriesList() {
+                const container = document.getElementById('categoriesList');
+                if (!container) return;
+                let html = '';
+                categories.forEach((cat, index) => {
+                    html += '<div class="category-row">' +
+                        '<div class="cat-color" style="background:' + cat.color + '"></div>' +
+                        '<span class="cat-name">' + escapeHtml(cat.name) + '</span>' +
+                        '<button class="btn btn-danger" style="min-width:50px;width:auto;max-width:60px;font-size:12px;padding:6px 10px;" data-cat-index="' + index + '">删除</button>' +
+                        '</div>';
+                });
+                container.innerHTML = html;
+                container.querySelectorAll('.btn-danger').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const idx = parseInt(this.dataset.catIndex);
+                        if (!isNaN(idx) && idx < categories.length) deleteCategory(idx);
+                    });
+                });
+            }
+
+            function addCategory() {
+                const nameEl = document.getElementById('newCategoryName');
+                const colorEl = document.getElementById('newCategoryColor');
+                const name = nameEl.value.trim();
+                const color = colorEl.value;
+                if (!name) { showToast('请输入分类名称', 2000, 'warning'); return; }
+                if (categories.some(c => c.name === name)) { showToast('分类已存在', 2000, 'warning'); return; }
+                categories.push({ name, color });
+                saveCategories();
+                renderCategoriesList();
+                renderCategoryFilter();
+                nameEl.value = '';
+                showToast('分类已添加', 2000, 'success');
+            }
+
+            function deleteCategory(index) {
+                if (categories.length <= 1) { showToast('至少保留一个分类', 2000, 'warning'); return; }
+                const name = categories[index].name;
+                categories.splice(index, 1);
+                saveCategories();
+                items.forEach(item => { if (item.category === name) item.category = categories[0].name; });
+                saveItems();
+                renderCategoriesList();
+                renderCategoryFilter();
+                renderList();
+                showToast('分类已删除', 2000, 'success');
+            }
+
+            function resetCategories() {
+                categories = [
+                    { name: '学习', color: '#007aff' },
+                    { name: '工作', color: '#ff9500' },
+                    { name: '娱乐', color: '#af52de' },
+                    { name: '生活', color: '#34c759' },
+                    { name: '旅游', color: '#00bcd4' },
+                    { name: '美食', color: '#ff3b30' },
+                    { name: '其他', color: '#8e8e93' }
+                ];
+                saveCategories();
+                renderCategoriesList();
+                renderCategoryFilter();
+                showToast('已恢复默认分类', 2000, 'success');
+            }
+
+            function switchView(view) {
+                currentView = view;
+                viewGrid.classList.remove('active');
+                viewList.classList.remove('active');
+                viewCompact.classList.remove('active');
+                document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
+                renderList();
+            }
+
+            function handleSearch() {
+                searchQuery = searchInput.value.trim();
+                renderList();
+            }
+
+            // ---- 暴露方法到全局（供内联 onclick 调用） ----
+            window.ScraperApp = { togglePriority };
+
+            // ---- 事件绑定 ----
+            launchBtn.addEventListener('click', launch);
+
+            refreshBtn.addEventListener('click', () => {
+                loadItems();
+                renderTagFilter();
+                renderList();
+                showToast('已刷新', 2000, 'success');
+            });
+
+            exportAllBtn.addEventListener('click', exportAll);
+            clearAllBtn.addEventListener('click', clearAll);
+
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(bookmarkCode.value).then(() => {
+                    showToast('已复制', 2000, 'success');
+                }).catch(() => {
+                    bookmarkCode.select();
+                    document.execCommand('copy');
+                    showToast('已复制', 2000, 'success');
+                });
+            });
+
+            closeFallbackBtn.addEventListener('click', () => {
+                fallback.classList.remove('active');
+            });
+
+            const addCatBtn = document.getElementById('addCategoryBtn');
+            if (addCatBtn) addCatBtn.addEventListener('click', addCategory);
+
+            const resetCatBtn = document.getElementById('resetCategoriesBtn');
+            if (resetCatBtn) resetCatBtn.addEventListener('click', resetCategories);
+
+            searchInput.addEventListener('input', handleSearch);
+            searchInput.addEventListener('search', handleSearch);
+
+            categoryFilter.addEventListener('click', e => {
+                const chip = e.target.closest('.category-chip');
+                if (!chip) return;
+                currentCategory = chip.dataset.category;
+                renderCategoryFilter();
+                renderList();
+            });
+
+            tagFilter.addEventListener('click', e => {
+                const chip = e.target.closest('.tag-chip');
+                if (!chip) return;
+                currentTag = chip.dataset.tag;
+                renderTagFilter();
+                renderList();
+            });
+
+            manageCategoriesBtn.addEventListener('click', () => {
+                renderCategoriesList();
+                openModal('manageCategoriesModal');
+            });
+
+            // ---- 专辑管理 ----
+            function renderAlbumsList() {
+                const container = document.getElementById('albumsList');
+                if (!container) return;
+                let html = '';
+                albums.forEach((album, index) => {
+                    const count = items.filter(it => it.albumId === album.id).length;
+                    html += '<div class="category-row">' +
+                        '<div class="cat-color" style="background:' + album.color + '"></div>' +
+                        '<span class="cat-name">' + escapeHtml(album.name) + '<span style="font-size:12px;color:var(--text-placeholder);margin-left:4px;">(' + count + ')</span></span>' +
+                        '<button class="btn btn-danger" style="min-width:50px;width:auto;max-width:60px;font-size:12px;padding:6px 10px;" data-album-index="' + index + '">删除</button>' +
+                        '</div>';
+                });
+                container.innerHTML = html;
+                container.querySelectorAll('.btn-danger').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const idx = parseInt(this.dataset.albumIndex);
+                        if (!isNaN(idx) && idx < albums.length) deleteAlbum(idx);
+                    });
+                });
+            }
+
+            // ---- 颜色选择器 ----
+            const PRESET_COLORS = [
+                '#6c5ce7', '#e74c3c', '#e67e22', '#f1c40f', '#2ecc71',
+                '#1abc9c', '#3498db', '#9b59b6', '#e91e63', '#00bcd4',
+                '#795548', '#607d8b', '#ff5722', '#4caf50', '#ffc107'
+            ];
+
+            function initColorPicker() {
+                const colorEl = document.getElementById('newAlbumColor');
+                const colorDisplay = document.getElementById('colorDisplay');
+                const colorHexLabel = document.getElementById('colorHexLabel');
+                const presetWrap = document.getElementById('presetColors');
+                let selectedBtn = null;
+
+                function updateColorUI(color) {
+                    colorDisplay.style.background = color;
+                    colorHexLabel.textContent = color.toUpperCase();
+                    const lum = getLuminance(color);
+                    const icon = colorDisplay.querySelector('svg');
+                    if (icon) icon.style.opacity = lum > 160 ? '0.35' : '0.9';
+                    if (selectedBtn) {
+                        selectedBtn.style.boxShadow = '';
+                        selectedBtn.style.transform = '';
+                    }
+                    selectedBtn = presetWrap.querySelector('[data-color="' + color + '"]');
+                    if (selectedBtn) {
+                        selectedBtn.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px var(--main)';
+                    }
+                }
+
+                colorDisplay.addEventListener('click', () => colorEl.click());
+                colorDisplay.addEventListener('mouseenter', () => colorDisplay.style.transform = 'scale(1.05)');
+                colorDisplay.addEventListener('mouseleave', () => colorDisplay.style.transform = '');
+                colorEl.addEventListener('input', (e) => updateColorUI(e.target.value));
+
+                presetWrap.innerHTML = PRESET_COLORS.map(c =>
+                    '<button type="button" data-color="' + c + '" style="width:36px;height:36px;border-radius:10px;border:2px solid var(--border);cursor:pointer;background:' + c + ';padding:0;transition:transform .15s,box-shadow .15s;" title="' + c + '"></button>'
+                ).join('');
+
+                presetWrap.querySelectorAll('button').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const c = btn.dataset.color;
+                        colorEl.value = c;
+                        updateColorUI(c);
+                    });
+                    btn.addEventListener('mouseenter', () => btn.style.transform = 'scale(1.15)');
+                    btn.addEventListener('mouseleave', () => btn.style.transform = '');
+                });
+
+                updateColorUI(colorEl.value);
+            }
+
+            function getLuminance(hex) {
+                const r = parseInt(hex.slice(1, 3), 16);
+                const g = parseInt(hex.slice(3, 5), 16);
+                const b = parseInt(hex.slice(5, 7), 16);
+                return 0.299 * r + 0.587 * g + 0.114 * b;
+            }
+
+            function addAlbum() {
+                const nameEl = document.getElementById('newAlbumName');
+                const colorEl = document.getElementById('newAlbumColor');
+                const name = nameEl.value.trim();
+                const color = colorEl.value;
+                if (!name) { showToast('请输入专辑名称', 2000, 'warning'); return; }
+                if (albums.some(a => a.name === name)) { showToast('专辑已存在', 2000, 'warning'); return; }
+                albums.push({ id: Date.now() + '_' + Math.random().toString(36).slice(2, 6), name, color });
+                saveAlbums();
+                renderAlbumsList();
+                renderAlbumFilter();
+                nameEl.value = '';
+                showToast('专辑已创建', 2000, 'success');
+            }
+
+            function deleteAlbum(index) {
+                const id = albums[index].id;
+                albums.splice(index, 1);
+                saveAlbums();
+                items.forEach(item => { if (item.albumId === id) delete item.albumId; });
+                saveItems();
+                renderAlbumsList();
+                renderAlbumFilter();
+                renderList();
+                showToast('专辑已删除', 2000, 'success');
+            }
+
+            manageAlbumsBtn.addEventListener('click', () => {
+                renderAlbumsList();
+                openModal('manageAlbumsModal');
+            });
+
+            const addAlbumBtnModal = document.getElementById('addAlbumBtnModal');
+            if (addAlbumBtnModal) addAlbumBtnModal.addEventListener('click', addAlbum);
+
+            addAlbumBtn.addEventListener('click', () => {
+                renderAlbumsList();
+                openModal('manageAlbumsModal');
+                setTimeout(() => document.getElementById('newAlbumName').focus(), 100);
+            });
+
+            albumFilter.addEventListener('click', e => {
+                const chip = e.target.closest('.category-chip');
+                if (!chip) return;
+                currentAlbum = chip.dataset.album;
+                renderAlbumFilter();
+                renderList();
+            });
+
+            // ---- 侧边栏切换（抽屉） ----
+            const sidebarMask = document.getElementById('sidebarMask');
+            const scraperLayout = document.querySelector('.scraper-layout');
+            let sidebarOpen = window.innerWidth > 950;
+
+            function applySidebarState() {
+                var isDesktop = window.innerWidth > 950;
+                if (isDesktop) {
+                    sidebar.classList.toggle('collapsed', !sidebarOpen);
+                    sidebar.classList.remove('open');
+                    sidebarMask.classList.remove('show');
+                    scraperLayout.classList.toggle('with-sidebar', sidebarOpen);
+                } else {
+                    sidebar.classList.toggle('open', sidebarOpen);
+                    sidebar.classList.remove('collapsed');
+                    sidebarMask.classList.toggle('show', sidebarOpen);
+                    scraperLayout.classList.remove('with-sidebar');
+                }
+                sidebarToggle.textContent = sidebarOpen ? '✕' : '☰';
+            }
+
+            function toggleSidebar() {
+                sidebarOpen = !sidebarOpen;
+                applySidebarState();
+            }
+
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            sidebarMask.addEventListener('click', toggleSidebar);
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && sidebarOpen) {
+                    toggleSidebar();
+                }
+            });
+
+            // ---- 初始化 ----
+            applySidebarState();
+
+            window.addEventListener('resize', function () {
+                sidebarOpen = window.innerWidth > 950;
+                applySidebarState();
+            });
+
+            viewGrid.addEventListener('click', () => switchView('grid'));
+            viewList.addEventListener('click', () => switchView('list'));
+            viewCompact.addEventListener('click', () => switchView('compact'));
+
+            sortSelect.addEventListener('change', function () {
+                currentSort = this.value;
+                renderList();
+            });
+
+            // ---- 初始化 ----
+            loadCategories();
+            loadAlbums();
+            loadItems();
+            renderCategoryFilter();
+            renderAlbumFilter();
+            renderTagFilter();
+            renderList();
+            checkSupport();
+            updatePoints();
+            initColorPicker();
+
+            // 监听积分变化，实时更新显示
+            if (window.PointsSystem) {
+                PointsSystem.onUpdate(function () {
+                    updatePoints();
+                });
+            }
+
+            // ---- 定期同步（从画中画窗口写入的数据） ----
+            setInterval(() => {
+                loadItems();
+                loadAlbums();
+                renderAlbumFilter();
+                renderTagFilter();
+                renderList();
+                updatePoints();
+            }, 5000);
+
+            // ---- 暴露给画中画窗口调用 ----
+            window.ScraperApp = {
+                renderList: renderList,
+                loadItems: loadItems,
+                loadAlbums: loadAlbums,
+                updatePoints: updatePoints
+            };
+        })();
+    </script>
+
+    <!-- 项目共享模块 -->
+    <script src="../../js/pwa.js"></script>
+    <script src="../../js/pointsSystem.js"></script>
+    <script src="../../js/search/utils.js"></script>
+    <script src="../../js/search/search.js"></script>
+    <script src="../../js/search/instruction/Email.js"></script>
+    <script src="../../js/search/instruction/go.js"></script>
+    <script src="../../js/card/weather.js"></script>
+    <script src="../../js/titleManager.js"></script>
+    <script src="../../ui/js/modules/captcha.js"></script>
+    <script src="../../ui/js/modules/carousel.js"></script>
+    <script src="../../ui/js/modules/feedback.js"></script>
+    <script src="../../ui/js/modules/modal.js"></script>
+    <script src="../../js/app.js"></script>
+</body>
+
+</html>

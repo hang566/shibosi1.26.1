@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>传说卡牌召唤 - 市舶司</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.ico">
+<link href="../../ui/css/modules/base.css" rel="stylesheet">
+<link href="../../ui/css/modules/display.css" rel="stylesheet">
+<link href="../../ui/css/modules/feedback.css" rel="stylesheet">
+<link href="../../ui/css/modules/forms.css" rel="stylesheet">
+<link href="../../ui/css/modules/layout.css" rel="stylesheet">
+<link href="../../ui/css/modules/navigation.css" rel="stylesheet">
+<link href="../../ui/css/modules/variables.css" rel="stylesheet">
+<style>
+    body {
+        padding-top: 60px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 60px 20px 40px;
+        gap: 24px;
+    }
+
+    .title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        background: linear-gradient(90deg, var(--warning), var(--danger));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes shakeBody {
+        0%,100%{transform:translateX(0)}
+        20%{transform:translateX(-4px)}
+        40%{transform:translateX(4px)}
+        60%{transform:translateX(-3px)}
+        80%{transform:translateX(3px)}
+    }
+    .shake{animation:shakeBody 0.4s ease-in-out}
+
+    @keyframes btnShake {
+        0%,100%{transform:scale(1)}
+        50%{transform:scale(0.94)}
+    }
+    .btn-shake{animation:btnShake 0.3s infinite}
+
+    @keyframes cardPop {
+        0%{transform:scale(0.3) translateY(60px);opacity:0}
+        60%{transform:scale(1.08) translateY(-10px);opacity:1}
+        100%{transform:scale(1) translateY(0);opacity:1}
+    }
+    .card-pop{animation:cardPop 0.7s ease-out forwards}
+
+    @keyframes flashMask {
+        0%{opacity:0}
+        40%{opacity:0.85}
+        100%{opacity:0}
+    }
+    .flash-mask{position:fixed;inset:0;pointer-events:none;animation:flashMask 0.6s ease-out forwards;z-index:99}
+    .flash-r1{background:radial-gradient(circle,#fff9c0 0%,rgba(255,180,0,0.6) 40%,transparent 70%)}
+    .flash-r2{background:radial-gradient(circle,#e8d8ff 0%,rgba(160,90,255,0.5) 40%,transparent 70%)}
+    .flash-r3{background:radial-gradient(circle,#d4ffe8 0%,rgba(40,220,130,0.4) 40%,transparent 70%)}
+
+    .particle-layer{position:fixed;inset:0;pointer-events:none;z-index:98;overflow:hidden}
+    .particle{position:absolute;border-radius:50%;background:#ffd700;animation:particleFly 1s ease-out forwards}
+    @keyframes particleFly {
+        0%{transform:translate(0,0) scale(1);opacity:1}
+        100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
+    }
+
+    .card-wrap{position:relative;margin-top:10px}
+    #cardCanvas{border-radius:20px;transform:scale(0.3);opacity:0}
+
+    .btn-group{display:flex;gap:18px;margin-top:14px}
+
+    #drawBtn{
+        background:linear-gradient(135deg, var(--main), #7c3aed);
+        color:#fff;
+        padding:14px 48px;
+        border:none;
+        border-radius:12px;
+        font-size:18px;
+        font-weight:600;
+        cursor:pointer;
+        transition:all 0.25s;
+        box-shadow:0 4px 15px rgba(0,122,255,0.3);
+    }
+    #drawBtn:hover{transform:scale(1.05);filter:brightness(1.15);box-shadow:0 6px 20px rgba(0,122,255,0.4)}
+    #drawBtn:active{transform:scale(0.97)}
+    #drawBtn:disabled{filter:grayscale(0.6);cursor:not-allowed;box-shadow:none}
+
+    #downloadBtn{
+        background:linear-gradient(135deg, var(--success), #10b981);
+        color:#fff;
+        padding:14px 36px;
+        border:none;
+        border-radius:12px;
+        font-size:18px;
+        font-weight:600;
+        cursor:pointer;
+        transition:all 0.25s;
+    }
+    #downloadBtn:disabled{background:#333;color:#777;cursor:not-allowed;transform:none}
+
+    .log-box{
+        width:100%;
+        max-width:680px;
+        background:var(--card-bg);
+        padding:18px;
+        border-radius:16px;
+        max-height:260px;
+        overflow-y:auto;
+        margin-top:10px;
+        border:1px solid var(--border);
+    }
+    .log-title{font-size:20px;margin-bottom:12px;color:var(--text)}
+    .log-item{padding:7px 0;border-bottom:1px solid var(--border-line);line-height:1.8}
+
+    .r1{color:#ffd266;font-weight:bold}
+    .r2{color:#c094ff;font-weight:bold}
+    .r3{color:#59e89f;font-weight:bold}
+    .r4{color:#70b8ff;font-weight:bold}
+    .r5{color:#d2b9ff;font-weight:bold}
+    .r6{color:#999}
+
+    .points-display{
+        font-size:1.1rem;
+        color:var(--warning);
+        display:flex;
+        align-items:center;
+        gap:8px;
+        padding:10px 20px;
+        background:rgba(255,215,0,0.1);
+        border-radius:20px;
+        border:1px solid rgba(255,215,0,0.3);
+        margin-bottom:8px;
+    }
+
+    .navbar-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .navbar-left span {
+        color: var(--text);
+        opacity: 0.6;
+    }
+
+    .navbar-left .navbar-current {
+        font-weight: 500;
+        opacity: 1;
+    }
+
+    .navbar-brand a {
+        color: var(--main);
+        text-decoration: none;
+    }
+
+    .navbar-brand a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .title {
+            font-size: 1.5rem;
+        }
+
+        .btn-group {
+            flex-direction: column;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        #drawBtn, #downloadBtn {
+            width: 100%;
+        }
+    }
+</style>
+</head>
+<body id="pageBody">
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="navbar-brand">
+                <a href="../../index.html">市舶司</a>
+            </div>
+            <span>|</span>
+            <span class="navbar-current">传说卡牌召唤</span>
+        </div>
+        <button class="navbar-toggle" id="navbar-toggle" onclick="toggleNavbar()" aria-label="切换导航菜单" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="navbar-nav" id="navbar-nav">
+            <li>
+                <div class="points-display" style="border: 2px solid var(--main); background-color: var(--trbg); border-radius: 20px; padding: 8px 16px;">
+                    <b id="points">积分</b>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <h1 class="title">传说卡牌召唤</h1>
+    <div class="points-display" id="pointsDisplay">🏆 <span id="pointsValue">0</span> 积分</div>
+    <div style="font-size:14px;color:var(--text-sub);">每次召唤消耗 200 积分</div>
+
+    <div class="card-wrap">
+        <canvas id="cardCanvas" width="340" height="480"></canvas>
+    </div>
+
+    <div class="btn-group">
+        <button id="drawBtn">召唤卡牌</button>
+        <button id="downloadBtn" disabled>保存高清卡牌</button>
+    </div>
+
+    <div class="log-box">
+        <div class="log-title">召唤记录</div>
+        <div id="logContent"></div>
+    </div>
+
+    <div id="maskBox"></div>
+    <div class="particle-layer" id="particleBox"></div>
+
+    <script src="../../../ui/js/modules/theme.js"></script>
+    <script src="../../../js/pointsSystem.js"></script>
+    <script>
+        const rawPool = {
+            r1: ["🦄","🐲","👑","💎","🌈","🧚","✨","🌟","🧜","🏆","🪄","🌝","🌚","🫅","💯","💫","🪩","⚱️","🎇","🎆","🪔","💎","🫧"],
+            r2: ["🦕","🦖","🚀","🛸","🎂","🍰","🎪","🎠","🦅","🦩","🧟","🧛","🧟‍♀️","🧟‍♂️","🪂","🏇","🎡","🛸","🎃","🪁","🚁","🦭","👾","👽","🤖","☠️","👹","👺"],
+            r3: ["🌸","🌺","🐬","🐋","🎸","🎹","💍","🪷","🌻","🦋","🌷","🦜","🎺","🪶","🌼","🦚","🥀","🎻","🐚","🪸","🦪","🌺","💐","🌾","🍄","🌿","☘️","🍀"],
+            r4: ["🍓","🍉","🍔","🍕","🐱","🐶","🐰","🍣","🍦","🐼","🥭","🍜","🥟","🐨","🐹","🍑","🍍","🥐","🍩","🦆","🍒","🍎","🍊","🍋","🥥","🍅","🌶️","🥕","🍞","🧇","🥞","🍗","🍖","🌭","🥪","🍟","🌮","🍣","🍤","🍚","🍱","🍡"],
+            r5: ["🧑‍🎨","🧑‍🍳","❤️","🧡","💛","💚","🩵","💜","💙","🤎","🖤","🩶","🤍","🩷","💘","💝","💖","💗","💓","💞","💕","💌","💟","♥️","❣️","💔","❤️‍🩹","❤️‍🔥","💋","🫂","👥","👤","🧠","🫀","🫁","🩸","👅","🫦","👄","👁️","👀","🦴","🦷","🦶","🦵","🦿","🦾","💪","👏","👍","👎","🫶","🙌","👐","🤲","🤝","🤜","🤛","✊","👊","🫳","🫴","🫱","🫲","🫸","🫷","👋","🤚","🖐️","✋","🖖","🤟","🤘","✌️","🤞","🫰","🤙","🤌","🤏","👌","🫵","👉","👈","☝️","👆","👇","✍️","🤳","🙏","💅","🧑‍🦯","🧑‍🦼","🧑‍🦽","🧎","🧍","🚶","🏃","🤸","🏋️","⛹️","🤾","🚴","🚵","🧗","🤼","🤹","🏌️","🤺","⛷️","🏂","🏄","🚣","🏊","🤽","🧜","🧞","🧝","🧙","🕵️","👮","👷","🧑‍🚀","👰","🤵","💂","👼","🧑‍✈️","🧑‍🔬","🧑‍🔧","🧑‍⚕️","🧑‍🏭","🧑‍🚒","🧑‍🌾","🧑‍🏫","🧑‍🎓","🧑‍💼","🧑‍⚖️","🧑‍💻","🧑‍🎤","👳","🧕","👲","🧑‍🦲","🧑‍🦱","👱","🧑‍🦰","🧑‍🦳","🧓","🧑","🧒","👶","🧔","🕴️","💃","🕺","📷","📸","🖼️","🎨","🖌️","🖍️","🪡","🧵","🧶","🎤","🎧","🎚️","🎛️","🎙️","📻","📺","📼","📹","📽️","🎥","🎞️","🎬","🎭","🎫","🎟️","📱","☎️","📞","📟","📠","📖","📚","📒","📔","📕","📓","📗","📘","📙","🔖","🗒️","📄","📃","📋","📑","📂","📁","🗂️","🗃️","🗄️","📊","📈","📉","📇","🪪","📌","📍","✏️","🖊️","🖋️","✒️","📝"],
+            r6: ["😀","😃","😄","😁","😆","😅","😂","🤣","😭","😉","😗","😙","😚","😘","🥰","😍","🤩","🥳","🫠","🙃","🙂","🥲","🥹","😊","☺️","😌","😏","😴","😪","🤤","😋","😛","😝","😜","🤪","🥴","😔","🥺","😬","🫥","😑","😐","😶","😶‍🌫️","🤐","🫡","🤔","🤫","🫢","🤭","🥱","🫣","🤗","😱","🤨","🧐","😒","🙄","😮‍💨","😤","😠","😡","🤬","😞","😓","😟","😥","😢","☹️","🙁","🫤","😕","😰","😨","😦","😧","😮","😯","😲","😳","🤯","😖","😣","😩","😵","😫","😵‍💫","🫨","🥶","🥵","🤠","😇","🤥","😷","🤕","🤒","🤧","🤮","🤢","🤑","🤓","😎","🥸","🤡","😈","👿","🌞","🌜","🌛","🙈","🙉","🙊","😺","😸","😹","😻","😼","😽","😿","🙀","😾","⛰️","🏔️","❄️","☃️","⛄","🌫️","🌡️","🔥","🌋","🏜️","🏞️","🏝️","🏖️","🌅","🌄","🌈","🌊","🌬️","🌀","🌪️","⚡","☔","💧","🌧️","🌩️","⛈️","🌨️","☁️","🌦️","🌥️","⛅","🌤️","🌴","🌳","🌲","🪵","🪹","🪺","🪨","🏛️","💈","🏯","⛩️","⛲","🕍","🕌","🛕","⛪","🏩","🏰","🏗️","🏢","🏭","🏬","🏪","🏟️","🏦","🏫","🏨","🏣","🏤","🏥","🏚️","🏠","🏡","🏘️","⛺","🛖","🏕️","⛱️","🏙️","🌆","🌇","🌃","🌉","🌁","🛤️","🛣️","🗾","🗺️","🌐","💺","🧳","🛏️","🛋️","🚿","🛁","🚽","🧻","🪠","🧸","🪆","🧷","🪢","🧹","🧴","🧽","🧼","🪥","🪒","🪮","🧺","👑","🎒","👝","👛","👜","💼","☂️","🌂","💍","💄","👠","👟","👞","🥿","🩴","👡","👢","🥾","🦯","🕶️","👓","⚗️","🧫","🧪","💉","💊","🩹","🩺","🩻","🧬","🔭","🔬","📡","🛰️","🧯","🪓","🪜","🪣","🪝","🧲","🧰","🗜️","🔩","🪛","🪚","🔧","🔨","⚒️","🛠️","⛏️","⚙️","🔗","⛓️","📎","🖇️","📏","📐","🕯️","💡","🔦","🏮","🧱","🪟","🚪","🪑","⏱️","⌚","🕰️","⌛","⏳","⏲️","⏰","🗓️","🪧","🛎️","🔔","📯","📢","📣","🔍","🔎","🧿","🪬","📿","🏺","⚰️","🪦","🚬","💣","🪤","📜","⚔️","🗡️","🛡️","🗝️","🔑","🔐","🔏","🔒","🔓","✂️","🗑️","📰","🗞️","🏷️","📦","📫","📪","📬","📭","📮","✉️","📧","📩","📨","💌","📤","📥","🗳️","🚨","🛢️","🧭","🛞","🛟","⚓","🚏","🚇","🚥","🛴","🦽","🚦","🦼","🩼","🚲","🛵","🏍️","🚙","🚗","🛻","🚐","🚚","🚛","🚜","🏎️","🚒","🚑","🚓","🚕","🛺","🚌","🚈","🚝","🚅","🚄","🚂","🚃","🚋","🚎","🚞","🚊","🚉","🚍","🚔","🚘","🚖","🚆","🚢","🛳️","🛥️","🚤","⛴️","⛵","🛶","🚟","🚠","🚡","🛝","🎢","🎡","🎠","🎪","🗼","🗽","🗿","🗻","🎉","🎊","🎈","🎂","🎀","🎁","🧨","🧧","🎗️","🥇","🥈","🥉","🏅","🎖️","🏆","📢","⚽","⚾","🥎","🏀","🏐","🏈","🏉","🥅","🎾","🏸","🥍","🏏","🏑","🏒","🥌","🛷","🎿","⛸️","🛼","🩰","🛹","⛳","🎯","🏹","🥏","🪃","🪁","🎣","🤿","🩱","🎽","🥋","🥊","🎱","🏓","🎳","♟️","🪀","🧩","🎮","🕹️","🔫","🎲","🎰","🎴","🀄","🃏","🎩","🎷","🎺","🪕","🪘","🥁","🪇","🎻","🎹","🎸","🎤","🎧","🎺","🪗","🎷","🪈","🎻","🎹","🎸","🎤","🎧","🎺","🪗","🎷","🪈","🎻","🎹","🎸","🎤","🎧","🎺","🪗","🎷","🪈"],
+        };
+
+        const weightList = [
+            { key:"r1", weight:5, name:"顶级传说", flashClass:"flash-r1",
+                borderGrad:["#ffd700","#ff2b2b"], glowColor:"rgba(255,200,60,0.7)", glowBlur:35,
+                atk:[95,130], hp:[190,260], starRate:[0,0,0,20,80], desc:"世间罕有·至臻传说", needParticle:true },
+            { key:"r2", weight:10, name:"超稀有史诗", flashClass:"flash-r2",
+                borderGrad:["#b07bff","#299dff"], glowColor:"rgba(160,110,255,0.6)", glowBlur:28,
+                atk:[72,94], hp:[145,188], starRate:[0,0,10,40,50], desc:"上古遗物·史诗藏品", needParticle:true },
+            { key:"r3", weight:20, name:"稀有珍品", flashClass:"flash-r3",
+                borderGrad:["#2fe088","#02b383"], glowColor:"rgba(60,240,150,0.5)", glowBlur:22,
+                atk:[52,71], hp:[105,144], starRate:[0,10,30,45,15], desc:"山野奇物·珍稀收藏", needParticle:false },
+            { key:"r4", weight:35, name:"精良优品", flashClass:"",
+                borderGrad:["#409eff","#075fd8"], glowColor:"rgba(60,150,255,0.35)", glowBlur:16,
+                atk:[32,51], hp:[72,104], starRate:[10,25,40,20,5], desc:"日常精品·实用好物", needParticle:false },
+            { key:"r5", weight:40, name:"普通优质", flashClass:"",
+                borderGrad:["#b8a0ff","#7c5edb"], glowColor:"rgba(170,140,255,0.25)", glowBlur:10,
+                atk:[16,31], hp:[42,71], starRate:[25,40,25,10,0], desc:"寻常物件·基础收藏", needParticle:false },
+            { key:"r6", weight:75, name:"凡品基础", flashClass:"",
+                borderGrad:["#777777","#444444"], glowColor:"transparent", glowBlur:0,
+                atk:[1,15], hp:[10,41], starRate:[60,30,10,0,0], desc:"随处可见·普通凡物", needParticle:false }
+        ];
+
+        function uniqueArr(arr){return [...new Set(arr)]}
+        const pool = {};
+        Object.keys(rawPool).forEach(k=>pool[k]=uniqueArr(rawPool[k]));
+
+        const canvas = document.getElementById("cardCanvas");
+        const ctx = canvas.getContext("2d");
+        const drawBtn = document.getElementById("drawBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const logContent = document.getElementById("logContent");
+        const pageBody = document.getElementById("pageBody");
+        const maskBox = document.getElementById("maskBox");
+        const particleBox = document.getElementById("particleBox");
+        let finalCard = null;
+        let rollingTimer = null;
+        const STORAGE_KEY = 'gacha_collection';
+
+        function saveCard(card) {
+            const collection = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            collection.unshift({
+                ...card,
+                tier: { ...card.tier },
+                timestamp: Date.now()
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(collection));
+        }
+
+        function loadCollection() {
+            const collection = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            collection.forEach(card => {
+                const item = document.createElement("div");
+                item.className = card.tier.key;
+                item.classList.add("log-item");
+                item.innerText = `${card.tier.name} ${card.emoji} | ${card.star}星 | 攻击${card.atk} 生命${card.hp}`;
+                logContent.appendChild(item);
+            });
+        }
+
+        function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+        function getStar(rates){
+            const total = rates.reduce((s,v)=>s+v,0);
+            let r = randInt(1,total);
+            for(let i=0;i<5;i++){
+                r -= rates[i];
+                if(r<=0) return i+1;
+            }
+            return 1;
+        }
+        function getCardData(){
+            const totalW = weightList.reduce((s,i)=>s+i.weight,0);
+            let r = Math.random()*totalW;
+            let tier = null;
+            for(const t of weightList){
+                r -= t.weight;
+                if(r<=0){tier=t;break}
+            }
+            const emojiList = pool[tier.key];
+            const emoji = emojiList[randInt(0,emojiList.length-1)];
+            const atk = randInt(tier.atk[0],tier.atk[1]);
+            const hp = randInt(tier.hp[0],tier.hp[1]);
+            const star = getStar(tier.starRate);
+            return {emoji,tier,atk,hp,star};
+        }
+
+        function renderCard(data){
+            const W = canvas.width;
+            const H = canvas.height;
+            const padOuter = 12;
+            const padInner = 8;
+            ctx.clearRect(0,0,W,H);
+            const {tier,emoji,atk,hp,star} = data;
+
+            if(tier.glowBlur>0){
+                ctx.save();
+                ctx.shadowColor = tier.glowColor;
+                ctx.shadowBlur = tier.glowBlur;
+                const outerGrad = ctx.createLinearGradient(padOuter,padOuter,W-padOuter,H-padOuter);
+                outerGrad.addColorStop(0,tier.borderGrad[0]);
+                outerGrad.addColorStop(1,tier.borderGrad[1]);
+                ctx.fillStyle = outerGrad;
+                ctx.beginPath();
+                ctx.roundRect(padOuter,padOuter,W-padOuter*2,H-padOuter*2,22);
+                ctx.fill();
+                ctx.restore();
+            }else{
+                const outerGrad = ctx.createLinearGradient(padOuter,padOuter,W-padOuter,H-padOuter);
+                outerGrad.addColorStop(0,tier.borderGrad[0]);
+                outerGrad.addColorStop(1,tier.borderGrad[1]);
+                ctx.fillStyle = outerGrad;
+                ctx.beginPath();
+                ctx.roundRect(padOuter,padOuter,W-padOuter*2,H-padOuter*2,22);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = "#0a0a16";
+            ctx.beginPath();
+            ctx.roundRect(padOuter+padInner,padOuter+padInner,W-(padOuter+padInner)*2,H-(padOuter+padInner)*2,16);
+            ctx.fill();
+
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 28px system-ui";
+            ctx.fillText(tier.name, W/2, 66);
+            let starStr = "";
+            for(let i=0;i<5;i++) starStr += i<star ? "★" : "☆";
+            ctx.font = "22px system-ui";
+            ctx.fillStyle = "#ffd700";
+            ctx.fillText(starStr, W/2, 100);
+
+            ctx.font = "135px system-ui";
+            ctx.fillText(emoji, W/2, 235);
+
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(40,270);
+            ctx.lineTo(W-40,270);
+            ctx.stroke();
+
+            const barW = W-100;
+            const barH = 16;
+            const barX = 50;
+            const atkMax = tier.atk[1];
+            const atkRatio = atk/atkMax;
+            ctx.fillStyle = "#221010";
+            ctx.beginPath();
+            ctx.roundRect(barX,295,barW,barH,8);
+            ctx.fill();
+            const atkGrad = ctx.createLinearGradient(barX,0,barX+barW,0);
+            atkGrad.addColorStop(0,"#ff5555");
+            atkGrad.addColorStop(1,"#ff2222");
+            ctx.fillStyle = atkGrad;
+            ctx.beginPath();
+            ctx.roundRect(barX,295,barW*atkRatio,barH,8);
+            ctx.fill();
+            ctx.fillStyle = "#fff";
+            ctx.textAlign = "left";
+            ctx.font = "bold 18px system-ui";
+            ctx.fillText(`⚔️ 攻击 ${atk}`, barX+10, 308);
+
+            const hpMax = tier.hp[1];
+            const hpRatio = hp/hpMax;
+            ctx.fillStyle = "#102210";
+            ctx.beginPath();
+            ctx.roundRect(barX,330,barW,barH,8);
+            ctx.fill();
+            const hpGrad = ctx.createLinearGradient(barX,0,barX+barW,0);
+            hpGrad.addColorStop(0,"#39e878");
+            hpGrad.addColorStop(1,"#0fc454");
+            ctx.fillStyle = hpGrad;
+            ctx.beginPath();
+            ctx.roundRect(barX,330,barW*hpRatio,barH,8);
+            ctx.fill();
+            ctx.fillStyle = "#fff";
+            ctx.fillText(`❤️ 生命 ${hp}`, barX+10, 343);
+
+            ctx.fillStyle = "#888";
+            ctx.font = "17px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText(tier.desc, W/2, 410);
+            ctx.font = "15px system-ui";
+            ctx.fillStyle = "#666";
+            ctx.fillText(`稀有等级：${tier.key}`, W/2, 440);
+        }
+
+        function createParticle(){
+            particleBox.innerHTML = "";
+            for(let i=0;i<60;i++){
+                const p = document.createElement("div");
+                p.className = "particle";
+                const size = randInt(4,12);
+                p.style.width = size+"px";
+                p.style.height = size+"px";
+                p.style.left = "50%";
+                p.style.top = "50%";
+                const tx = randInt(-400,400);
+                const ty = randInt(-400,400);
+                p.style.setProperty("--tx",tx+"px");
+                p.style.setProperty("--ty",ty+"px");
+                particleBox.appendChild(p);
+            }
+            setTimeout(()=>particleBox.innerHTML="",1000);
+        }
+
+        const POINTS_PER_DRAW = 200;
+
+        function updatePointsDisplay() {
+            const pointsValue = document.getElementById('pointsValue');
+            const pointsNav = document.getElementById('points');
+            if (window.PointsSystem) {
+                PointsSystem.loadPoints();
+                const total = PointsSystem.getTotalPoints();
+                if (pointsValue) pointsValue.textContent = total;
+                if (pointsNav) pointsNav.textContent = `🏆 ${total} 积分`;
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);color:#fff;padding:16px 32px;border-radius:12px;font-size:18px;z-index:1000;animation:fadeIn 0.3s ease-out';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function toggleNavbar() {
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const isActive = navbarNav.classList.toggle('active');
+            navbarToggle.classList.toggle('active');
+            navbarToggle.setAttribute('aria-expanded', isActive);
+        }
+
+        function fullSummon(){
+            if (window.PointsSystem) {
+                if (!PointsSystem.hasEnoughPoints(POINTS_PER_DRAW)) {
+                    showToast('积分不足！需要 200 积分进行召唤');
+                    return;
+                }
+                PointsSystem.spendPoints(POINTS_PER_DRAW);
+                updatePointsDisplay();
+            }
+
+            drawBtn.disabled = true;
+            drawBtn.classList.add("btn-shake");
+            pageBody.classList.add("shake");
+            canvas.style.transform = "scale(0.3)";
+            canvas.style.opacity = "0";
+            maskBox.innerHTML = "";
+            particleBox.innerHTML = "";
+
+            let rollCount = 0;
+            rollingTimer = setInterval(()=>{
+                const temp = getCardData();
+                renderCard(temp);
+                rollCount++;
+                if(rollCount >= 32){
+                    clearInterval(rollingTimer);
+                    rollingTimer = null;
+                    drawBtn.classList.remove("btn-shake");
+                    pageBody.classList.remove("shake");
+
+                    finalCard = getCardData();
+                    renderCard(finalCard);
+
+                    if(finalCard.tier.flashClass){
+                        const mask = document.createElement("div");
+                        mask.className = "flash-mask " + finalCard.tier.flashClass;
+                        maskBox.appendChild(mask);
+                    }
+
+                    if(finalCard.tier.needParticle){
+                        createParticle();
+                    }
+
+                    setTimeout(()=>{
+                        canvas.classList.add("card-pop");
+                        downloadBtn.disabled = false;
+                        saveCard(finalCard);
+                        const item = document.createElement("div");
+                        item.className = finalCard.tier.key;
+                        item.classList.add("log-item");
+                        item.innerText = `${finalCard.tier.name} ${finalCard.emoji} | ${finalCard.star}星 | 攻击${finalCard.atk} 生命${finalCard.hp}`;
+                        logContent.prepend(item);
+                    },300);
+
+                    setTimeout(()=>drawBtn.disabled=false,1000);
+                }
+            },32);
+        }
+
+        drawBtn.addEventListener("click", fullSummon);
+
+        downloadBtn.addEventListener("click",()=>{
+            if(!finalCard) return;
+            const hdCanvas = document.createElement("canvas");
+            hdCanvas.width = canvas.width*2;
+            hdCanvas.height = canvas.height*2;
+            const hdCtx = hdCanvas.getContext("2d");
+            hdCtx.scale(2,2);
+            renderCard(finalCard);
+            hdCtx.drawImage(canvas,0,0);
+            const link = document.createElement("a");
+            link.download = `${finalCard.tier.name}_${finalCard.emoji}_${finalCard.star}星卡牌.png`;
+            link.href = hdCanvas.toDataURL("image/png");
+            link.click();
+        });
+
+        ctx.fillStyle = "#0a0a16";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#888";
+        ctx.textAlign = "center";
+        ctx.font = "24px system-ui";
+        ctx.fillText("点击召唤卡牌", canvas.width/2, canvas.height/2);
+
+        loadCollection();
+        updatePointsDisplay();
+        if (window.PointsSystem) {
+            PointsSystem.onUpdate(function(total) {
+                updatePointsDisplay();
+            });
+        }
+    </script>
+</body>
+</html>

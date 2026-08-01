@@ -1,0 +1,294 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  transition: var(--transition);
+}
+
+*,
+*::before,
+*::after {
+  font-family: inherit;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.emoji-text {
+  font-family: "Noto Color Emoji", system-ui, -apple-system, sans-serif;
+}
+
+.lead {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.text-sm {
+  font-size: 0.85em;
+}
+
+.text-start {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: right;
+}
+
+.text-wrap {
+  white-space: normal;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.list-unstyled {
+  list-style: none;
+}
+
+.list-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: var(--border-line);
+  margin: 16px 0;
+}
+
+a {
+  color: var(--main);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 2.25rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 24px 0 12px;
+  font-weight: 600;
+}
+
+p {
+  margin: 12px 0;
+}
+
+small {
+  font-size: 0.875rem;
+}
+
+mark {
+  background-color: var(--warning);
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+code {
+  font-family: monospace;
+  background: var(--block-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+pre {
+  background: var(--block-bg);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+kbd {
+  background: var(--block-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.85em;
+}
+
+blockquote {
+  border-left: 4px solid var(--main);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: var(--text-sub);
+  font-style: italic;
+}
+
+.adaptive-text {
+  color: #fff;
+  background: inherit;
+  mix-blend-mode: difference;
+}
+
+.text-auto-contrast {
+  display: inline-block;
+  color: #fff;
+  background: inherit;
+  mix-blend-mode: difference;
+  text-shadow: 0 0 2px rgba(0,0,0,0.3), 0 0 6px rgba(255,255,255,0.2);
+}
+
+.highlight {
+  padding: 0.1em 0.3em;
+  border-radius: 4px 8px 8px 4px;
+  transform: rotate(-0.5deg);
+  display: inline-block;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+}
+
+.markYellow {
+  background: linear-gradient(120deg, rgba(255, 238, 0, 0.7) 0%, rgba(255, 210, 0, 0.5) 30%, rgba(255, 238, 0, 0.8) 60%, rgba(255, 200, 0, 0.4) 85%, rgba(255, 238, 0, 0.6) 100%);
+}
+
+.markGreen {
+  background: linear-gradient(120deg, rgba(0, 255, 0, 0.7) 0%, rgba(0, 210, 0, 0.5) 30%, rgba(0, 255, 0, 0.8) 60%, rgba(0, 200, 0, 0.4) 85%, rgba(0, 255, 0, 0.6) 100%);
+}
+
+.markRed {
+  background: linear-gradient(120deg, rgba(255, 0, 0, 0.7) 0%, rgba(210, 0, 0, 0.5) 30%, rgba(255, 0, 0, 0.8) 60%, rgba(200, 0, 0, 0.4) 85%, rgba(255, 0, 0, 0.6) 100%);
+}
+
+.markBlue {
+  background: linear-gradient(120deg, rgba(0, 0, 255, 0.7) 0%, rgba(0, 0, 210, 0.5) 30%, rgba(0, 0, 255, 0.8) 60%, rgba(0, 0, 200, 0.4) 85%, rgba(0, 0, 255, 0.6) 100%);
+}
+
+.markOrange {
+  background: linear-gradient(120deg, rgba(255, 165, 0, 0.7) 0%, rgba(230, 140, 0, 0.5) 30%, rgba(255, 165, 0, 0.8) 60%, rgba(210, 120, 0, 0.4) 85%, rgba(255, 165, 0, 0.6) 100%);
+}
+
+.markPurple {
+  background: linear-gradient(120deg, rgba(180, 0, 255, 0.7) 0%, rgba(150, 0, 210, 0.5) 30%, rgba(180, 0, 255, 0.8) 60%, rgba(130, 0, 200, 0.4) 85%, rgba(180, 0, 255, 0.6) 100%);
+}
+
+.highlight:hover {
+  filter: brightness(0.95) saturate(1.1);
+  transform: rotate(-0.3deg) scale(1.02);
+}
+
+.display-1 {
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.display-2 {
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.display-3 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.display-4 {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+abbr {
+  border-bottom: 1px dashed var(--border);
+  cursor: help;
+}
+
+.initialism {
+  font-size: 0.85em;
+  text-transform: uppercase;
+}
+
+dl {
+  margin: 16px 0;
+}
+
+dt {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+dd {
+  margin-left: 20px;
+  margin-bottom: 8px;
+  color: var(--text-sub);
+}
+
+.more {
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: var(--text-sub);
+}
+
+.text-muted {
+  font-size: 0.85em;
+  color: var(--text-sub);
+}
+
+.text-justify {
+  text-align: justify;
+}

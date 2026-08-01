@@ -1,0 +1,37 @@
+[INFO] 2026/07/31 21:53:32 SEARCH query="bgm" engine=Bing results=10 duration=989.2044ms status=success
+[INFO] 2026/07/31 21:53:33 SEARCH query="bgm" engine=Baidu results=8 duration=1.0905365s status=success
+[INFO] 2026/07/31 21:53:33 SEARCH query="bgm" engine=Sogou results=6 duration=1.2920171s status=success
+[INFO] 2026/07/31 21:53:40 SEARCH query="bgm" engine=Google results=0 duration=8.1016155s status=error: Get "https://www.google.com/search?num=10&q=bgm": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 21:53:40 SEARCH query="bgm" engine=DuckDuckGo results=0 duration=8.1016155s status=error: Get "https://html.duckduckgo.com/html/?q=bgm": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 21:53:40 SEARCH COMPLETE query="bgm" total=10 engines=map[Baidu:8 Bing:10 Sogou:6]
+[INFO] 2026/07/31 21:53:55 SEARCH query="百万英镑bgm" engine=Bing results=10 duration=318.5901ms status=success
+[INFO] 2026/07/31 21:53:55 SEARCH query="百万英镑bgm" engine=Sogou results=0 duration=326.0951ms status=success
+[INFO] 2026/07/31 21:53:56 SEARCH query="百万英镑bgm" engine=Baidu results=0 duration=531.3789ms status=success
+[INFO] 2026/07/31 21:54:03 SEARCH query="百万英镑bgm" engine=DuckDuckGo results=0 duration=8.1005573s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 21:54:03 SEARCH query="百万英镑bgm" engine=Google results=0 duration=8.1015541s status=error: Get "https://www.google.com/search?num=10&q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 21:54:03 SEARCH COMPLETE query="百万英镑bgm" total=10 engines=map[Bing:10]
+[INFO] 2026/07/31 21:54:10 CACHE HIT query="百万英镑bgm"
+[INFO] 2026/07/31 21:55:27 SEARCH query="百万英镑bgm bilibili" engine=Bing results=10 duration=575.2778ms status=success
+[INFO] 2026/07/31 21:55:28 SEARCH query="百万英镑bgm bilibili" engine=Baidu results=8 duration=1.0422963s status=success
+[INFO] 2026/07/31 21:55:28 SEARCH query="百万英镑bgm bilibili" engine=Sogou results=9 duration=1.4123988s status=success
+[INFO] 2026/07/31 21:55:35 SEARCH query="百万英镑bgm bilibili" engine=DuckDuckGo results=0 duration=8.1022542s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 21:55:35 SEARCH query="百万英镑bgm bilibili" engine=Google results=0 duration=8.1059528s status=error: Get "https://www.google.com/search?num=10&q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 21:55:35 SEARCH COMPLETE query="百万英镑bgm bilibili" total=10 engines=map[Baidu:8 Bing:10 Sogou:9]
+[INFO] 2026/07/31 22:03:10 SEARCH query="百万英镑bgm bilibili" engine=Bing results=10 duration=552.6193ms status=success
+[INFO] 2026/07/31 22:03:10 SEARCH query="百万英镑bgm bilibili" engine=Baidu results=9 duration=628.6306ms status=success
+[INFO] 2026/07/31 22:03:10 SEARCH query="百万英镑bgm bilibili" engine=Sogou results=9 duration=882.8144ms status=success
+[INFO] 2026/07/31 22:03:12 SEARCH query="百万英镑bgm bilibili" engine=Sogou results=0 duration=321.6278ms status=success
+[INFO] 2026/07/31 22:03:12 SEARCH query="百万英镑bgm bilibili" engine=Bing results=10 duration=322.1812ms status=success
+[INFO] 2026/07/31 22:03:13 SEARCH query="百万英镑bgm bilibili" engine=Baidu results=9 duration=581.7723ms status=success
+[INFO] 2026/07/31 22:03:13 SEARCH query="百万英镑bgm bilibili" engine=Bing results=10 duration=317.2483ms status=success
+[INFO] 2026/07/31 22:03:13 SEARCH query="百万英镑bgm bilibili" engine=Sogou results=0 duration=331.8826ms status=success
+[INFO] 2026/07/31 22:03:13 SEARCH query="百万英镑bgm bilibili" engine=Baidu results=9 duration=617.916ms status=success
+[INFO] 2026/07/31 22:03:17 SEARCH query="百万英镑bgm bilibili" engine=DuckDuckGo results=0 duration=8.1067852s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 22:03:17 SEARCH query="百万英镑bgm bilibili" engine=Google results=0 duration=8.1077878s status=error: Get "https://www.google.com/search?num=10&q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 22:03:17 SEARCH COMPLETE query="百万英镑bgm bilibili" total=10 engines=map[Baidu:9 Bing:10 Sogou:9]
+[INFO] 2026/07/31 22:03:20 SEARCH query="百万英镑bgm bilibili" engine=DuckDuckGo results=0 duration=8.1020074s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 22:03:20 SEARCH query="百万英镑bgm bilibili" engine=Google results=0 duration=8.1020074s status=error: Get "https://www.google.com/search?num=10&q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 22:03:20 SEARCH COMPLETE query="百万英镑bgm bilibili" total=10 engines=map[Baidu:9 Bing:10]
+[INFO] 2026/07/31 22:03:21 SEARCH query="百万英镑bgm bilibili" engine=DuckDuckGo results=0 duration=8.1005654s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 22:03:21 SEARCH query="百万英镑bgm bilibili" engine=Google results=0 duration=8.1005654s status=error: Get "https://www.google.com/search?num=10&q=%E7%99%BE%E4%B8%87%E8%8B%B1%E9%95%91bgm+bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/31 22:03:21 SEARCH COMPLETE query="百万英镑bgm bilibili" total=10 engines=map[Baidu:9 Bing:10]

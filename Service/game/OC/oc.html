@@ -1,0 +1,3897 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>OC 养成</title>
+    <link href="../../../ui/css/modules/display.css" rel="stylesheet">
+    <link href="../../../ui/css/modules/feedback.css" rel="stylesheet">
+    <link href="../../../ui/css/modules/forms.css" rel="stylesheet">
+    <link href="../../../ui/css/modules/layout.css" rel="stylesheet">
+    <link href="../../../ui/css/modules/navigation.css" rel="stylesheet">
+    <link href="../../../ui/css/modules/tabs-browser.css" rel="stylesheet">
+    <link href="../../../ui/css/modules/variables.css" rel="stylesheet">
+
+    <script src="../../../ui/js/modules/modal.js"></script>
+    <script src="../../../ui/js/modules/tabs.js"></script>
+    <script src="../../../ui/js/modules/theme.js"></script>
+    <script src="../../../js/pointsSystem.js"></script>
+    <script src="../../../js/syncManager.js"></script>
+    <script src="../../../js/userAccount.js" defer></script>
+
+    <style>
+        :root {
+            --info-panel-width: 260px;
+            --info-panel-top: 80px;
+            --info-panel-left: 20px;
+            --info-panel-opacity: 0.6;
+
+            --action-panel-width: 300px;
+            --action-panel-bottom: 20px;
+            --action-panel-right: 20px;
+            --action-panel-opacity: 0.7;
+
+            --dialog-box-width: 550px;
+            --dialog-box-bottom: 260px;
+            --dialog-box-left: 50%;
+            --dialog-box-opacity: 0.75;
+
+            --panel-border-radius: 16px;
+            --panel-blur: 20px;
+            --panel-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+            --action-panel-height: 320px;
+
+            --bg-position-x: center;
+            --bg-position-y: center;
+            --bg-size: cover;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: transparent;
+            backdrop-filter: none;
+            box-shadow: none;
+        }
+
+        .navbar,
+        .navbar * {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .navbar .navbar-brand a {
+            color: #818cf8;
+        }
+
+        .navbar .navbar-brand a:hover {
+            color: #a5b4fc;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar .navbar-left span {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .navbar .navbar-left .navbar-current {
+            font-weight: 500;
+            opacity: 1;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .navbar-brand a {
+            color: var(--main);
+            text-decoration: none;
+        }
+
+        .navbar-brand a:hover {
+            text-decoration: underline;
+        }
+
+        .oc-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            padding-top: 60px;
+            --text: rgba(255, 255, 255, 0.95);
+            --main: #6366f1;
+            --border: rgba(255, 255, 255, 0.15);
+            --card-bg: rgba(30, 30, 40, 0.95);
+            --block-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        .character-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: var(--bg-size);
+            background-position: var(--bg-position-x) var(--bg-position-y);
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .character-bg.has-bg-image {
+            opacity: 0.85;
+        }
+
+        .character-bg.has-live2d {
+            opacity: 0.3;
+        }
+
+        .character-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.4) 100%);
+        }
+
+        .character-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .character-area.show-live2d {
+            display: flex;
+        }
+
+        .live2d-container {
+            width: 400px;
+            height: 600px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            pointer-events: auto;
+        }
+
+        .character-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            object-position: center bottom;
+            filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.6));
+        }
+
+        .info-panel {
+            position: absolute;
+            top: var(--info-panel-top);
+            left: var(--info-panel-left);
+            background: rgba(0, 0, 0, var(--info-panel-opacity, 0.82));
+            backdrop-filter: blur(var(--panel-blur));
+            -webkit-backdrop-filter: blur(var(--panel-blur));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--panel-border-radius);
+            padding: 20px;
+            width: var(--info-panel-width);
+            max-width: calc(100% - 40px);
+            z-index: 10;
+            color: var(--text);
+            box-shadow: var(--panel-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .info-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .character-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--main);
+            margin-bottom: 4px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .character-type {
+            display: inline-block;
+            padding: 2px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            opacity: 0.8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .status-item span:first-child {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text);
+            opacity: 0.9;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .progress {
+            height: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 7px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 7px;
+            transition: width 0.5s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar.life {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+        }
+
+        .progress-bar.hunger {
+            background: linear-gradient(90deg, #ffd93d, #f9c80e);
+        }
+
+        .progress-bar.energy {
+            background: linear-gradient(90deg, #6bcb77, #4dac5d);
+        }
+
+        .progress-bar.mood {
+            background: linear-gradient(90deg, #4d96ff, #357abd);
+        }
+
+        .status-effects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .status-badge.buff {
+            background: rgba(79, 172, 254, 0.2);
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            color: #4facfe;
+        }
+
+        .status-badge.debuff {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            color: #ff6b6b;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .status-icon {
+            font-size: 0.7rem;
+        }
+
+        .status-name {
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .status-time {
+            opacity: 0.7;
+            font-size: 0.55rem;
+        }
+
+        .dialog-box {
+            position: absolute;
+            bottom: var(--dialog-box-bottom);
+            left: var(--dialog-box-left);
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, var(--dialog-box-opacity, 0.88));
+            backdrop-filter: blur(calc(var(--panel-blur) + 5px));
+            -webkit-backdrop-filter: blur(calc(var(--panel-blur) + 5px));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: calc(var(--panel-border-radius) + 4px);
+            padding: 16px 24px;
+            max-width: var(--dialog-box-width);
+            width: calc(100% - 40px);
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 10;
+            color: var(--text);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        .dialog-box::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .dialog-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .dialog-box::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .dialog-avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--main);
+            border-radius: 50%;
+            margin-right: 12px;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .dialog-text {
+            display: inline;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.95;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .dialog-name {
+            font-weight: 600;
+            color: var(--main);
+            margin-right: 8px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .dialog-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dialog-option {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: var(--text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .dialog-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--main);
+            transform: translateY(-2px);
+        }
+
+        .dialog-option:active {
+            transform: translateY(0);
+        }
+
+        .action-panel {
+            position: fixed;
+            bottom: var(--action-panel-bottom);
+            right: var(--action-panel-right);
+            background: rgba(0, 0, 0, var(--action-panel-opacity, 0.88));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 14px;
+            width: var(--action-panel-width);
+            max-width: calc(100% - 40px);
+            max-height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        .panel-tabs {
+            flex-shrink: 0;
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3px;
+            border-radius: 12px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .panel-tabs::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .panel-tabs::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-tabs::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .panel-tabs::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .panel-tab {
+            flex-shrink: 0;
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .panel-tab.active {
+            background: var(--main);
+            color: white;
+            font-weight: 600;
+        }
+
+        .panel-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .panel-content-area {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .panel-content-area::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .panel-content-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-content-area::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .panel-content-area::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .action-btn:hover {
+            background: var(--main);
+            border-color: var(--main);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .action-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .action-btn .action-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            line-height: 1;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .action-btn .action-effect {
+            font-size: 0.62rem;
+            line-height: 1.2;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            white-space: nowrap;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .action-btn:hover .action-effect {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .mobile-card {
+            display: contents;
+        }
+
+        .action-grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            padding-right: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .panel-actions {
+            flex-shrink: 0;
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .panel-actions::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .panel-actions::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-actions::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .panel-actions::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .panel-btn {
+            flex-shrink: 0;
+            padding: 7px 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .panel-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+        }
+
+        @media (max-width: 950px) {
+            :root {
+                --info-panel-width: 220px;
+                --action-panel-width: 260px;
+                --dialog-box-width: 450px;
+            }
+
+            .dialog-box {
+                max-width: calc(100% - var(--action-panel-width) - var(--action-panel-right) - 40px);
+            }
+        }
+
+        @media (max-width: 800px) {
+            :root {
+                --info-panel-width: 200px;
+                --action-panel-width: 240px;
+                --dialog-box-width: 400px;
+                --action-panel-height: 220px;
+            }
+
+            .live2d-container {
+                width: 320px;
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 20px;
+                max-height: 85vh;
+                border-radius: 20px;
+            }
+
+            .backpack-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+            }
+
+            .backpack-item {
+                padding: 8px 4px;
+            }
+
+            .backpack-item .item-icon {
+                font-size: 20px;
+            }
+
+            .backpack-item .item-name {
+                font-size: 0.65rem;
+            }
+
+            .store-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .store-item {
+                padding: 10px;
+            }
+
+            .store-item .item-icon {
+                font-size: 28px;
+            }
+
+            .store-item .item-name {
+                font-size: 0.8rem;
+            }
+
+            .store-item .item-desc {
+                font-size: 0.7rem;
+            }
+
+            .menu {
+                flex-wrap: wrap;
+            }
+
+            .menu-item {
+                padding: 6px 8px;
+                font-size: 0.72rem;
+            }
+
+            .buy-btn {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+
+            .modal-content h3 {
+                font-size: 1.2rem;
+                margin-bottom: 16px;
+            }
+
+            .modal-content input,
+            .modal-content select {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .switch {
+                width: 44px;
+                height: 24px;
+            }
+
+            .slider:before {
+                height: 18px;
+                width: 18px;
+                left: 3px;
+                bottom: 3px;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(20px);
+            }
+        }
+
+        @media (max-width: 700px) {
+            :root {
+                --info-panel-width: 180px;
+                --action-panel-width: 220px;
+                --dialog-box-width: 350px;
+            }
+
+            .info-panel {
+                top: 70px;
+                left: 15px;
+                padding: 16px;
+            }
+
+            .character-name {
+                font-size: 1.1rem;
+            }
+
+            .action-panel {
+                bottom: 15px;
+                right: 15px;
+                padding: 12px;
+            }
+
+            .dialog-box {
+                max-width: calc(100% - 30px);
+                left: 15px;
+                right: 15px;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .oc-container {
+                padding-top: 0;
+            }
+
+            :root {
+                --info-panel-width: var(--info-panel-width, auto);
+                --info-panel-top: var(--info-panel-top, 10px);
+                --info-panel-left: var(--info-panel-left, 10px);
+                --action-panel-width: 100%;
+                --action-panel-bottom: 0;
+                --action-panel-right: 0;
+                --dialog-box-width: 100%;
+                --action-panel-height: 52vh;
+            }
+
+            .live2d-container {
+                width: 280px;
+                height: 450px;
+            }
+
+            .mobile-card {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: var(--action-panel-height);
+                background: rgba(30, 30, 40, 0.8);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-radius: 20px 20px 0 0;
+                z-index: 100;
+                box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
+                overflow: hidden;
+            }
+
+            .info-panel,
+            .dialog-box,
+            .action-panel {
+                position: static;
+                width: 100%;
+                max-width: none;
+                transform: none;
+                margin: 0;
+                padding: 0;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                background: transparent;
+                z-index: auto;
+                max-height: none;
+                overflow: visible;
+            }
+
+            .info-panel {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 6px 14px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                order: 2;
+                height: 36px;
+                flex-shrink: 0;
+            }
+
+            .info-header {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .character-name {
+                font-size: 0.8rem;
+                margin-bottom: 0;
+                font-weight: 600;
+            }
+
+            .character-type {
+                font-size: 0.5rem;
+                padding: 2px 5px;
+            }
+
+            .status-grid {
+                display: flex;
+                flex-direction: row;
+                gap: 4px;
+                flex: 1;
+                justify-content: flex-end;
+                margin-left: 8px;
+            }
+
+            .status-item {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1px;
+            }
+
+            .status-item span:first-child {
+                font-size: 0.45rem;
+                white-space: nowrap;
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+            .progress {
+                height: 5px;
+                width: 100%;
+                border-radius: 3px;
+            }
+
+            .progress-bar {
+                font-size: 0;
+                padding-right: 0;
+            }
+
+            .status-effects {
+                display: none;
+            }
+
+            .dialog-box {
+                display: flex;
+                flex-direction: column;
+                padding: 8px 14px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                order: 1;
+                flex-shrink: 0;
+                height: 56px;
+            }
+
+            .dialog-text {
+                font-size: 0.75rem;
+                line-height: 1.4;
+                color: rgba(255, 255, 255, 0.9);
+                margin: 0;
+                max-height: 28px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .dialog-options {
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+                margin-top: 4px;
+                flex-wrap: wrap;
+            }
+
+            .dialog-option {
+                padding: 3px 8px;
+                font-size: 0.6rem;
+                white-space: nowrap;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .action-panel {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                padding: 0 10px;
+                padding-bottom: calc(10px + env(safe-area-inset-bottom));
+                order: 3;
+                overflow: hidden;
+                min-height: 0;
+            }
+
+            .panel-tabs {
+                margin-bottom: 6px;
+                margin-top: 6px;
+                padding: 2px;
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .panel-tab {
+                padding: 4px 8px;
+                font-size: 0.65rem;
+            }
+
+            .action-grid-wrapper {
+                flex: 1;
+                overflow-y: auto;
+                min-height: 120px;
+                padding-right: 4px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .action-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+            }
+
+            .action-btn {
+                padding: 8px 4px;
+                gap: 2px;
+                border-radius: 8px;
+                min-height: 56px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .action-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .action-btn .action-name {
+                font-size: 0.65rem;
+            }
+
+            .action-btn .action-effect {
+                font-size: 0.5rem;
+            }
+
+            .panel-actions {
+                margin-top: 6px;
+                padding-top: 6px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: space-around;
+            }
+
+            .panel-btn {
+                padding: 4px 8px;
+                font-size: 0;
+                min-width: 44px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .panel-btn::before {
+                font-size: 16px;
+            }
+
+            .panel-btn:nth-child(1)::before {
+                content: '⚙️';
+            }
+
+            .panel-btn:nth-child(2)::before {
+                content: '🎒';
+            }
+
+            .panel-btn:nth-child(3)::before {
+                content: '🛒';
+            }
+
+            .panel-btn:nth-child(4)::before {
+                content: '🎨';
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --action-panel-height: 48vh;
+            }
+
+            .live2d-container {
+                width: 220px;
+                height: 360px;
+            }
+
+            .info-panel {
+                padding: 5px 12px;
+                height: 34px;
+            }
+
+            .character-name {
+                font-size: 0.75rem;
+            }
+
+            .character-type {
+                font-size: 0.45rem;
+            }
+
+            .status-grid {
+                gap: 3px;
+            }
+
+            .progress {
+                height: 4px;
+            }
+
+            .dialog-box {
+                padding: 7px 12px;
+                height: 52px;
+            }
+
+            .dialog-text {
+                font-size: 0.7rem;
+            }
+
+            .action-panel {
+                padding: 0 8px;
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+            }
+
+            .panel-tab {
+                padding: 3px 6px;
+                font-size: 0.6rem;
+            }
+
+            .action-grid-wrapper {
+                min-height: 100px;
+            }
+
+            .action-grid {
+                gap: 4px;
+            }
+
+            .action-btn {
+                padding: 7px 3px;
+                min-height: 52px;
+            }
+
+            .action-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .action-btn .action-name {
+                font-size: 0.6rem;
+            }
+
+            .action-btn .action-effect {
+                font-size: 0.45rem;
+            }
+
+            .panel-btn {
+                min-width: 40px;
+                height: 28px;
+            }
+
+            .panel-btn::before {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            :root {
+                --action-panel-height: 45vh;
+            }
+
+            .live2d-container {
+                width: 190px;
+                height: 320px;
+            }
+
+            .info-panel {
+                padding: 4px 10px;
+                height: 32px;
+            }
+
+            .character-name {
+                font-size: 0.7rem;
+            }
+
+            .dialog-box {
+                padding: 6px 10px;
+                height: 48px;
+            }
+
+            .dialog-text {
+                font-size: 0.65rem;
+            }
+
+            .action-grid-wrapper {
+                min-height: 80px;
+            }
+
+            .action-grid {
+                gap: 3px;
+            }
+
+            .action-btn {
+                padding: 6px 2px;
+                min-height: 48px;
+            }
+
+            .action-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .action-btn .action-name {
+                font-size: 0.55rem;
+            }
+
+            .panel-btn {
+                min-width: 36px;
+                height: 26px;
+            }
+
+            .panel-btn::before {
+                font-size: 12px;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: var(--main);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--main);
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--block-bg);
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .modal-content input:focus,
+        .modal-content select:focus {
+            outline: none;
+            border-color: var(--main);
+        }
+
+        .form-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border);
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--main);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        .collapse-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--block-bg);
+            border-radius: var(--radius);
+            cursor: pointer;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+
+        .collapse {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .collapse.show {
+            display: block;
+        }
+
+        .collapse-body {
+            background: var(--block-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 8px;
+        }
+
+        .collapse-body p {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--main);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification.success {
+            background: #6bcb77;
+        }
+
+        .notification.error {
+            background: #ff6b6b;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (hover: none) {
+            .action-btn:active {
+                transform: scale(0.95);
+                background: var(--main);
+            }
+
+            .panel-tab:active {
+                opacity: 0.7;
+            }
+
+            .dialog-option:active {
+                transform: scale(0.98);
+                background: rgba(255, 255, 255, 0.2);
+            }
+
+            .buy-btn:active {
+                transform: scale(0.98);
+            }
+
+            .menu-item:active {
+                opacity: 0.7;
+            }
+
+            .backpack-item:active {
+                transform: scale(0.95);
+            }
+
+            .store-item:active {
+                transform: scale(0.98);
+            }
+
+            .panel-btn:active {
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+            .status-badge:active {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 14px;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            .action-btn {
+                min-height: 48px;
+                min-width: 48px;
+            }
+
+            .panel-tab {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .dialog-option {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+
+            .panel-btn {
+                min-height: 40px;
+                min-width: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .buy-btn {
+                min-height: 40px;
+            }
+
+            .menu-item {
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .backpack-item {
+                min-height: 60px;
+            }
+
+            .store-item {
+                min-height: 90px;
+            }
+        }
+
+        @media (orientation: landscape) {
+            .oc-container {
+                padding-top: 40px;
+            }
+
+            .live2d-container {
+                width: 280px;
+                height: 420px;
+            }
+
+            .info-panel {
+                top: 50px;
+                left: 15px;
+                width: 180px;
+                padding: 14px;
+            }
+
+            .status-grid {
+                gap: 8px;
+            }
+
+            .character-name {
+                font-size: 1rem;
+            }
+
+            .dialog-box {
+                bottom: 20px;
+                left: 220px;
+                right: 340px;
+                width: auto;
+                max-width: none;
+                transform: none;
+            }
+
+            .action-panel {
+                width: 300px;
+                bottom: 20px;
+                right: 20px;
+                height: 320px;
+                padding-bottom: 20px;
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+
+            .action-btn {
+                padding: 10px 6px;
+                min-height: 60px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-width: 900px) {
+            .live2d-container {
+                width: 220px;
+                height: 340px;
+            }
+
+            .info-panel {
+                width: 160px;
+                padding: 12px;
+            }
+
+            .dialog-box {
+                left: 180px;
+                right: 280px;
+            }
+
+            .action-panel {
+                width: 260px;
+                height: 280px;
+            }
+
+            .action-btn {
+                min-height: 54px;
+            }
+        }
+
+        .backpack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .backpack-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .backpack-item:hover {
+            border-color: var(--main);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .backpack-item.has-item {
+            border-style: solid;
+            border-color: var(--border);
+        }
+
+        .backpack-item .item-icon {
+            font-size: 24px;
+        }
+
+        .backpack-item .item-name {
+            font-size: 0.7rem;
+            text-align: center;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 4px;
+        }
+
+        .backpack-item .item-count {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: var(--main);
+            color: white;
+            font-size: 0.65rem;
+            padding: 1px 4px;
+            border-radius: 8px;
+        }
+
+        .backpack-item .item-durability {
+            width: 100%;
+            padding: 0 4px;
+            margin-top: 2px;
+        }
+
+        .backpack-item .durability-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .backpack-item .durability-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .backpack-item .item-expire {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: rgba(255, 152, 0, 0.8);
+            color: white;
+            font-size: 0.55rem;
+            padding: 1px 3px;
+            border-radius: 4px;
+        }
+
+        .backpack-item.expired {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .backpack-item.broken {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .store-item {
+            background: var(--block-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .store-item:hover {
+            border-color: var(--main);
+            transform: translateY(-2px);
+        }
+
+        .store-item .item-icon {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        .store-item .item-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .store-item .item-desc {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .store-item .item-price {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 0.9rem;
+            color: var(--main);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 6px 12px;
+            background: var(--main);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .buy-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .buy-btn.disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+            background: var(--block-bg);
+            padding: 4px;
+            border-radius: var(--radius);
+        }
+
+        .menu-item {
+            flex: 1;
+            padding: 6px 10px;
+            background: transparent;
+            border: none;
+            border-radius: calc(var(--radius) - 4px);
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item.active {
+            background: var(--card-bg);
+            color: var(--main);
+            font-weight: 500;
+        }
+
+        .menu-item:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sub-tab-content {
+            display: none;
+            grid-area: content;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+            margin-right: -6px;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        .sub-tab-content.active {
+            display: block;
+        }
+
+        .sub-tab-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sub-tab-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .sub-tab-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .sub-tab-content::-webkit-scrollbar-thumb:hover {
+            background: var(--main);
+        }
+
+        .oc-container.bright-bg .character-bg::after {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0.7) 100%);
+        }
+
+        .oc-container.bright-bg .info-panel {
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .oc-container.bright-bg .dialog-box {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .oc-container.bright-bg .action-panel {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .oc-container.bright-bg .status-badge.buff {
+            background: rgba(79, 172, 254, 0.3);
+            border: 1px solid rgba(79, 172, 254, 0.5);
+        }
+
+        .oc-container.bright-bg .status-badge.debuff {
+            background: rgba(255, 107, 107, 0.3);
+            border: 1px solid rgba(255, 107, 107, 0.5);
+        }
+
+        .oc-container.bright-bg .dialog-option {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .oc-container.bright-bg .dialog-option:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .oc-container.dark-bg .character-bg::after {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.1) 70%, rgba(0, 0, 0, 0.2) 100%);
+        }
+
+        .oc-container.dark-bg .info-panel {
+            background: rgba(0, 0, 0, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .oc-container.dark-bg .dialog-box {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .oc-container.dark-bg .action-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .oc-container.dark-bg .status-badge.buff {
+            background: rgba(79, 172, 254, 0.15);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .oc-container.dark-bg .status-badge.debuff {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .oc-container.dark-bg .dialog-option {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .oc-container.dark-bg .dialog-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .oc-container.neutral-bg .character-bg::after {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.4) 100%);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="navbar-brand">
+                <a href="../../../index.html">市舶司</a>
+            </div>
+            <span>|</span>
+            <span class="navbar-current">OC养成</span>
+        </div>
+        <button class="navbar-toggle" id="navbar-toggle" onclick="toggleNavbar()" aria-label="切换导航菜单"
+            aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="navbar-nav" id="navbar-nav">
+            <li>
+                <div class="points-display"
+                    style="border: 2px solid var(--main); background-color: var(--trbg); border-radius: 20px; padding: 8px 16px;">
+                    <b id="points">积分</b>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+
+    <div class="oc-container">
+        <div class="character-bg" id="characterBg"></div>
+
+        <div class="character-area">
+            <div class="live2d-container">
+                <img id="characterImage" class="character-image" src="" alt="角色" />
+                <div id="characterEmoji" style="display: none; font-size: 64px; position: absolute; bottom: 100px;">🎭
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-card">
+            <div class="info-panel">
+                <div class="info-header">
+                    <div class="character-name" id="characterName">未命名</div>
+                    <div class="character-type" id="characterType">OC</div>
+                </div>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span>❤️ 生命</span>
+                        <div class="progress">
+                            <div class="progress-bar life" id="lifeBar" style="width: 75%">75%</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <span>🍔 饥饿</span>
+                        <div class="progress">
+                            <div class="progress-bar hunger" id="hungerBar" style="width: 75%">75%</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <span>⚡ 精力</span>
+                        <div class="progress">
+                            <div class="progress-bar energy" id="energyBar" style="width: 75%">75%</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <span>😊 心情</span>
+                        <div class="progress">
+                            <div class="progress-bar mood" id="moodBar" style="width: 75%">75%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-effects" id="statusEffects"></div>
+            </div>
+
+            <div class="dialog-box">
+                <span class="dialog-avatar">🎭</span>
+                <span class="dialog-text">
+                    <span class="dialog-name" id="dialogName">角色</span>
+                    <span id="dialogContent">点击右下角的互动面板与我互动吧~</span>
+                </span>
+                <div class="dialog-options" id="dialogOptions"></div>
+            </div>
+
+            <div class="action-panel">
+                <div class="panel-tabs" id="panelTabs"></div>
+
+                <div class="action-grid-wrapper">
+                    <div class="panel-content-area">
+                        <div id="panelClean" class="sub-tab-content" style="display: none;">
+                            <div class="action-grid" id="actionGridClean"></div>
+                        </div>
+
+                        <div id="panelRest" class="sub-tab-content" style="display: none;">
+                            <div class="action-grid" id="actionGridRest"></div>
+                        </div>
+
+                        <div id="panelFeed" class="sub-tab-content active">
+                            <div class="action-grid" id="actionGridFeed"></div>
+                        </div>
+
+                        <div id="panelPlay" class="sub-tab-content" style="display: none;">
+                            <div class="action-grid" id="actionGridPlay"></div>
+                        </div>
+
+                        <div id="panelGames" class="sub-tab-content" style="display: none;">
+                            <div class="action-grid" id="actionGridGames"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel-actions">
+                    <button class="panel-btn" onclick="openModal('modal')">设置</button>
+                    <button class="panel-btn" onclick="openModal('modalBackpack')">背包</button>
+                    <button class="panel-btn" onclick="openModal('modalStore')">商店</button>
+                    <button class="panel-btn" onclick="toggleUIEditCard()">UI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3>配置角色</h3>
+            <hr>
+            <p>配置你的角色信息</p>
+            <select id="ocType">
+                <option value="OC">OC</option>
+                <option value="pet">宠物</option>
+                <option value="friend">朋友</option>
+                <option value="other">其他</option>
+            </select>
+            <input type="text" id="ocName" placeholder="名字">
+
+            <span>主图片</span>
+            <input type="file" id="uploadImageMain" name="image" accept="image/*" />
+
+            <button type="button" onclick="saveConfig()">提交</button>
+
+            <div class="collapse-header" onclick="toggleCollapse('Advanced')">
+                <span>高级</span>
+                <span>▼</span>
+            </div>
+            <div class="collapse" id="Advanced">
+                <div class="collapse-body">
+                    <p>接入AI</p>
+                    <div class="form-item">
+                        <label>是否开启此服务</label>
+                        <label class="switch">
+                            <input type="checkbox" id="aiEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <input type="text" id="aiModel" placeholder="请输入AI模型名字">
+                    <input type="text" id="aiUrl" placeholder="请输入url">
+                    <input type="text" id="aiKey" placeholder="请输入AI密钥">
+                    <input type="text" id="aiPrompt" placeholder="初始提示词">
+                </div>
+
+                <div class="collapse-body">
+                    <p>更多图片配置</p>
+                    <div class="form-item">
+                        <label>是否开启此服务</label>
+                        <label class="switch">
+                            <input type="checkbox" id="timeImageEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <p>凌晨</p>
+                    <input type="file" id="uploadImageDawn" name="image" accept="image/*" />
+                    <p>白天</p>
+                    <input type="file" id="uploadImageDay" name="image" accept="image/*" />
+                    <p>傍晚</p>
+                    <input type="file" id="uploadImageDusk" name="image" accept="image/*" />
+                    <p>夜晚</p>
+                    <input type="file" id="uploadImageNight" name="image" accept="image/*" />
+                </div>
+            </div>
+            <button onclick="closeModal('modal')">关闭</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modalStore">
+        <div class="modal-content">
+            <h3>商店</h3>
+            <div>
+                <div class="col">
+                    <ul class="menu">
+                        <li class="menu-item active" onclick="switchStoreTab('all')">所有</li>
+                        <li class="menu-item" onclick="switchStoreTab('food')">饮食</li>
+                        <li class="menu-item" onclick="switchStoreTab('medicine')">药材</li>
+                        <li class="menu-item" onclick="switchStoreTab('equipment')">装备</li>
+                        <li class="menu-item" onclick="switchStoreTab('toy')">玩具</li>
+                        <li class="menu-item" onclick="switchStoreTab('gift')">礼品</li>
+                        <li class="menu-item" onclick="switchStoreTab('upgrade')">升级</li>
+                    </ul>
+                </div>
+                <div class="store-grid" id="storeGrid">
+                </div>
+            </div>
+            <button onclick="closeModal('modalStore')">关闭</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modalBackpack">
+        <div class="modal-content">
+            <h3>背包</h3>
+            <div class="backpack-grid" id="backpackGrid"></div>
+            <button onclick="closeModal('modalBackpack')">关闭</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modalUI">
+        <div class="modal-content">
+            <h3>UI自定义</h3>
+
+            <div class="collapse-body">
+                <p>背景图片</p>
+                <div class="form-item">
+                    <label>水平位置: <span id="bgPosXVal">center</span></label>
+                    <select id="bgPosX" onchange="handleUIChange('bgPosX', this.value)">
+                        <option value="left">左</option>
+                        <option value="center" selected>中</option>
+                        <option value="right">右</option>
+                        <option value="10%">10%</option>
+                        <option value="25%">25%</option>
+                        <option value="75%">75%</option>
+                        <option value="90%">90%</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label>垂直位置: <span id="bgPosYVal">center</span></label>
+                    <select id="bgPosY" onchange="handleUIChange('bgPosY', this.value)">
+                        <option value="top">上</option>
+                        <option value="center" selected>中</option>
+                        <option value="bottom">下</option>
+                        <option value="10%">10%</option>
+                        <option value="25%">25%</option>
+                        <option value="75%">75%</option>
+                        <option value="90%">90%</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label>背景大小: <span id="bgSizeVal">cover</span></label>
+                    <select id="bgSize" onchange="handleUIChange('bgSize', this.value)">
+                        <option value="cover" selected>覆盖</option>
+                        <option value="contain">适应</option>
+                        <option value="auto">原始</option>
+                        <option value="100% 100%">拉伸</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="collapse-body">
+                <p>信息面板</p>
+                <div class="form-item">
+                    <label>宽度: <span id="infoWidthVal">260</span>px</label>
+                    <input type="range" id="infoWidth" min="150" max="400" value="260" step="10"
+                        oninput="handleUIChange('infoWidth', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>距顶部: <span id="infoTopVal">80</span>px</label>
+                    <input type="range" id="infoTop" min="0" max="300" value="80" step="10"
+                        oninput="handleUIChange('infoTop', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>距左边: <span id="infoLeftVal">20</span>px</label>
+                    <input type="range" id="infoLeft" min="0" max="300" value="20" step="5"
+                        oninput="handleUIChange('infoLeft', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>透明度: <span id="infoOpacityVal">60</span>%</label>
+                    <input type="range" id="infoOpacity" min="20" max="95" value="60" step="5"
+                        oninput="handleUIChange('infoOpacity', this.value)">
+                </div>
+            </div>
+
+            <div class="collapse-body">
+                <p>互动面板</p>
+                <div class="form-item">
+                    <label>宽度: <span id="actionWidthVal">300</span>px</label>
+                    <input type="range" id="actionWidth" min="150" max="400" value="300" step="10"
+                        oninput="handleUIChange('actionWidth', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>距底部: <span id="actionBottomVal">20</span>px</label>
+                    <input type="range" id="actionBottom" min="0" max="200" value="20" step="5"
+                        oninput="handleUIChange('actionBottom', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>距右边: <span id="actionRightVal">20</span>px</label>
+                    <input type="range" id="actionRight" min="0" max="200" value="20" step="5"
+                        oninput="handleUIChange('actionRight', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>透明度: <span id="actionOpacityVal">70</span>%</label>
+                    <input type="range" id="actionOpacity" min="20" max="95" value="70" step="5"
+                        oninput="handleUIChange('actionOpacity', this.value)">
+                </div>
+            </div>
+
+            <div class="collapse-body">
+                <p>对话气泡</p>
+                <div class="form-item">
+                    <label>最大宽度: <span id="dialogWidthVal">550</span>px</label>
+                    <input type="range" id="dialogWidth" min="200" max="800" value="550" step="50"
+                        oninput="handleUIChange('dialogWidth', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>距底部: <span id="dialogBottomVal">260</span>px</label>
+                    <input type="range" id="dialogBottom" min="50" max="600" value="260" step="10"
+                        oninput="handleUIChange('dialogBottom', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>水平位置: <span id="dialogLeftVal">50</span>%</label>
+                    <input type="range" id="dialogLeft" min="0" max="100" value="50" step="5"
+                        oninput="handleUIChange('dialogLeft', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>透明度: <span id="dialogOpacityVal">75</span>%</label>
+                    <input type="range" id="dialogOpacity" min="20" max="95" value="75" step="5"
+                        oninput="handleUIChange('dialogOpacity', this.value)">
+                </div>
+            </div>
+
+            <div class="collapse-body">
+                <p>全局设置</p>
+                <div class="form-item">
+                    <label>毛玻璃模糊: <span id="blurVal">20</span>px</label>
+                    <input type="range" id="blur" min="0" max="40" value="20" step="2"
+                        oninput="handleUIChange('blur', this.value)">
+                </div>
+                <div class="form-item">
+                    <label>圆角大小: <span id="radiusVal">16</span>px</label>
+                    <input type="range" id="radius" min="4" max="32" value="16" step="2"
+                        oninput="handleUIChange('radius', this.value)">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 16px;">
+                <button onclick="resetUIConfig()">重置默认</button>
+                <button onclick="closeModal('modalUI')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UI 编辑卡片 - 可拖动，实时预览 -->
+    <div id="uiEditCard"
+        style="display:none; position:fixed; top:100px; right:20px; width:280px; background:rgba(30,30,40,0.95); border-radius:12px; padding:16px; z-index:1500; color:white; font-size:13px; box-shadow:0 8px 32px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; cursor:move;"
+            id="uiEditCardHeader">
+            <span style="font-weight:600;">UI 编辑</span>
+            <button onclick="toggleUIEditCard()"
+                style="background:none; border:none; color:white; cursor:pointer; font-size:16px;">✕</button>
+        </div>
+        <div id="uiEditCardContent" style="max-height:70vh; overflow-y:auto;">
+            <!-- 动态填充 -->
+        </div>
+    </div>
+
+    <script>
+        function updatePointsDisplay() {
+            const pointsElement = document.getElementById('points');
+            if (pointsElement && window.PointsSystem) {
+                PointsSystem.loadPoints();
+                const total = PointsSystem.getTotalPoints();
+                pointsElement.textContent = total + ' 积分';
+            }
+        }
+
+        function toggleNavbar() {
+            const navbarNav = document.getElementById('navbar-nav');
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const isActive = navbarNav.classList.toggle('active');
+            navbarToggle.classList.toggle('active');
+            navbarToggle.setAttribute('aria-expanded', isActive);
+        }
+
+        const OC_CONFIG_KEY = 'oc_config';
+        const OC_STATUS_KEY = 'oc_status';
+        const OC_BACKPACK_KEY = 'oc_backpack';
+        const OC_UI_CONFIG_KEY = 'oc_ui_config';
+
+        let ocConfig = {
+            type: 'OC',
+            name: '未命名',
+            image: '',
+            aiEnabled: false,
+            aiModel: '',
+            aiUrl: '',
+            aiKey: '',
+            aiPrompt: '',
+            timeImageEnabled: false,
+            images: {}
+        };
+
+        let ocStatus = {
+            life: 75,
+            hunger: 75,
+            energy: 75,
+            mood: 75
+        };
+
+        let backpack = {
+            capacity: 12,
+            items: []
+        };
+        let currentStoreFilter = 'all';
+        let storeItems = [];
+        let eventData = {};
+        let chatData = {};
+
+        let actionCount = 0;
+        let lastDialogueTime = {};
+        let dialogueTimer = null;
+        let currentDialogue = null;
+        let activeStatusEffects = [];
+        let statusEffectTimer = null;
+
+        function getTimePeriod() {
+            const hour = new Date().getHours();
+            if (hour >= 5 && hour < 12) return 'morning';
+            if (hour >= 12 && hour < 18) return 'afternoon';
+            return 'evening';
+        }
+
+        function analyzeImageBrightness(dataURL) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const sampleSize = 100;
+                    canvas.width = sampleSize;
+                    canvas.height = sampleSize;
+                    ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+
+                    const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+                    const pixels = imageData.data;
+                    let totalBrightness = 0;
+                    let pixelCount = 0;
+
+                    for (let i = 0; i < pixels.length; i += 4) {
+                        if (pixels[i + 3] > 128) {
+                            const r = pixels[i];
+                            const g = pixels[i + 1];
+                            const b = pixels[i + 2];
+                            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                            totalBrightness += brightness;
+                            pixelCount++;
+                        }
+                    }
+
+                    const avgBrightness = pixelCount > 0 ? totalBrightness / pixelCount : 128;
+                    resolve(avgBrightness);
+                };
+                img.onerror = () => {
+                    resolve(128);
+                };
+                img.src = dataURL;
+            });
+        }
+
+        function applyBrightnessClass(brightness) {
+            const container = document.querySelector('.oc-container');
+            container.classList.remove('bright-bg', 'dark-bg', 'neutral-bg');
+
+            if (brightness > 160) {
+                container.classList.add('bright-bg');
+            } else if (brightness < 80) {
+                container.classList.add('dark-bg');
+            } else {
+                container.classList.add('neutral-bg');
+            }
+        }
+
+        function checkDialogueCondition(dialogue) {
+            const trigger = dialogue.trigger;
+            if (!trigger) return true;
+
+            const now = Date.now();
+            const period = getTimePeriod();
+
+            if (trigger.interval && lastDialogueTime[dialogue.id]) {
+                if (now - lastDialogueTime[dialogue.id] < trigger.interval) {
+                    return false;
+                }
+            }
+
+            if (trigger.time && !trigger.time.includes(period)) {
+                return false;
+            }
+
+            if (trigger.status) {
+                for (const [key, condition] of Object.entries(trigger.status)) {
+                    if (condition.max && ocStatus[key] > condition.max) return false;
+                    if (condition.min && ocStatus[key] < condition.min) return false;
+                }
+            }
+
+            if (trigger.actionCount) {
+                if (trigger.actionCount.min && actionCount < trigger.actionCount.min) return false;
+                if (trigger.actionCount.max && actionCount > trigger.actionCount.max) return false;
+            }
+
+            return true;
+        }
+
+        function getAvailableDialogues() {
+            if (!chatData.dialogues || !Array.isArray(chatData.dialogues)) return [];
+            return chatData.dialogues.filter(dialogue => checkDialogueCondition(dialogue));
+        }
+
+        function showDialogue(dialogue) {
+            if (!dialogue) return;
+
+            currentDialogue = dialogue;
+            lastDialogueTime[dialogue.id] = Date.now();
+
+            updateStatus(dialogue.content);
+            renderDialogueOptions(dialogue.options);
+        }
+
+        function renderDialogueOptions(options) {
+            const container = document.getElementById('dialogOptions');
+            container.innerHTML = '';
+
+            if (!options || !Array.isArray(options) || options.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'flex';
+            options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'dialog-option';
+                btn.textContent = option.text;
+                btn.onclick = () => selectDialogueOption(option);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectDialogueOption(option) {
+            const container = document.getElementById('dialogOptions');
+            container.innerHTML = '';
+            container.style.display = 'none';
+
+            let canProceed = true;
+
+            if (option.consumeItem) {
+                if (!consumeBackpackItem(option.consumeItem)) {
+                    updateStatus('你没有这个道具！');
+                    canProceed = false;
+                }
+            }
+
+            if (canProceed) {
+                if (!option.skipStatusEffect && option.effect) {
+                    applyEffect(option.effect);
+                }
+
+                if (option.applyStatus) {
+                    const statusData = {
+                        ...option.applyStatus,
+                        startTime: Date.now()
+                    };
+                    activeStatusEffects.push(statusData);
+                    renderStatusEffects();
+                }
+
+                if (option.removeStatus) {
+                    removeStatusEffect(option.removeStatus);
+                }
+
+                if (option.reward && option.reward.points && window.PointsSystem) {
+                    PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, option.reward.points);
+                }
+
+                if (option.points && option.points > 0 && window.PointsSystem) {
+                    PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, option.points);
+                }
+
+                if (option.response) {
+                    updateStatus(option.response);
+                }
+            }
+        }
+
+        function checkAllDialogueTriggers() {
+            const available = getAvailableDialogues();
+            if (available.length > 0) {
+                const randomDialogue = available[Math.floor(Math.random() * available.length)];
+                showDialogue(randomDialogue);
+                return true;
+            }
+            return false;
+        }
+
+        function startDialogueTimer() {
+            if (dialogueTimer) clearInterval(dialogueTimer);
+
+            dialogueTimer = setInterval(() => {
+                if (!currentDialogue) {
+                    checkAllDialogueTriggers();
+                }
+            }, 30000);
+        }
+
+        function triggerStatusEvent(eventId) {
+            const event = eventData.status_events?.[eventId];
+            if (!event) return;
+
+            const existingIndex = activeStatusEffects.findIndex(e => e.id === eventId);
+            if (existingIndex !== -1) {
+                return;
+            }
+
+            if (event.type === 'buff') {
+                applyEffect(event.effect);
+
+                const effectData = {
+                    id: eventId,
+                    name: event.name,
+                    type: event.type,
+                    effect: event.effect,
+                    duration: event.duration || 600000,
+                    startTime: Date.now(),
+                    removeItem: event.removeItem,
+                    reward: event.reward
+                };
+                activeStatusEffects.push(effectData);
+                renderStatusEffects();
+
+                const typeText = '获得';
+                updateStatus(`${typeText}【${event.name}】！${event.description || ''}`);
+                showNotification(`${typeText}${event.name}`, 'success');
+
+                if (event.reward && event.reward.points && window.PointsSystem) {
+                    PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, event.reward.points);
+                }
+                return;
+            }
+
+            const options = [];
+
+            if (event.removeItem) {
+                const item = storeItems.find(i => i.id === event.removeItem);
+                options.push({
+                    text: `使用${item?.name || event.removeItem}处理`,
+                    effect: {},
+                    response: `使用${item?.name || event.removeItem}成功解除了${event.name}！`,
+                    consumeItem: event.removeItem,
+                    skipStatusEffect: true
+                });
+            }
+
+            options.push({
+                text: '硬扛着',
+                effect: event.effect,
+                response: `你决定硬扛着${event.name}...`,
+                applyStatus: {
+                    id: eventId,
+                    name: event.name,
+                    type: event.type,
+                    effect: event.effect,
+                    duration: event.duration || 600000,
+                    removeItem: event.removeItem
+                },
+                reward: event.reward
+            });
+
+            const dialogue = {
+                id: `status_${eventId}_${Date.now()}`,
+                content: `${event.name}！${event.description || ''}`,
+                options: options
+            };
+
+            showDialogue(dialogue);
+        }
+
+        function removeStatusEffect(eventId) {
+            const index = activeStatusEffects.findIndex(e => e.id === eventId);
+            if (index !== -1) {
+                const effect = activeStatusEffects[index];
+                activeStatusEffects.splice(index, 1);
+                showNotification(`${effect.name}状态消失`, 'info');
+                renderStatusEffects();
+            }
+        }
+
+        function tryRemoveStatusEffect(eventId) {
+            const effect = activeStatusEffects.find(e => e.id === eventId);
+            if (!effect) return false;
+
+            if (effect.removeItem) {
+                const storeItem = storeItems.find(i => i.id === effect.removeItem);
+                const hasItem = backpack.items.some(item => item.id === effect.removeItem && !isItemExpired(item) && !isItemBroken(item));
+
+                const options = [];
+
+                if (hasItem) {
+                    options.push({
+                        text: `使用${storeItem.name}解除`,
+                        effect: {},
+                        response: `使用${storeItem.name}解除了${effect.name}`,
+                        consumeItem: effect.removeItem,
+                        removeStatus: eventId,
+                        skipStatusEffect: true
+                    });
+                }
+
+                options.push({
+                    text: '暂时不处理',
+                    effect: {},
+                    response: '你决定暂时不处理...'
+                });
+
+                const dialogue = {
+                    id: `remove_status_${eventId}_${Date.now()}`,
+                    content: `你想解除【${effect.name}】状态吗？${hasItem ? `你有${storeItem.name}可以使用。` : `你需要${storeItem.name}才能解除。`}`,
+                    options: options
+                };
+
+                showDialogue(dialogue);
+            } else {
+                removeStatusEffect(eventId);
+                showNotification(`解除了${effect.name}`, 'success');
+                return true;
+            }
+            return false;
+        }
+
+        function renderStatusEffects() {
+            const container = document.getElementById('statusEffects');
+            if (!container) {
+                const infoPanel = document.querySelector('.info-panel');
+                if (infoPanel) {
+                    const effectsDiv = document.createElement('div');
+                    effectsDiv.id = 'statusEffects';
+                    effectsDiv.className = 'status-effects';
+                    infoPanel.appendChild(effectsDiv);
+                }
+                return;
+            }
+
+            container.innerHTML = '';
+
+            if (activeStatusEffects.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'flex';
+            activeStatusEffects.forEach(effect => {
+                const remaining = Math.ceil((effect.duration - (Date.now() - effect.startTime)) / 60000);
+                const isBuff = effect.type === 'buff';
+
+                const badge = document.createElement('div');
+                badge.className = `status-badge ${isBuff ? 'buff' : 'debuff'}`;
+                badge.title = `${effect.name}\n剩余 ${remaining} 分钟`;
+
+                if (effect.removeItem) {
+                    badge.style.cursor = 'pointer';
+                    badge.onclick = () => tryRemoveStatusEffect(effect.id);
+                }
+
+                badge.innerHTML = `
+                    <span class="status-icon">${isBuff ? '✨' : '💫'}</span>
+                    <span class="status-name">${effect.name}</span>
+                    <span class="status-time">${remaining}m</span>
+                `;
+                container.appendChild(badge);
+            });
+        }
+
+        function updateStatusEffects() {
+            const now = Date.now();
+            let changed = false;
+
+            for (let i = activeStatusEffects.length - 1; i >= 0; i--) {
+                const effect = activeStatusEffects[i];
+                if (now - effect.startTime >= effect.duration) {
+                    activeStatusEffects.splice(i, 1);
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                renderStatusEffects();
+            }
+        }
+
+        function startStatusEffectTimer() {
+            if (statusEffectTimer) clearInterval(statusEffectTimer);
+
+            statusEffectTimer = setInterval(() => {
+                updateStatusEffects();
+            }, 30000);
+        }
+
+        function checkStatusEvents() {
+            if (!eventData.status_events) return;
+
+            const events = Object.entries(eventData.status_events);
+            for (const [id, event] of events) {
+                if (event.chance && Math.random() < event.chance) {
+                    triggerStatusEvent(id);
+                    break;
+                }
+            }
+        }
+
+        let idlePointsTimer = null;
+        const OC_IDLE_KEY = 'oc_idle_points';
+
+        function initIdlePointsSystem() {
+            const now = Date.now();
+            const lastActiveStr = localStorage.getItem(OC_IDLE_KEY);
+            const lastActive = lastActiveStr ? parseInt(lastActiveStr) : now;
+
+            if (!document.hidden) {
+                const awayMs = now - lastActive;
+                const awayHours = Math.floor(awayMs / 3600000);
+                if (awayHours >= 1) {
+                    const points = awayHours * 35;
+                    if (window.PointsSystem) {
+                        PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, points);
+                        showNotification(`离线奖励 +${points} 积分`, 'success');
+                    }
+                }
+            }
+
+            localStorage.setItem(OC_IDLE_KEY, now.toString());
+
+            function startActiveTimer() {
+                if (idlePointsTimer) clearInterval(idlePointsTimer);
+                idlePointsTimer = setInterval(() => {
+                    if (!document.hidden && window.PointsSystem) {
+                        PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, 10);
+                        showNotification('在线奖励 +10 积分', 'success');
+                    }
+                }, 60000);
+            }
+
+            function handleVisibilityChange() {
+                const now = Date.now();
+                if (document.hidden) {
+                    if (idlePointsTimer) {
+                        clearInterval(idlePointsTimer);
+                        idlePointsTimer = null;
+                    }
+                    localStorage.setItem(OC_IDLE_KEY, now.toString());
+                } else {
+                    const lastActiveStr = localStorage.getItem(OC_IDLE_KEY);
+                    const lastActive = lastActiveStr ? parseInt(lastActiveStr) : now;
+                    const awayMs = now - lastActive;
+                    const awayHours = Math.floor(awayMs / 3600000);
+                    if (awayHours >= 1) {
+                        const points = awayHours * 35;
+                        if (window.PointsSystem) {
+                            PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, points);
+                            showNotification(`离线奖励 +${points} 积分`, 'success');
+                        }
+                    }
+                    localStorage.setItem(OC_IDLE_KEY, now.toString());
+                    startActiveTimer();
+                }
+            }
+
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+
+            if (!document.hidden) {
+                startActiveTimer();
+            }
+
+            window.addEventListener('beforeunload', () => {
+                localStorage.setItem(OC_IDLE_KEY, Date.now().toString());
+            });
+        }
+
+        async function loadData() {
+            try {
+                const [shopRes, eventRes, chatRes] = await Promise.all([
+                    fetch('Shop.json'),
+                    fetch('Event.json'),
+                    fetch('chat.json')
+                ]);
+                storeItems = await shopRes.json();
+                eventData = await eventRes.json();
+                chatData = await chatRes.json();
+                renderActionButtons();
+            } catch (e) {
+                console.error('Failed to load data:', e);
+            }
+        }
+
+        function renderActionButtons() {
+            const categories = ['clean', 'rest', 'feed', 'play', 'games'];
+            const actionFunctions = {
+                clean: 'actionClean',
+                rest: 'actionRest',
+                feed: 'actionFeed',
+                play: 'actionPlay',
+                games: 'actionGame'
+            };
+
+            const tabsContainer = document.getElementById('panelTabs');
+            if (tabsContainer && chatData.tabs) {
+                tabsContainer.innerHTML = '';
+                const tabOrder = ['Clean', 'Rest', 'Feed', 'Play', 'Games'];
+                tabOrder.forEach((tabId, index) => {
+                    const tabName = chatData.tabs[tabId] || tabId;
+                    const btn = document.createElement('button');
+                    btn.className = 'panel-tab' + (tabId === 'Feed' ? ' active' : '');
+                    btn.onclick = () => switchPanelTab(tabId);
+                    btn.textContent = tabName;
+                    tabsContainer.appendChild(btn);
+                });
+            }
+
+            categories.forEach(category => {
+                const grid = document.getElementById(`actionGrid${category.charAt(0).toUpperCase() + category.slice(1)}`);
+                if (!grid || !eventData[category]) return;
+
+                grid.innerHTML = '';
+                const actions = eventData[category];
+
+                Object.keys(actions).forEach(actionKey => {
+                    const action = actions[actionKey];
+                    const effectText = formatEffect(action.effect);
+                    const btn = document.createElement('button');
+                    btn.className = 'action-btn';
+
+                    if (category === 'games') {
+                        btn.onclick = () => actionGame(actionKey);
+                    } else {
+                        btn.onclick = () => window[actionFunctions[category]](actionKey);
+                    }
+
+                    btn.title = `${action.name}`;
+                    btn.innerHTML = `
+                        ${action.icon}
+                        <span class="action-name">${action.name}</span>
+                        <span class="action-effect">${effectText}</span>
+                    `;
+                    grid.appendChild(btn);
+                });
+            });
+        }
+
+        function formatEffect(effect) {
+            if (!effect) return '';
+            const parts = [];
+            const emojis = {
+                life: '❤️',
+                hunger: '🍔',
+                energy: '⚡',
+                mood: '😊'
+            };
+
+            Object.keys(effect).forEach(key => {
+                const value = effect[key];
+                const emoji = emojis[key] || key;
+                const sign = value > 0 ? '+' : '';
+                parts.push(`${emoji}${sign}${value}`);
+            });
+
+            return parts.join(' ');
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                await loadData();
+                loadConfig();
+                loadStatus();
+                loadBackpack();
+                loadUIConfig();
+                renderStatus();
+                renderCharacter();
+                renderBackpack();
+                renderStore('all');
+                initUIControls();
+                console.log('[OC] All initialization completed successfully');
+            } catch (error) {
+                console.error('[OC] Initialization error:', error);
+                // 即使出错也要确保 UI 控件初始化
+                try {
+                    initUIControls();
+                } catch (e) {
+                    console.error('[OC] Failed to init UI controls:', e);
+                }
+            }
+
+            if (!localStorage.getItem(OC_CONFIG_KEY)) {
+                openModal('modal');
+            }
+
+            setTimeout(() => {
+                checkAllDialogueTriggers();
+                checkStatusEvents();
+            }, 2000);
+
+            startDialogueTimer();
+            startStatusEffectTimer();
+            setInterval(decreaseStatus, 60000);
+
+            setInterval(() => {
+                checkStatusEvents();
+            }, 60000);
+
+            initIdlePointsSystem();
+
+            updatePointsDisplay();
+
+            if (window.PointsSystem) {
+                PointsSystem.onUpdate(function(total) {
+                    updatePointsDisplay();
+                });
+            }
+        });
+
+        function loadConfig() {
+            const saved = localStorage.getItem(OC_CONFIG_KEY);
+            if (saved) {
+                ocConfig = JSON.parse(saved);
+            }
+        }
+
+        function loadStatus() {
+            const saved = localStorage.getItem(OC_STATUS_KEY);
+            if (saved) {
+                ocStatus = JSON.parse(saved);
+            }
+        }
+
+        function loadBackpack() {
+            const saved = localStorage.getItem(OC_BACKPACK_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.items) {
+                    backpack = parsed;
+                } else {
+                    const oldBackpack = parsed;
+                    backpack = {
+                        capacity: 12,
+                        items: []
+                    };
+                    for (const [id, count] of Object.entries(oldBackpack)) {
+                        for (let i = 0; i < count; i++) {
+                            backpack.items.push({
+                                id: id,
+                                durability: null,
+                                expireTime: null
+                            });
+                        }
+                    }
+                }
+            } else {
+                backpack = {
+                    capacity: 12,
+                    items: [
+                        { id: 'apple', durability: null, expireTime: Date.now() + 24 * 3600000 },
+                        { id: 'bread', durability: null, expireTime: Date.now() + 12 * 3600000 },
+                        { id: 'water_bottle', durability: 50, expireTime: null },
+                        { id: 'balloon', durability: 5, expireTime: null },
+                        { id: 'book', durability: 30, expireTime: null },
+                        { id: 'brush', durability: 15, expireTime: null }
+                    ]
+                };
+                saveBackpack();
+            }
+        }
+
+        function loadUIConfig() {
+            const saved = localStorage.getItem(OC_UI_CONFIG_KEY);
+            if (saved) {
+                const uiConfig = JSON.parse(saved);
+                applyUIConfig(uiConfig);
+            }
+        }
+
+        function applyUIConfig(config) {
+            const root = document.documentElement;
+            const infoPanel = document.querySelector('.info-panel');
+            const actionPanel = document.querySelector('.action-panel');
+            const dialogBox = document.querySelector('.dialog-box');
+            const characterBg = document.querySelector('.character-bg');
+
+            // 背景图片 - 直接设到元素
+            if (characterBg) {
+                if (config.bgPosX !== undefined) characterBg.style.backgroundPositionX = config.bgPosX;
+                if (config.bgPosY !== undefined) characterBg.style.backgroundPositionY = config.bgPosY;
+                if (config.bgSize !== undefined) characterBg.style.backgroundSize = config.bgSize;
+            }
+
+            // 布局属性 - 内联样式 + !important 覆盖媒体查询
+            if (infoPanel) {
+                if (config.infoWidth !== undefined) infoPanel.style.setProperty('width', config.infoWidth + 'px', 'important');
+                if (config.infoTop !== undefined) infoPanel.style.setProperty('top', config.infoTop + 'px', 'important');
+                if (config.infoLeft !== undefined) infoPanel.style.setProperty('left', config.infoLeft + 'px', 'important');
+            }
+            if (actionPanel) {
+                if (config.actionWidth !== undefined) actionPanel.style.setProperty('width', config.actionWidth + 'px', 'important');
+                if (config.actionBottom !== undefined) actionPanel.style.setProperty('bottom', config.actionBottom + 'px', 'important');
+                if (config.actionRight !== undefined) actionPanel.style.setProperty('right', config.actionRight + 'px', 'important');
+            }
+            if (dialogBox) {
+                if (config.dialogWidth !== undefined) dialogBox.style.setProperty('max-width', config.dialogWidth + 'px', 'important');
+                if (config.dialogBottom !== undefined) dialogBox.style.setProperty('bottom', config.dialogBottom + 'px', 'important');
+                if (config.dialogLeft !== undefined) dialogBox.style.setProperty('left', config.dialogLeft + '%', 'important');
+            }
+
+            // CSS 变量 - 必须设到 :root 才能让子元素继承使用
+            if (config.infoOpacity !== undefined) root.style.setProperty('--info-panel-opacity', config.infoOpacity / 100);
+            if (config.actionOpacity !== undefined) root.style.setProperty('--action-panel-opacity', config.actionOpacity / 100);
+            if (config.dialogOpacity !== undefined) root.style.setProperty('--dialog-box-opacity', config.dialogOpacity / 100);
+            if (config.blur !== undefined) root.style.setProperty('--panel-blur', config.blur + 'px');
+            if (config.radius !== undefined) root.style.setProperty('--panel-border-radius', config.radius + 'px');
+        }
+
+        function saveUIConfig() {
+            const uiConfig = {
+                bgPosX: document.getElementById('bgPosX').value,
+                bgPosY: document.getElementById('bgPosY').value,
+                bgSize: document.getElementById('bgSize').value,
+                infoWidth: parseInt(document.getElementById('infoWidth').value),
+                infoTop: parseInt(document.getElementById('infoTop').value),
+                infoLeft: parseInt(document.getElementById('infoLeft').value),
+                infoOpacity: parseInt(document.getElementById('infoOpacity').value),
+                actionWidth: parseInt(document.getElementById('actionWidth').value),
+                actionBottom: parseInt(document.getElementById('actionBottom').value),
+                actionRight: parseInt(document.getElementById('actionRight').value),
+                actionOpacity: parseInt(document.getElementById('actionOpacity').value),
+                dialogWidth: parseInt(document.getElementById('dialogWidth').value),
+                dialogBottom: parseInt(document.getElementById('dialogBottom').value),
+                dialogLeft: parseInt(document.getElementById('dialogLeft').value),
+                dialogOpacity: parseInt(document.getElementById('dialogOpacity').value),
+                blur: parseInt(document.getElementById('blur').value),
+                radius: parseInt(document.getElementById('radius').value)
+            };
+
+            localStorage.setItem(OC_UI_CONFIG_KEY, JSON.stringify(uiConfig));
+            applyUIConfig(uiConfig);
+        }
+
+        function handleUIChange(id, value) {
+            // 同步到弹窗中的隐藏控件
+            const hiddenEl = document.getElementById(id);
+            if (hiddenEl) hiddenEl.value = value;
+
+            const valEl = document.getElementById(id + 'Val');
+            if (valEl) {
+                if (id.startsWith('bg') || id === 'bgSize') {
+                    const selectEl = document.getElementById(id);
+                    if (selectEl) {
+                        valEl.textContent = selectEl.options[selectEl.selectedIndex].text;
+                    }
+                } else {
+                    valEl.textContent = value;
+                }
+            }
+            saveUIConfig();
+        }
+
+        // UI 编辑卡片
+        let uiEditCardVisible = false;
+        let uiEditDragState = null;
+
+        function toggleUIEditCard() {
+            const card = document.getElementById('uiEditCard');
+            uiEditCardVisible = !uiEditCardVisible;
+            card.style.display = uiEditCardVisible ? 'block' : 'none';
+            if (uiEditCardVisible) {
+                populateUIEditCard();
+            }
+        }
+
+        function populateUIEditCard() {
+            const content = document.getElementById('uiEditCardContent');
+            content.innerHTML = `
+                <div style="margin-bottom:10px;">
+                    <div style="font-weight:600;margin-bottom:6px;color:#a0a0ff;">信息面板</div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">宽度</span>
+                        <input type="range" min="150" max="400" value="${document.getElementById('infoWidth').value}" step="10" oninput="handleUIChange('infoWidth',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('infoWidth').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">顶部</span>
+                        <input type="range" min="0" max="300" value="${document.getElementById('infoTop').value}" step="10" oninput="handleUIChange('infoTop',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('infoTop').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">左边</span>
+                        <input type="range" min="0" max="300" value="${document.getElementById('infoLeft').value}" step="5" oninput="handleUIChange('infoLeft',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('infoLeft').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="width:40px;font-size:11px;">透明</span>
+                        <input type="range" min="20" max="95" value="${document.getElementById('infoOpacity').value}" step="5" oninput="handleUIChange('infoOpacity',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('infoOpacity').value}%</span>
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <div style="font-weight:600;margin-bottom:6px;color:#a0a0ff;">互动面板</div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">宽度</span>
+                        <input type="range" min="150" max="400" value="${document.getElementById('actionWidth').value}" step="10" oninput="handleUIChange('actionWidth',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('actionWidth').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">底部</span>
+                        <input type="range" min="0" max="200" value="${document.getElementById('actionBottom').value}" step="5" oninput="handleUIChange('actionBottom',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('actionBottom').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">右边</span>
+                        <input type="range" min="0" max="200" value="${document.getElementById('actionRight').value}" step="5" oninput="handleUIChange('actionRight',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('actionRight').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="width:40px;font-size:11px;">透明</span>
+                        <input type="range" min="20" max="95" value="${document.getElementById('actionOpacity').value}" step="5" oninput="handleUIChange('actionOpacity',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('actionOpacity').value}%</span>
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <div style="font-weight:600;margin-bottom:6px;color:#a0a0ff;">对话气泡</div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">宽度</span>
+                        <input type="range" min="200" max="800" value="${document.getElementById('dialogWidth').value}" step="50" oninput="handleUIChange('dialogWidth',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('dialogWidth').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">底部</span>
+                        <input type="range" min="50" max="600" value="${document.getElementById('dialogBottom').value}" step="10" oninput="handleUIChange('dialogBottom',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('dialogBottom').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">水平</span>
+                        <input type="range" min="0" max="100" value="${document.getElementById('dialogLeft').value}" step="5" oninput="handleUIChange('dialogLeft',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('dialogLeft').value}%</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="width:40px;font-size:11px;">透明</span>
+                        <input type="range" min="20" max="95" value="${document.getElementById('dialogOpacity').value}" step="5" oninput="handleUIChange('dialogOpacity',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('dialogOpacity').value}%</span>
+                    </div>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <div style="font-weight:600;margin-bottom:6px;color:#a0a0ff;">全局</div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                        <span style="width:40px;font-size:11px;">模糊</span>
+                        <input type="range" min="0" max="40" value="${document.getElementById('blur').value}" step="2" oninput="handleUIChange('blur',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('blur').value}px</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="width:40px;font-size:11px;">圆角</span>
+                        <input type="range" min="4" max="32" value="${document.getElementById('radius').value}" step="2" oninput="handleUIChange('radius',this.value);this.parentElement.querySelector('.v').textContent=this.value" style="flex:1;">
+                        <span class="v" style="width:35px;font-size:11px;text-align:right;">${document.getElementById('radius').value}px</span>
+                    </div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                    <button onclick="resetUIConfig();populateUIEditCard();" style="flex:1;padding:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:white;cursor:pointer;font-size:12px;">重置</button>
+                    <button onclick="toggleUIEditCard()" style="flex:1;padding:6px;background:rgba(99,102,241,0.3);border:1px solid rgba(99,102,241,0.5);border-radius:6px;color:white;cursor:pointer;font-size:12px;">完成</button>
+                </div>
+            `;
+        }
+
+        // 拖动卡片
+        document.addEventListener('mousedown', function (e) {
+            const header = document.getElementById('uiEditCardHeader');
+            if (header && header.contains(e.target)) {
+                const card = document.getElementById('uiEditCard');
+                const rect = card.getBoundingClientRect();
+                uiEditDragState = {
+                    offsetX: e.clientX - rect.left,
+                    offsetY: e.clientY - rect.top
+                };
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (uiEditDragState) {
+                const card = document.getElementById('uiEditCard');
+                card.style.left = (e.clientX - uiEditDragState.offsetX) + 'px';
+                card.style.top = (e.clientY - uiEditDragState.offsetY) + 'px';
+                card.style.right = 'auto';
+            }
+        });
+
+        document.addEventListener('mouseup', function () {
+            uiEditDragState = null;
+        });
+
+        function resetUIConfig() {
+            localStorage.removeItem(OC_UI_CONFIG_KEY);
+
+            const defaults = {
+                bgPosX: 'center', bgPosY: 'center', bgSize: 'cover',
+                infoWidth: 260, infoTop: 80, infoLeft: 20, infoOpacity: 60,
+                actionWidth: 300, actionBottom: 20, actionRight: 20, actionOpacity: 70,
+                dialogWidth: 550, dialogBottom: 260, dialogLeft: 50, dialogOpacity: 75,
+                blur: 20, radius: 16
+            };
+
+            applyUIConfig(defaults);
+
+            document.getElementById('bgPosX').value = 'center';
+            document.getElementById('bgPosY').value = 'center';
+            document.getElementById('bgSize').value = 'cover';
+            document.getElementById('infoWidth').value = 260;
+            document.getElementById('infoTop').value = 80;
+            document.getElementById('infoLeft').value = 20;
+            document.getElementById('infoOpacity').value = 60;
+            document.getElementById('actionWidth').value = 300;
+            document.getElementById('actionBottom').value = 20;
+            document.getElementById('actionRight').value = 20;
+            document.getElementById('actionOpacity').value = 70;
+            document.getElementById('dialogWidth').value = 550;
+            document.getElementById('dialogBottom').value = 260;
+            document.getElementById('dialogLeft').value = 50;
+            document.getElementById('dialogOpacity').value = 75;
+            document.getElementById('blur').value = 20;
+            document.getElementById('radius').value = 16;
+
+            updateUIValues();
+        }
+
+        function initUIControls() {
+            console.log('[OC UI] initUIControls called');
+
+            const rangeControls = [
+                'infoWidth', 'infoTop', 'infoLeft', 'infoOpacity',
+                'actionWidth', 'actionBottom', 'actionRight', 'actionOpacity',
+                'dialogWidth', 'dialogBottom', 'dialogLeft', 'dialogOpacity', 'blur', 'radius'
+            ];
+
+            rangeControls.forEach(id => {
+                const el = document.getElementById(id);
+                console.log('[OC UI] Found element:', id, el);
+                if (el) {
+                    el.addEventListener('input', function () {
+                        console.log('[OC UI] Input event:', id, this.value);
+                        const valEl = document.getElementById(id + 'Val');
+                        if (valEl) {
+                            valEl.textContent = this.value;
+                        }
+                        saveUIConfig();
+                    });
+                }
+            });
+
+            const selectControls = ['bgPosX', 'bgPosY', 'bgSize'];
+            selectControls.forEach(id => {
+                const el = document.getElementById(id);
+                console.log('[OC UI] Found select:', id, el);
+                if (el) {
+                    el.addEventListener('change', function () {
+                        console.log('[OC UI] Change event:', id, this.value);
+                        const valEl = document.getElementById(id + 'Val');
+                        if (valEl) {
+                            valEl.textContent = this.options[this.selectedIndex].text;
+                        }
+                        saveUIConfig();
+                    });
+                }
+            });
+
+            const saved = localStorage.getItem(OC_UI_CONFIG_KEY);
+            if (saved) {
+                const uiConfig = JSON.parse(saved);
+                for (const [key, value] of Object.entries(uiConfig)) {
+                    const el = document.getElementById(key);
+                    if (el) {
+                        if (el.type === 'checkbox') {
+                            el.checked = value;
+                        } else {
+                            el.value = value;
+                        }
+                        const valEl = document.getElementById(key + 'Val');
+                        if (valEl) {
+                            if (el.tagName === 'SELECT') {
+                                valEl.textContent = el.options[el.selectedIndex].text;
+                            } else {
+                                valEl.textContent = value;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        function updateUIValues() {
+            const controls = [
+                'infoWidth', 'infoTop', 'infoLeft', 'infoOpacity',
+                'actionWidth', 'actionBottom', 'actionRight', 'actionOpacity',
+                'dialogWidth', 'dialogBottom', 'dialogLeft', 'dialogOpacity', 'blur', 'radius'
+            ];
+
+            controls.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    document.getElementById(id + 'Val').textContent = el.value;
+                }
+            });
+
+            const selectControls = ['bgPosX', 'bgPosY', 'bgSize'];
+            selectControls.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    document.getElementById(id + 'Val').textContent = el.options[el.selectedIndex].text;
+                }
+            });
+        }
+
+
+
+        function saveConfig() {
+            ocConfig.type = document.getElementById('ocType').value;
+            ocConfig.name = document.getElementById('ocName').value || '未命名';
+            ocConfig.aiEnabled = document.getElementById('aiEnabled').checked;
+            ocConfig.aiModel = document.getElementById('aiModel').value;
+            ocConfig.aiUrl = document.getElementById('aiUrl').value;
+            ocConfig.aiKey = document.getElementById('aiKey').value;
+            ocConfig.aiPrompt = document.getElementById('aiPrompt').value;
+            ocConfig.timeImageEnabled = document.getElementById('timeImageEnabled').checked;
+
+            const mainFile = document.getElementById('uploadImageMain').files[0];
+            if (mainFile) {
+                const reader = new FileReader();
+                reader.onload = async function (e) {
+                    ocConfig.image = e.target.result;
+                    const brightness = await analyzeImageBrightness(e.target.result);
+                    ocConfig.imageBrightness = brightness;
+                    applyBrightnessClass(brightness);
+                    try {
+                        localStorage.setItem(OC_CONFIG_KEY, JSON.stringify(ocConfig));
+                        renderCharacter();
+                        closeModal('modal');
+                        showNotification(chatData.notification?.saveSuccess || '配置已保存', 'success');
+                    } catch (e) {
+                        console.error('Failed to save config:', e);
+                        showNotification(chatData.notification?.saveFailImage || '保存失败，存储空间不足，请尝试使用较小的图片', 'error');
+                    }
+                };
+                reader.readAsDataURL(mainFile);
+            } else {
+                try {
+                    localStorage.setItem(OC_CONFIG_KEY, JSON.stringify(ocConfig));
+                    renderCharacter();
+                    closeModal('modal');
+                    showNotification(chatData.notification?.saveSuccess || '配置已保存', 'success');
+                } catch (e) {
+                    console.error('Failed to save config:', e);
+                    showNotification(chatData.notification?.saveFail || '保存失败，存储空间不足', 'error');
+                }
+            }
+        }
+
+        function renderCharacter() {
+            const nameEl = document.getElementById('characterName');
+            const typeEl = document.getElementById('characterType');
+            const imageEl = document.getElementById('characterImage');
+            const bgEl = document.getElementById('characterBg');
+            const dialogNameEl = document.getElementById('dialogName');
+            const emojiEl = document.getElementById('characterEmoji');
+            const characterAreaEl = document.querySelector('.character-area');
+
+            nameEl.textContent = ocConfig.name;
+            dialogNameEl.textContent = ocConfig.name;
+
+            const typeNames = { 'OC': '原创角色', 'pet': '宠物', 'friend': '朋友', 'other': '其他' };
+            typeEl.textContent = typeNames[ocConfig.type] || ocConfig.type;
+
+            bgEl.classList.remove('has-bg-image', 'has-live2d');
+            if (characterAreaEl) {
+                characterAreaEl.classList.remove('show-live2d');
+            }
+
+            if (ocConfig.image) {
+                bgEl.style.backgroundImage = `url(${ocConfig.image})`;
+
+                if (ocConfig.live2dEnabled && ocConfig.live2dModel) {
+                    bgEl.classList.add('has-live2d');
+                    if (characterAreaEl) {
+                        characterAreaEl.classList.add('show-live2d');
+                    }
+                    imageEl.src = ocConfig.image;
+                    imageEl.style.display = 'block';
+                    emojiEl.style.display = 'none';
+                } else {
+                    bgEl.classList.add('has-bg-image');
+                    imageEl.src = '';
+                    imageEl.style.display = 'none';
+                    emojiEl.style.display = 'none';
+                }
+            } else {
+                bgEl.style.backgroundImage = '';
+                imageEl.src = '';
+                imageEl.style.display = 'none';
+                emojiEl.style.display = 'block';
+            }
+
+            if (ocConfig.imageBrightness !== undefined) {
+                applyBrightnessClass(ocConfig.imageBrightness);
+            }
+        }
+
+        function renderStatus() {
+            updateBar('lifeBar', ocStatus.life);
+            updateBar('hungerBar', ocStatus.hunger);
+            updateBar('energyBar', ocStatus.energy);
+            updateBar('moodBar', ocStatus.mood);
+        }
+
+        function updateBar(id, value) {
+            const bar = document.getElementById(id);
+            if (bar) {
+                bar.style.width = `${value}%`;
+                bar.textContent = `${value}%`;
+            }
+        }
+
+        function saveStatus() {
+            try {
+                localStorage.setItem(OC_STATUS_KEY, JSON.stringify(ocStatus));
+            } catch (e) {
+                console.error('Failed to save status:', e);
+                showNotification(chatData.notification?.saveFail || '保存失败，存储空间不足', 'error');
+            }
+        }
+
+        function saveBackpack() {
+            try {
+                localStorage.setItem(OC_BACKPACK_KEY, JSON.stringify(backpack));
+            } catch (e) {
+                console.error('Failed to save backpack:', e);
+                showNotification(chatData.notification?.saveFail || '保存失败，存储空间不足', 'error');
+            }
+        }
+
+        function decreaseStatus() {
+            ocStatus.hunger = Math.max(0, ocStatus.hunger - 2);
+            ocStatus.energy = Math.max(0, ocStatus.energy - 1);
+            ocStatus.mood = Math.max(0, ocStatus.mood - 1);
+
+            if (ocStatus.hunger < 20) {
+                ocStatus.life = Math.max(0, ocStatus.life - 1);
+            }
+            if (ocStatus.energy < 10) {
+                ocStatus.life = Math.max(0, ocStatus.life - 1);
+            }
+
+            renderStatus();
+            saveStatus();
+        }
+
+        function applyEffect(effect) {
+            if (effect.life) ocStatus.life = Math.min(100, Math.max(0, ocStatus.life + effect.life));
+            if (effect.hunger) ocStatus.hunger = Math.min(100, Math.max(0, ocStatus.hunger + effect.hunger));
+            if (effect.energy) ocStatus.energy = Math.min(100, Math.max(0, ocStatus.energy + effect.energy));
+            if (effect.mood) ocStatus.mood = Math.min(100, Math.max(0, ocStatus.mood + effect.mood));
+
+            renderStatus();
+            saveStatus();
+        }
+
+        function consumeBackpackItem(itemId) {
+            if (!itemId) return true;
+
+            const index = backpack.items.findIndex(item => item.id === itemId && !isItemExpired(item) && !isItemBroken(item));
+            if (index === -1) {
+                const itemInfo = storeItems.find(i => i.id === itemId);
+                if (itemInfo) {
+                    showNotification(`背包中没有${itemInfo.name}，无法进行此操作！`, 'error');
+                } else {
+                    showNotification('背包中缺少所需物品！', 'error');
+                }
+                return false;
+            }
+
+            const item = backpack.items[index];
+            const storeItem = storeItems.find(i => i.id === itemId);
+
+            if (storeItem.durability && storeItem.durability > 0) {
+                item.durability = (item.durability || storeItem.durability) - storeItem.durabilityDrop;
+                if (item.durability <= 0) {
+                    showNotification(`${storeItem.name}坏掉了...`, 'error');
+                    backpack.items.splice(index, 1);
+                }
+            } else {
+                backpack.items.splice(index, 1);
+            }
+
+            saveBackpack();
+            renderBackpack();
+            return true;
+        }
+
+        function actionClean(type) {
+            const action = eventData.clean?.[type];
+            if (!action) return;
+
+            if (!consumeBackpackItem(action.consumeItem)) return;
+
+            applyEffect(action.effect || {});
+            updateStatus(chatData.clean?.[type] || `正在${action.name}...`);
+            showNotification(chatData.notification?.clean || '清洁完成！', 'success');
+            actionCount++;
+
+            setTimeout(() => {
+                checkAllDialogueTriggers();
+            }, 2000);
+
+            if (window.PointsSystem) {
+                PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, 5);
+            }
+        }
+
+        function actionRest(type) {
+            const action = eventData.rest?.[type];
+            if (!action) return;
+
+            if (!consumeBackpackItem(action.consumeItem)) return;
+
+            applyEffect(action.effect || {});
+            updateStatus(chatData.rest?.[type] || `正在${action.name}...`);
+            showNotification(chatData.notification?.rest || '休息好了！', 'success');
+            actionCount++;
+
+            setTimeout(() => {
+                checkAllDialogueTriggers();
+            }, 2000);
+
+            if (window.PointsSystem) {
+                PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, 5);
+            }
+        }
+
+        function actionFeed(type) {
+            const action = eventData.feed?.[type];
+            if (!action) return;
+
+            if (!consumeBackpackItem(action.consumeItem)) return;
+
+            applyEffect(action.effect || {});
+            updateStatus(chatData.feed?.[type] || `正在吃${action.name}...`);
+            showNotification(chatData.notification?.feed || '吃饱了！', 'success');
+            actionCount++;
+
+            setTimeout(() => {
+                checkAllDialogueTriggers();
+            }, 2000);
+
+            if (window.PointsSystem) {
+                PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, 5);
+            }
+        }
+
+        function actionPlay(type) {
+            const action = eventData.play?.[type];
+            if (!action) return;
+
+            if (!consumeBackpackItem(action.consumeItem)) return;
+
+            applyEffect(action.effect || {});
+            updateStatus(chatData.play?.[type] || `正在${action.name}...`);
+            showNotification(chatData.notification?.play || '玩得开心！', 'success');
+            actionCount++;
+
+            setTimeout(() => {
+                checkAllDialogueTriggers();
+            }, 2000);
+
+            if (window.PointsSystem) {
+                PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, 10);
+            }
+        }
+
+        function updateStatus(text) {
+            const el = document.getElementById('dialogContent');
+            if (el) {
+                el.textContent = text;
+            }
+        }
+
+        function switchPanelTab(tabId) {
+            document.querySelectorAll('.panel-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.sub-tab-content').forEach(content => content.style.display = 'none');
+
+            const targetContent = document.getElementById('panel' + tabId);
+            if (targetContent) {
+                targetContent.style.display = 'block';
+            }
+
+            const buttons = document.querySelectorAll('.panel-tab');
+            buttons.forEach(btn => {
+                if (btn.textContent.includes(getPanelTabName(tabId))) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function getPanelTabName(tabId) {
+            return chatData.tabs?.[tabId] || '';
+        }
+
+        function switchSubTab(tabId) {
+            document.querySelectorAll('.sub-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.sub-tab-content').forEach(content => content.style.display = 'none');
+
+            const targetContent = document.getElementById('subTab' + tabId);
+            if (targetContent) {
+                targetContent.style.display = 'block';
+            }
+
+            const buttons = document.querySelectorAll('.sub-tab');
+            buttons.forEach(btn => {
+                if (btn.textContent.includes(getSubTabName(tabId))) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function getSubTabName(tabId) {
+            const names = { 'Clean': '清洗', 'Rest': '休息', 'Feed': '饮食', 'Play': '玩耍' };
+            return names[tabId] || '';
+        }
+
+        function isItemExpired(itemInstance) {
+            if (!itemInstance.expireTime) return false;
+            return Date.now() > itemInstance.expireTime;
+        }
+
+        function isItemBroken(itemInstance) {
+            if (itemInstance.durability === null || itemInstance.durability === undefined) return false;
+            return itemInstance.durability <= 0;
+        }
+
+        function getDurabilityColor(durability) {
+            if (durability >= 70) return '#4CAF50';
+            if (durability >= 40) return '#FFC107';
+            if (durability >= 20) return '#FF9800';
+            return '#F44336';
+        }
+
+        function renderBackpack() {
+            const grid = document.getElementById('backpackGrid');
+            grid.innerHTML = '';
+
+            const emptySlots = Math.max(0, backpack.capacity - backpack.items.length);
+
+            backpack.items.forEach((itemInstance, index) => {
+                const item = storeItems.find(i => i.id === itemInstance.id);
+                if (!item) return;
+
+                const expired = isItemExpired(itemInstance);
+                const broken = isItemBroken(itemInstance);
+                const canUse = !expired && !broken;
+
+                const div = document.createElement('div');
+                div.className = `backpack-item has-item ${expired ? 'expired' : ''} ${broken ? 'broken' : ''}`;
+
+                let durabilityHtml = '';
+                if (item.durability && itemInstance.durability !== null) {
+                    const color = getDurabilityColor(itemInstance.durability);
+                    durabilityHtml = `
+                        <div class="item-durability">
+                            <div class="durability-bar">
+                                <div class="durability-fill" style="width: ${itemInstance.durability}%; background: ${color}"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let expireHtml = '';
+                if (item.expireHours && itemInstance.expireTime) {
+                    const remaining = Math.max(0, Math.ceil((itemInstance.expireTime - Date.now()) / 3600000));
+                    expireHtml = `<span class="item-expire">${remaining}h</span>`;
+                }
+
+                div.innerHTML = `
+                    <span class="item-icon">${expired ? '🧟' : broken ? '💔' : item.icon}</span>
+                    <span class="item-name">${item.name}</span>
+                    ${durabilityHtml}
+                    ${expireHtml}
+                `;
+
+                if (canUse) {
+                    div.onclick = () => useItem(index);
+                } else {
+                    div.title = expired ? '已过期' : '已损坏';
+                }
+
+                grid.appendChild(div);
+            });
+
+            for (let i = 0; i < emptySlots; i++) {
+                const div = document.createElement('div');
+                div.className = 'backpack-item';
+                div.innerHTML = '<span style="opacity: 0.3;">📦</span>';
+                grid.appendChild(div);
+            }
+        }
+
+        function useItem(index) {
+            const itemInstance = backpack.items[index];
+            const item = storeItems.find(i => i.id === itemInstance.id);
+            if (!item) return;
+
+            if (isItemExpired(itemInstance)) {
+                showNotification(`${item.name}已过期，无法使用！`, 'error');
+                return;
+            }
+
+            if (isItemBroken(itemInstance)) {
+                showNotification(`${item.name}已损坏，无法使用！`, 'error');
+                return;
+            }
+
+            applyEffect(item.effect);
+
+            if (item.durability && item.durability > 0) {
+                itemInstance.durability = (itemInstance.durability || item.durability) - item.durabilityDrop;
+                if (itemInstance.durability <= 0) {
+                    showNotification(`${item.name}坏掉了...`, 'error');
+                }
+            }
+
+            if (!item.durability || item.durability <= 0) {
+                backpack.items.splice(index, 1);
+            }
+
+            saveBackpack();
+            renderBackpack();
+            showNotification(`${chatData.notification?.useItem || '使用了'}${item.name}`, 'success');
+        }
+
+        function actionGame(type) {
+            const game = eventData.games?.[type];
+            if (!game) return;
+
+            if (!consumeBackpackItem(game.consumeItem)) return;
+
+            updateStatus(`正在玩${game.name}...`);
+            applyEffect(game.effect);
+            actionCount++;
+
+            if (game.reward && game.reward.points && window.PointsSystem) {
+                PointsSystem.addPoints(PointsSystem.GAME_KEYS.OC, game.reward.points);
+            }
+
+            setTimeout(() => {
+                showNotification(`玩${game.name}真开心！`, 'success');
+                checkAllDialogueTriggers();
+            }, 1000);
+
+            if (game.gameUrl) {
+                setTimeout(() => {
+                    window.open(game.gameUrl, '_blank');
+                }, 500);
+            }
+        }
+
+        function renderStore(filter) {
+            const grid = document.getElementById('storeGrid');
+            grid.innerHTML = '';
+
+            const filteredItems = filter === 'all' ? storeItems : storeItems.filter(item => item.type === filter);
+
+            filteredItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'store-item';
+                const canAfford = window.PointsSystem ? PointsSystem.hasEnoughPoints(item.price) : false;
+                div.innerHTML = `
+                    <span class="item-icon">${item.icon}</span>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-desc">${item.desc}</div>
+                    <div class="item-price">
+                        <span>🏆</span>
+                        <span>${item.price}</span>
+                    </div>
+                    <button class="buy-btn ${canAfford ? '' : 'disabled'}" onclick="buyItem('${item.id}')">购买</button>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function switchStoreTab(type) {
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            currentStoreFilter = type;
+            renderStore(type);
+        }
+
+        function buyItem(itemId) {
+            const item = storeItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (item.type === 'upgrade' && item.upgradeType === 'backpack') {
+                if (window.PointsSystem) {
+                    if (PointsSystem.hasEnoughPoints(item.price)) {
+                        PointsSystem.spendPoints(item.price);
+                        backpack.capacity += item.upgradeValue;
+                        saveBackpack();
+                        renderBackpack();
+                        renderStore(currentStoreFilter);
+                        showNotification(`背包扩容成功！当前容量：${backpack.capacity}`, 'success');
+                    } else {
+                        showNotification(chatData.notification?.buyFail || '积分不足！', 'error');
+                    }
+                } else {
+                    showNotification(chatData.notification?.noPointsSystem || '积分系统未加载', 'error');
+                }
+                return;
+            }
+
+            if (backpack.items.length >= backpack.capacity) {
+                showNotification('背包已满！请扩容或使用物品后再购买', 'error');
+                return;
+            }
+
+            if (window.PointsSystem) {
+                if (PointsSystem.hasEnoughPoints(item.price)) {
+                    PointsSystem.spendPoints(item.price);
+
+                    const newItem = {
+                        id: item.id,
+                        durability: item.durability || null,
+                        expireTime: item.expireHours ? Date.now() + item.expireHours * 3600000 : null
+                    };
+
+                    backpack.items.push(newItem);
+                    saveBackpack();
+                    renderBackpack();
+                    renderStore(currentStoreFilter);
+                    showNotification(`${chatData.notification?.buySuccess || '购买成功！获得'}${item.name}`, 'success');
+                } else {
+                    showNotification(chatData.notification?.buyFail || '积分不足！', 'error');
+                }
+            } else {
+                showNotification(chatData.notification?.noPointsSystem || '积分系统未加载', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = type === 'success' ? '✅ ' : '❌ ';
+            notification.textContent += message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleCollapse(collapseId) {
+            const collapse = document.getElementById(collapseId);
+            if (collapse) {
+                collapse.classList.toggle('show');
+            }
+        }
+    </script>
+</body>
+
+</html>

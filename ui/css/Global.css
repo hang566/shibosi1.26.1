@@ -1,0 +1,219 @@
+/* ============================================
+   全局文本自适应背景颜色 (CSS Only)
+   原理：使用 mix-blend-mode 或 滤镜 实现
+   方案：采用 SVG 滤镜 + CSS 混合模式双重保障
+   ============================================ */
+
+/* ---------- 基础重置 ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------- 方案1: 使用 mix-blend-mode (广泛支持) ---------- */
+/* 
+   此方案通过混合模式让文字颜色与背景产生反差。
+   适用于任何背景（纯色、渐变、图片、视频）。
+   文字会变成背景的“反色”或“互补色”，始终清晰。
+*/
+.adaptive-text {
+  color: #fff; /* 后备颜色，但混合模式会覆盖其效果 */
+  background: inherit; /* 继承父级背景，确保混合生效 */
+  mix-blend-mode: difference; 
+  /* 
+     difference 模式：黑色背景变白，白色背景变黑，彩色背景变为互补色。
+     如果希望更柔和，可使用 'exclusion'。
+  */
+}
+
+/* 为了更精细控制，可添加文本阴影辅助 */
+.adaptive-text-shadow {
+  color: #fff;
+  background: inherit;
+  mix-blend-mode: difference;
+  text-shadow: 0 0 2px rgba(0,0,0,0.5), 0 0 4px rgba(255,255,255,0.3);
+}
+
+/* ---------- 方案2: 使用 SVG 滤镜 (更激进，兼容性稍低但效果更佳) ---------- */
+/* 
+   此方案通过 CSS 滤镜引用 SVG 的 <feColorMatrix> 来反转颜色。
+   需要单独定义 SVG 滤镜，然后通过 filter 属性引用。
+   优点：不依赖混合模式，可独立控制。
+*/
+
+/* 定义 SVG 滤镜 (放在 HTML 中任意位置，这里用 CSS 模拟定义) */
+/* 实际使用需在 HTML 中添加如下 SVG 代码：
+   <svg style="position:absolute;width:0;height:0;">
+     <filter id="invertFilter">
+       <feColorMatrix type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/>
+     </filter>
+   </svg>
+   然后在此处使用 filter: url(#invertFilter);
+   但我们这里用纯 CSS 模拟一下，使用 backdrop-filter 或 filter 的 invert()
+*/
+
+/* 使用 CSS filter invert() 实现颜色反转（效果类似） */
+.adaptive-filter {
+  color: #fff; /* 后备 */
+  background: inherit;
+  filter: invert(100%);
+  /* 
+     这会反转元素本身以及其内容的颜色。
+     但注意：如果背景有颜色，反转后文字颜色会变成背景的反色。
+     缺点是会同时反转背景，所以通常用于文字单独包裹。
+  */
+}
+
+/* 更精准：仅对文字应用 invert，背景不变 —— 使用 backdrop-filter */
+.adaptive-backdrop {
+  color: #fff;
+  background: inherit;
+  backdrop-filter: invert(100%);
+  /* 
+      backdrop-filter 作用于元素背后的区域，不会影响背景本身。
+      但需要元素本身半透明或背景透明才能看到背后内容。
+      这里使用 inherit 背景，并配合透明背景。
+  */
+  background-color: transparent; /* 关键：背景透明才能看到父级背景 */
+}
+
+/* ---------- 方案3: 使用 CSS 自定义属性 + 计算 (仅针对已知背景色) ---------- */
+/* 
+   如果背景色已知（如 #ffcc00），可通过计算亮度决定文字黑白。
+   但这不是"自动适配任意背景"，故不展开。
+   我们提供一种“伪自适应”通过 JS 辅助，但本代码是纯 CSS，故此方案省略。
+*/
+
+/* ---------- 推荐封装类 ---------- */
+
+/* 类名: .text-auto-contrast 
+   使用 mix-blend-mode: difference 配合轻微阴影，
+   适应绝大多数背景。
+*/
+.text-auto-contrast {
+  display: inline-block;  /* 或 block，根据需求 */
+  color: #fff;            /* 后备 */
+  background: inherit;    /* 继承父级背景 */
+  mix-blend-mode: difference;
+  text-shadow: 0 0 2px rgba(0,0,0,0.3), 0 0 6px rgba(255,255,255,0.2);
+}
+
+/* 针对白色背景微调（防止白色背景显示为黑色文字太刺眼） */
+.bg-white .text-auto-contrast,
+.text-auto-contrast.bg-white {
+  mix-blend-mode: exclusion; /* 更柔和的反转 */
+}
+
+/* ---------- 备选：使用 backdrop-filter 方案 ---------- */
+.text-auto-backdrop {
+  display: inline-block;
+  color: #fff;
+  background-color: transparent; /* 透明背景 */
+  backdrop-filter: invert(1) hue-rotate(180deg); 
+  /* 
+     invert(1) 完全反转颜色，hue-rotate 可调整色相。
+     但注意：backdrop-filter 对文字本身不生效，只会影响元素背后的区域，
+     所以文字颜色实际上是透明的背景色反转？不，文字颜色由 color 决定。
+     因此，此方法不适用于直接改变文字颜色。
+     正确用法是：将文字放在一个半透明背景上，然后对背景应用 backdrop-filter。
+     这里不推荐用于直接文字适配。
+  */
+}
+
+/* 修正：使用 filter 直接反转文字颜色（但会反转整个元素） */
+.text-filter-invert {
+  display: inline-block;
+  color: #000; /* 初始颜色，会被反转 */
+  background: inherit; /* 继承背景 */
+  filter: invert(100%);
+  /* 
+     如果父背景是白色，则文字变为黑色；如果父背景是黑色，文字变白。
+     但缺点是背景也会被反转，所以如果背景是图片，会失真。
+     因此，仅适用于文字独立包裹且背景为纯色的场景。
+  */
+}
+
+/* 改进：利用 mix-blend-mode 更优，推荐使用 .text-auto-contrast */
+
+/* ---------- 全局应用示例 ---------- */
+/* 
+   用法：给任何需要自适应文字的元素添加 class="text-auto-contrast"。
+   该元素会继承父级背景，并自动反转颜色。
+
+   对于块级元素（如 div、p、h1等），建议添加 display: inline-block; 
+   以便背景继承生效。
+*/
+
+/* 如果你希望所有文字自动适应背景，可以设置全局（不推荐，影响性能） */
+/* 
+body * {
+  mix-blend-mode: difference;
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+*/
+
+/* ---------- 额外工具：背景色反转辅助（针对纯色背景） ---------- */
+/* 
+   如果背景是纯色且已知，可以使用 CSS 变量配合亮度计算，
+   但需要预处理器或自定义属性，且无法实时适配动态背景。
+   故本文不提供。
+*/
+
+/* ============================================
+   使用示例及说明
+   ============================================ 
+   HTML:
+   <div style="background: #ff6600; padding: 20px;">
+     <span class="text-auto-contrast">这段文字会自动适应橙色背景</span>
+   </div>
+   <div style="background: #0066ff; padding: 20px;">
+     <span class="text-auto-contrast">这段文字会自动适应蓝色背景</span>
+   </div>
+   <div style="background: url('bg.jpg'); padding: 20px;">
+     <span class="text-auto-contrast">这段文字会自动适应图片背景</span>
+   </div>
+*/
+
+/* 为了更清晰，增加测试样式 */
+.demo-box {
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 背景色示例 */
+.bg-red { background: #e74c3c; }
+.bg-blue { background: #3498db; }
+.bg-green { background: #2ecc71; }
+.bg-dark { background: #2c3e50; }
+.bg-light { background: #ecf0f1; }
+.bg-gradient { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.bg-image { 
+  background: url('https://picsum.photos/800/200?random=1') center/cover no-repeat; 
+  color: transparent; /* 让文字颜色透明以便混合模式更明显？不，我们保留文字颜色 */
+}
+
+/* 自适应文字样式增强 */
+.text-auto-contrast.demo-text {
+  font-size: 2rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: inherit; /* 继承背景 */
+  mix-blend-mode: difference;
+  color: #fff;
+  text-shadow: 0 0 4px rgba(0,0,0,0.5), 0 0 8px rgba(255,255,255,0.2);
+}
+
+/* 针对白色背景特殊处理：如果背景是白色，文字反转后为黑色，可能不够柔和，使用 exclusion */
+.bg-light .text-auto-contrast.demo-text {
+  mix-blend-mode: exclusion;
+  text-shadow: 0 0 2px rgba(0,0,0,0.1);
+}

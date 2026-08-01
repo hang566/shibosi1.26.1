@@ -1,0 +1,2769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Star Luster - 太空立体战</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  background: #000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  user-select: none;
+  position: relative;
+}
+#game-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+}
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  border: 2px solid #333;
+  max-width: 100%;
+  max-height: 100vh;
+}
+#ui-overlay {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  color: #888;
+  font-size: 10px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 触屏控制按钮 */
+.touch-controls {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: none;
+  justify-content: space-between;
+  padding: 10px 20px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .touch-controls {
+    display: flex;
+  }
+  #ui-overlay {
+    display: none;
+  }
+}
+
+.dpad-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  width: 150px;
+  height: 150px;
+}
+
+.dpad-btn {
+  width: 46px;
+  height: 46px;
+  background: rgba(50, 60, 80, 0.85);
+  border: 2px solid rgba(100, 150, 200, 0.6);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s;
+  touch-action: manipulation;
+}
+
+.dpad-btn:active {
+  background: rgba(100, 150, 200, 0.6);
+  transform: scale(0.95);
+}
+
+.dpad-btn.empty {
+  background: transparent;
+  border: none;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.action-btn {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  border: 3px solid;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s;
+  touch-action: manipulation;
+}
+
+.action-btn.x {
+  background: rgba(255, 50, 50, 0.7);
+  border-color: #ff6666;
+  color: #fff;
+}
+
+.action-btn.z {
+  background: rgba(50, 150, 255, 0.7);
+  border-color: #66aaff;
+  color: #fff;
+}
+
+.action-btn.tab {
+  background: rgba(150, 100, 255, 0.7);
+  border-color: #aa66ff;
+  color: #fff;
+}
+
+.action-btn.enter {
+  background: rgba(50, 200, 100, 0.7);
+  border-color: #66ffaa;
+  color: #fff;
+}
+
+.action-btn:active {
+  transform: scale(0.92);
+  opacity: 0.8;
+}
+
+.center-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.center-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border: 2px solid rgba(200, 200, 200, 0.5);
+  background: rgba(60, 60, 80, 0.8);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s;
+  touch-action: manipulation;
+}
+
+.center-btn:active {
+  background: rgba(100, 100, 120, 0.8);
+  transform: scale(0.95);
+}
+
+/* 手机端画布适配 */
+@media (max-width: 768px) {
+  canvas {
+    width: 100vw;
+    height: auto;
+    object-fit: contain;
+    border: none;
+  }
+  #game-container {
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+<body>
+<div id="game-container">
+  <canvas id="game"></canvas>
+</div>
+<div id="ui-overlay">座舱:方向键转向 | 按住X连射(软锁定) | Z加速 | Tab星图 | Enter跃迁(超光速曲速飞行)</div>
+
+<!-- 触屏控制按钮 -->
+<div class="touch-controls">
+  <!-- 左侧方向键 -->
+  <div class="dpad-container">
+    <div class="dpad-btn empty"></div>
+    <div class="dpad-btn" id="btnUp">↑</div>
+    <div class="dpad-btn empty"></div>
+    <div class="dpad-btn" id="btnLeft">←</div>
+    <div class="dpad-btn" id="btnDown">↓</div>
+    <div class="dpad-btn" id="btnRight">→</div>
+    <div class="dpad-btn empty"></div>
+    <div class="dpad-btn empty"></div>
+    <div class="dpad-btn empty"></div>
+  </div>
+
+  <!-- 中间按钮 -->
+  <div class="center-buttons">
+    <button class="center-btn" id="btnTab">TAB</button>
+    <button class="center-btn" id="btnEnter">ENT</button>
+  </div>
+
+  <!-- 右侧动作按钮 -->
+  <div class="action-buttons">
+    <button class="action-btn x" id="btnX">X</button>
+    <button class="action-btn z" id="btnZ">Z</button>
+    <button class="action-btn tab" id="btnTabAlt">星图</button>
+    <button class="action-btn enter" id="btnEnterAlt">跃迁</button>
+  </div>
+</div>
+  <script src="../../../js/pointsSystem.js"></script>
+  <script>
+// ============ Star Luster - 太空立体战 ============
+// FC 经典游戏 Web 复刻版
+
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+// 画布尺寸
+const W = 800, H = 600;
+canvas.width = W;
+canvas.height = H;
+
+// ============ 游戏状态 ============
+const STATE = {
+  TITLE: 'title',
+  MODE_SELECT: 'modeSelect',
+  PLAYING: 'playing',
+  SHOP: 'shop',
+  GAMEOVER: 'gameover',
+  ENDING: 'ending',
+  WARP: 'warp',
+};
+
+const MODE = {
+  TRAINING: 'training',
+  COMMAND: 'command', 
+  ADVENTURE: 'adventure',
+};
+
+// ============ 全局游戏数据 ============
+let gameState = STATE.TITLE;
+let gameMode = MODE.TRAINING;
+let frameCount = 0;
+let titleBlink = 0;
+let modeSelectIndex = 0;
+let warpTimer = 0;
+let warpDuration = 90;
+let warpPhase = 0; // 0=跃迁中, 1=到达
+let messageText = '';
+let messageTimer = 0;
+let gameOverTimer = 0;
+let endingTimer = 0;
+let endingType = ''; // 'bad' or 'good'
+
+// 星图数据
+const MAP_SIZE = 8;
+let starMap = [];
+let playerMapX = 4, playerMapY = 4; // 玩家星图位置
+
+// 玩家数据
+let energy = 100;
+let maxEnergy = 100;
+let shield = 100;
+let maxShield = 100;
+let radOk = true;   // 雷达
+let comOk = true;   // 火控电脑
+let engOk = true;   // 引擎
+let photonTorpedoes = 5;
+let keys = 0;
+let maxKeys = 7;
+let hasBarrier = false;
+let hasDalto = false;
+let asteroidKillCount = 0;
+let daltoAsteroidThreshold = 60;
+
+// 积分与商店系统
+let credits = 0;
+let shopSelected = 0;
+const shopItems = ['能量补满', '护盾补满', '全机维修', '光子鱼雷x3', '招募盟军', '升级能量上限', '升级护盾上限', '升级激光威力', '升级引擎速度'];
+const shopCosts = [20, 15, 30, 25, 50, 40, 35, 45, 35];
+const shopMaxLevels = [1, 1, 1, 1, 3, 5, 5, 3, 3];
+
+// 权威值系统
+let authority = 0; // 权威值：占领区域后增加
+let authorityLevel = 0; // 权威等级：0-5
+let conqueredZones = 0; // 已占领区域数
+let conquestNotification = ''; // 占领通知文本
+let conquestNotificationTimer = 0; // 通知显示时间
+
+// 盟军系统
+let alliedFighters = [];
+const MAX_ALLIES = 3;
+
+// 升级系统
+let upgradeLevels = { energy: 0, shield: 0, laser: 0, engine: 0 };
+
+// 座舱战斗数据
+let cockpitEnemies = [];
+let cockpitAsteroids = [];
+let cockpitStars = [];
+let viewAngleX = 0, viewAngleY = 0; // 机体转向角度（-1到1，代表左右/上下最大转向）
+let aimAngleX = 0, aimAngleY = 0;
+let laserCooldown = 0;
+let laserFiring = false;
+let laserHitEnemy = null; // 被击中的敌机闪烁效果
+let shieldRegenTimer = 0;
+let cockpitRadarEnemies = [];
+let screenShake = 0;
+let hitFlash = 0;
+let boostSpeed = 0; // 加速推进速度
+
+// 键盘状态
+let keysDown = {};
+let keyJustPressed = {};
+
+// 星图敌军数据
+let mapEnemyClusters = [];
+
+// ============ 初始化星图 ============
+function initStarMap() {
+  starMap = [];
+  mapEnemyClusters = [];
+  for (let y = 0; y < MAP_SIZE; y++) {
+    starMap[y] = [];
+    for (let x = 0; x < MAP_SIZE; x++) {
+      starMap[y][x] = { type: 'empty', planetAlive: true, planetKey: null, baseDestroyed: false };
+    }
+  }
+
+  // 放置补给基地 (B)
+  const basePositions = [[1,1], [6,1], [3,3], [4,6], [1,5], [6,4]];
+  basePositions.forEach(([x,y]) => {
+    starMap[y][x].type = 'base';
+  });
+
+  // 放置行星 (带钥匙，仅冒险模式)
+  const planetPositions = [[0,2], [2,0], [5,3], [7,1], [3,5], [0,6], [7,6]];
+  planetPositions.forEach(([x,y], i) => {
+    starMap[y][x].type = 'planet';
+    starMap[y][x].planetKey = i; // 0-6 对应七色钥匙
+  });
+
+  // 放置小行星带
+  const asteroidPositions = [[2,2], [7,4], [1,4], [5,1], [3,6], [6,2]];
+  asteroidPositions.forEach(([x,y]) => {
+    starMap[y][x].type = 'asteroid';
+  });
+
+  // 放置敌军集群
+  const enemyPositions = [[0,0], [4,0], [7,0], [2,1], [5,2], [0,3], [7,3], [3,4], [6,5], [2,6], [5,6], [1,7], [4,7], [7,7]];
+  enemyPositions.forEach(([x,y]) => {
+    starMap[y][x].type = 'enemy';
+    mapEnemyClusters.push({
+      x, y,
+      strength: 8 + Math.floor(Math.random() * 5),
+      maxStrength: 12,
+      attackTimer: 60 + Math.floor(Math.random() * 120),
+      attacking: null,
+    });
+  });
+
+  // 训练模式: 移除行星和钥匙，敌人不主动进攻
+  if (gameMode === MODE.TRAINING) {
+    for (let y = 0; y < MAP_SIZE; y++) {
+      for (let x = 0; x < MAP_SIZE; x++) {
+        if (starMap[y][x].type === 'planet') {
+          starMap[y][x].type = 'empty';
+          starMap[y][x].planetKey = null;
+        }
+      }
+    }
+    keys = 0;
+    maxKeys = 0;
+  }
+
+  // 指挥模式: 移除钥匙收集
+  if (gameMode === MODE.COMMAND) {
+    for (let y = 0; y < MAP_SIZE; y++) {
+      for (let x = 0; x < MAP_SIZE; x++) {
+        if (starMap[y][x].type === 'planet') {
+          starMap[y][x].planetKey = null;
+        }
+      }
+    }
+    keys = 0;
+    maxKeys = 0;
+  }
+
+  playerMapX = 4;
+  playerMapY = 4;
+}
+
+// ============ 初始化座舱星空 ============
+function initCockpitStars() {
+  cockpitStars = [];
+  for (let i = 0; i < 150; i++) {
+    cockpitStars.push({
+      wx: (Math.random() - 0.5) * 800,  // 世界坐标 X
+      wy: (Math.random() - 0.5) * 500,  // 世界坐标 Y
+      wz: 20 + Math.random() * 600,      // 世界坐标 Z（深度，近=小，远=大）
+      baseSize: 0.3 + Math.random() * 1.5, // 基础大小
+      brightness: 0.3 + Math.random() * 0.7,
+    });
+  }
+}
+
+// ============ 初始化座舱敌人 ============
+function initCockpitEnemies() {
+  cockpitEnemies = [];
+  cockpitAsteroids = [];
+  const cluster = getCurrentEnemyCluster();
+  let enemyCount = 0;
+  const strengthBonus = getEnemyStrengthBonus();
+  if (cluster) {
+    enemyCount = Math.min(cluster.strength + strengthBonus, 15);
+  } else {
+    enemyCount = 3 + Math.floor(Math.random() * 5) + strengthBonus;
+  }
+  
+  for (let i = 0; i < enemyCount; i++) {
+    spawnEnemy();
+  }
+  
+  // 小行星带额外生成陨石
+  if (starMap[playerMapY] && starMap[playerMapY][playerMapX] && starMap[playerMapY][playerMapX].type === 'asteroid') {
+    for (let i = 0; i < 8; i++) {
+      spawnAsteroid();
+    }
+  }
+}
+
+function spawnEnemy() {
+  const types = ['fighter', 'fighter', 'fighter', 'fighter', 'cruiser', 'cruiser', 'battleship'];
+  const type = types[Math.floor(Math.random() * types.length)];
+  let size, hp, speed;
+  const hpBonus = getEnemyHpBonus();
+  switch(type) {
+    case 'fighter': size = 8; hp = 1 + hpBonus; speed = 0.8; break;
+    case 'cruiser': size = 14; hp = 2 + hpBonus; speed = 0.5; break;
+    case 'battleship': size = 22; hp = 3 + hpBonus; speed = 0.3; break;
+  }
+  
+  cockpitEnemies.push({
+    x: (Math.random() - 0.5) * 400,
+    y: (Math.random() - 0.5) * 300,
+    z: 80 + Math.random() * 200,
+    type, size, hp, maxHp: hp, speed,
+    vx: (Math.random() - 0.5) * 1.5,
+    vy: (Math.random() - 0.5) * 1.5,
+    fireTimer: 60 + Math.random() * 120,
+    alive: true,
+  });
+}
+
+function spawnAsteroid() {
+  cockpitAsteroids.push({
+    x: (Math.random() - 0.5) * 350,
+    y: (Math.random() - 0.5) * 250,
+    z: 80 + Math.random() * 250,
+    size: 5 + Math.random() * 15,
+    vx: (Math.random() - 0.5) * 2,
+    vy: (Math.random() - 0.5) * 2,
+    alive: true,
+  });
+}
+
+// ============ 获取当前星图位置的敌军集群 ============
+function getCurrentEnemyCluster() {
+  return mapEnemyClusters.find(c => c.x === playerMapX && c.y === playerMapY && c.strength > 0);
+}
+
+// ============ 权威值系统辅助函数 ============
+function updateAuthorityLevel() {
+  // 权威等级：每20权威值升一级，最高5级
+  authorityLevel = Math.min(5, Math.floor(authority / 20));
+}
+
+function getAllyCost() {
+  const baseCost = 50;
+  const discount = authorityLevel * 5; // 每级折扣5CR
+  return Math.max(20, baseCost - discount);
+}
+
+function getEnemyStrengthBonus() {
+  return authorityLevel * 2; // 每级增加2个敌人
+}
+
+function getEnemyHpBonus() {
+  return authorityLevel; // 每级增加1点HP
+}
+
+// ============ 游戏初始化 ============
+function initGame() {
+  energy = 100;
+  maxEnergy = 100;
+  shield = 100;
+  maxShield = 100;
+  radOk = true;
+  comOk = true;
+  engOk = true;
+  photonTorpedoes = 5;
+  keys = 0;
+  maxKeys = gameMode === MODE.ADVENTURE ? 7 : 0;
+  hasBarrier = false;
+  hasDalto = false;
+  asteroidKillCount = 0;
+  daltoAsteroidThreshold = 50 + Math.floor(Math.random() * 30);
+  viewAngleX = 0;
+  viewAngleY = 0;
+  aimAngleX = 0;
+  aimAngleY = 0;
+  laserCooldown = 0;
+  laserFiring = false;
+  shieldRegenTimer = 0;
+  screenShake = 0;
+  hitFlash = 0;
+  messageText = '';
+  messageTimer = 0;
+  cockpitEnemies = [];
+  cockpitAsteroids = [];
+  credits = 0;
+  shopSelected = 0;
+  alliedFighters = [];
+  authority = 0;
+  authorityLevel = 0;
+  conqueredZones = 0;
+  conquestNotification = '';
+  conquestNotificationTimer = 0;
+  upgradeLevels = { energy: 0, shield: 0, laser: 0, engine: 0 };
+  initStarMap();
+  initCockpitStars();
+  initCockpitEnemies();
+  gameState = STATE.PLAYING;
+}
+
+// ============ 绘制函数 ============
+
+// 绘制标题画面
+function drawTitleScreen() {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  // 闪烁标题
+  titleBlink += 0.05;
+  const alpha = 0.5 + Math.sin(titleBlink) * 0.5;
+  
+  ctx.save();
+  ctx.fillStyle = `rgba(255, 200, 50, ${alpha})`;
+  ctx.font = 'bold 48px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('STAR LUSTER', W/2, 180);
+  
+  ctx.fillStyle = '#fff';
+  ctx.font = '20px "Courier New"';
+  ctx.fillText('太空立体战', W/2, 220);
+  
+  // 小型像素战机动画
+  const sx = W/2 + Math.sin(frameCount * 0.03) * 40;
+  const sy = 270 + Math.cos(frameCount * 0.05) * 10;
+  drawPixelShip(sx, sy, 3);
+  
+  // 模式选择
+  ctx.fillStyle = '#aaa';
+  ctx.font = '16px "Courier New"';
+  const modes = ['TRAINING  训练模式', 'COMMAND   指挥模式', 'ADVENTURE 冒险模式'];
+  modes.forEach((m, i) => {
+    if (i === modeSelectIndex) {
+      ctx.fillStyle = '#ff0';
+      ctx.fillText('> ' + m + ' <', W/2, 340 + i * 30);
+    } else {
+      ctx.fillStyle = '#888';
+      ctx.fillText('  ' + m, W/2, 340 + i * 30);
+    }
+  });
+  
+  ctx.fillStyle = '#666';
+  ctx.font = '12px "Courier New"';
+  ctx.fillText('按 Enter 开始 | 上下键选择模式', W/2, 450);
+  ctx.fillText('星图:方向键移动 | Z/Enter跃迁 | X鱼雷 | Tab座舱', W/2, 475);
+  ctx.fillText('座舱:方向键转向 | 按住X连射(软锁定) | Z加速', W/2, 495);
+  ctx.fillText('1985 NAMCO - UGSF Series', W/2, 525);
+  ctx.restore();
+}
+
+// 绘制像素飞船
+function drawPixelShip(x, y, scale) {
+  ctx.fillStyle = '#fff';
+  const s = scale;
+  ctx.fillRect(x - 2*s, y - 3*s, s, s);
+  ctx.fillRect(x + 1*s, y - 3*s, s, s);
+  ctx.fillRect(x - 3*s, y - 2*s, s, s);
+  ctx.fillRect(x - 1*s, y - 2*s, 2*s, s);
+  ctx.fillRect(x + 2*s, y - 2*s, s, s);
+  ctx.fillRect(x - 4*s, y - 1*s, s, s);
+  ctx.fillRect(x - 2*s, y - 1*s, 4*s, s);
+  ctx.fillRect(x + 3*s, y - 1*s, s, s);
+  ctx.fillRect(x - 4*s, y, s, s);
+  ctx.fillRect(x - 2*s, y, 4*s, s);
+  ctx.fillRect(x + 3*s, y, s, s);
+  ctx.fillRect(x - 1*s, y + 1*s, 2*s, s);
+  ctx.fillRect(x - 1*s, y + 2*s, 2*s, s);
+  ctx.fillRect(x - 3*s, y + 3*s, 2*s, s);
+  ctx.fillRect(x + 1*s, y + 3*s, 2*s, s);
+}
+
+// 绘制星图战略界面
+function drawStarMap() {
+  ctx.fillStyle = '#000810';
+  ctx.fillRect(0, 0, W, H);
+  
+  const gridSize = 55;
+  const offsetX = (W - MAP_SIZE * gridSize) / 2;
+  const offsetY = 60;
+  
+  // 网格线
+  ctx.strokeStyle = '#0a2a4a';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= MAP_SIZE; i++) {
+    ctx.beginPath();
+    ctx.moveTo(offsetX + i * gridSize, offsetY);
+    ctx.lineTo(offsetX + i * gridSize, offsetY + MAP_SIZE * gridSize);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(offsetX, offsetY + i * gridSize);
+    ctx.lineTo(offsetX + MAP_SIZE * gridSize, offsetY + i * gridSize);
+    ctx.stroke();
+  }
+  
+  // 绘制每个格子
+  for (let y = 0; y < MAP_SIZE; y++) {
+    for (let x = 0; x < MAP_SIZE; x++) {
+      const cx = offsetX + x * gridSize + gridSize/2;
+      const cy = offsetY + y * gridSize + gridSize/2;
+      const cell = starMap[y][x];
+      
+      if (cell.type === 'enemy') {
+        const cluster = mapEnemyClusters.find(c => c.x === x && c.y === y);
+        if (cluster && cluster.strength > 0) {
+          ctx.fillStyle = '#f44';
+          ctx.font = 'bold 16px "Courier New"';
+          ctx.textAlign = 'center';
+          ctx.fillText('E', cx, cy + 6);
+        }
+      } else if (cell.type === 'base') {
+        if (!cell.baseDestroyed) {
+          ctx.fillStyle = '#4af';
+          ctx.font = 'bold 16px "Courier New"';
+          ctx.textAlign = 'center';
+          ctx.fillText('B', cx, cy + 6);
+        } else {
+          ctx.fillStyle = '#333';
+          ctx.font = 'bold 16px "Courier New"';
+          ctx.textAlign = 'center';
+          ctx.fillText('X', cx, cy + 6);
+        }
+      } else if (cell.type === 'planet') {
+        if (cell.planetAlive) {
+          const hasKey = cell.planetKey !== null;
+          ctx.fillStyle = hasKey ? '#ff0' : '#888';
+          ctx.font = 'bold 16px "Courier New"';
+          ctx.textAlign = 'center';
+          ctx.fillText(hasKey ? '*' : 'P', cx, cy + 6);
+        } else {
+          ctx.fillStyle = '#333';
+          ctx.font = 'bold 16px "Courier New"';
+          ctx.textAlign = 'center';
+          ctx.fillText('X', cx, cy + 6);
+        }
+      } else if (cell.type === 'asteroid') {
+        ctx.fillStyle = '#888';
+        ctx.font = '12px "Courier New"';
+        ctx.textAlign = 'center';
+        ctx.fillText('///', cx, cy + 4);
+      } else if (cell.type === 'darkstar') {
+        // 闪烁暗星
+        const blinkAlpha = 0.5 + Math.sin(frameCount * 0.1) * 0.5;
+        ctx.fillStyle = `rgba(255, 0, 255, ${blinkAlpha})`;
+        ctx.font = 'bold 18px "Courier New"';
+        ctx.textAlign = 'center';
+        ctx.fillText('◆', cx, cy + 6);
+      }
+    }
+  }
+  
+  // 玩家位置
+  const px = offsetX + playerMapX * gridSize + gridSize/2;
+  const py = offsetY + playerMapY * gridSize + gridSize/2;
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 20px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('▲', px, py - 5);
+  
+  // 总览
+  ctx.fillStyle = '#0af';
+  ctx.font = 'bold 14px "Courier New"';
+  ctx.textAlign = 'left';
+  ctx.fillText('STAR MAP - 星图战略', 20, 30);
+  ctx.fillText(`坐标: [${playerMapX}, ${playerMapY}] | 权威: ${authority} Lv${authorityLevel} | 占领: ${conqueredZones}`, 20, 48);
+  ctx.fillText(`能量: ${Math.floor(energy)}  鱼雷: ${photonTorpedoes}`, 400, 30);
+  ctx.fillText(`积分: ${credits}CR  盟军: ${alliedFighters.length}/${MAX_ALLIES}`, 400, 48);
+  if (gameMode === MODE.ADVENTURE) {
+    ctx.fillText(`钥匙: ${keys}/${maxKeys} 冒险模式`, 400, 66);
+  }
+  
+  // 区域提示
+  if (starMap[playerMapY] && starMap[playerMapY][playerMapX]) {
+    const cellType = starMap[playerMapY][playerMapX].type;
+    ctx.fillStyle = '#ff0';
+    ctx.font = '13px "Courier New"';
+    ctx.textAlign = 'center';
+    if (cellType === 'base' && !starMap[playerMapY][playerMapX].baseDestroyed) {
+      ctx.fillText('按 Enter 进入补给基地', W/2, offsetY + MAP_SIZE * gridSize + 10);
+    } else if (cellType === 'enemy') {
+      ctx.fillText('按 Enter 跃迁进入战斗', W/2, offsetY + MAP_SIZE * gridSize + 10);
+    } else if (cellType === 'asteroid') {
+      ctx.fillText('按 Enter 跃迁进入小行星带', W/2, offsetY + MAP_SIZE * gridSize + 10);
+    }
+  }
+  
+  // 方向键:移动光标 Z:跃迁 X:鱼雷 Tab:座舱
+  ctx.fillStyle = '#666';
+  ctx.font = '11px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('方向键:移动 | Z/Enter:跃迁战斗 | X:光子鱼雷 | Tab:座舱', W/2, offsetY + MAP_SIZE * gridSize + 30);
+  
+  // 占领通知（星图界面）
+  if (conquestNotificationTimer > 0) {
+    conquestNotificationTimer--;
+    const notifAlpha = Math.min(1, conquestNotificationTimer / 60);
+    const pulse = Math.sin(conquestNotificationTimer * 0.1) * 0.2 + 0.8;
+    ctx.fillStyle = `rgba(0,255,100,${notifAlpha * pulse})`;
+    ctx.font = 'bold 18px "Courier New"';
+    ctx.textAlign = 'center';
+    ctx.fillText(conquestNotification, W/2, H/2);
+    // 光晕效果
+    ctx.fillStyle = `rgba(0,200,50,${notifAlpha * 0.3})`;
+    ctx.font = 'bold 22px "Courier New"';
+    ctx.fillText(conquestNotification, W/2, H/2);
+  }
+  
+  // 底部信息
+  drawBottomStatus();
+}
+
+// 绘制底部状态栏
+function drawBottomStatus() {
+  ctx.fillStyle = '#333';
+  ctx.fillRect(0, H - 25, W, 25);
+  ctx.fillStyle = '#888';
+  ctx.font = '11px "Courier New"';
+  ctx.textAlign = 'center';
+  
+  let statusStr = `ENERGY:${Math.floor(energy)} | SHIELD:${Math.floor(shield)} | `;
+  statusStr += `RAD:${radOk?'OK':'NG'} COM:${comOk?'OK':'NG'} ENG:${engOk?'OK':'NG'} | `;
+  statusStr += `CR:${credits} | 盟军:${alliedFighters.length}/${MAX_ALLIES}`;
+  if (upgradeLevels.laser > 0 || upgradeLevels.engine > 0 || upgradeLevels.energy > 0 || upgradeLevels.shield > 0) {
+    statusStr += ` | 升级:`;
+    if (upgradeLevels.energy > 0) statusStr += `E${upgradeLevels.energy} `;
+    if (upgradeLevels.shield > 0) statusStr += `S${upgradeLevels.shield} `;
+    if (upgradeLevels.laser > 0) statusStr += `L${upgradeLevels.laser} `;
+    if (upgradeLevels.engine > 0) statusStr += `M${upgradeLevels.engine}`;
+  }
+  statusStr += gameMode === MODE.ADVENTURE ? ` | KEYS:${keys}/${maxKeys}` : '';
+  ctx.fillText(statusStr, W/2, H - 9);
+}
+
+// 绘制座舱战斗画面
+function drawCockpit() {
+  // 太空视野
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H * 0.55);
+  
+  // 屏幕震动
+  let shakeX = 0, shakeY = 0;
+  if (screenShake > 0) {
+    shakeX = (Math.random() - 0.5) * screenShake * 2;
+    shakeY = (Math.random() - 0.5) * screenShake * 2;
+  }
+  
+  ctx.save();
+  ctx.translate(shakeX, shakeY);
+  
+  // 转向偏移量：机体旋转时，星空和物体反向移动
+  // viewAngleX/Y 范围 -1到1，映射到约 ±300px 的世界偏移
+  const turnX = -viewAngleX * 300;
+  const turnY = -viewAngleY * 200;
+  const focalLength = 350; // 透视焦距
+  const centerX = W/2;
+  const centerY = H * 0.28;
+  
+  // 3D透视星空 - 星星根据深度改变大小和位置
+  cockpitStars.forEach(star => {
+    // 前进：星星向玩家靠近（wz减小），加速时更快
+    const forwardSpeed = 0.8 + boostSpeed * 3;
+    star.wz -= forwardSpeed;
+    if (star.wz < 10) {
+      // 回收远处的星星：重置到前方
+      star.wz = 500 + Math.random() * 300;
+      star.wx = (Math.random() - 0.5) * 800;
+      star.wy = (Math.random() - 0.5) * 500;
+    }
+    
+    // 3D透视投影：screen = center + (world / wz) * focalLength
+    const projectedX = (star.wx + turnX) / star.wz * focalLength;
+    const projectedY = (star.wy + turnY) / star.wz * focalLength;
+    const screenX = centerX + projectedX;
+    const screenY = centerY + projectedY;
+    
+    // 透视大小：近大远小
+    const starSize = star.baseSize / star.wz * focalLength;
+    const clampedSize = Math.max(0.3, Math.min(starSize, 4));
+    
+    // 透视亮度：近亮远暗
+    const depthFactor = Math.max(0, Math.min(1, 1 - star.wz / 600));
+    const alpha = star.brightness * (0.3 + depthFactor * 0.7);
+    
+    // 只在屏幕内绘制
+    if (screenX > -10 && screenX < W + 10 && screenY > -10 && screenY < H * 0.55 + 10) {
+      // 大星星加光晕
+      if (clampedSize > 2.5) {
+        ctx.fillStyle = `rgba(255,255,255,${alpha * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, clampedSize * 1.5, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+      ctx.fillRect(screenX - clampedSize/2, screenY - clampedSize/2, clampedSize, clampedSize);
+    }
+  });
+  
+  // 绘制小行星（考虑转向偏移）
+  cockpitAsteroids.forEach(ast => {
+    if (!ast.alive) return;
+    const screenX = W/2 + (ast.x + turnX) / (ast.z / 200) * (W/400);
+    const screenY = H*0.28 + (ast.y + turnY) / (ast.z / 200) * (H/400);
+    const screenSize = ast.size / (ast.z / 200) * 2;
+    
+    if (screenX > -100 && screenX < W+100 && screenY > -100 && screenY < H*0.55+100) {
+      ctx.fillStyle = '#666';
+      ctx.beginPath();
+      ctx.arc(screenX, screenY, Math.max(1, screenSize), 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = '#555';
+      ctx.fillRect(screenX - screenSize*0.3, screenY - screenSize*0.3, screenSize*0.6, screenSize*0.6);
+    }
+  });
+  
+  // 绘制敌机（考虑转向偏移）
+  cockpitEnemies.forEach(enemy => {
+    if (!enemy.alive) return;
+    const screenX = W/2 + (enemy.x + turnX) / (enemy.z / 200) * (W/400);
+    const screenY = H*0.28 + (enemy.y + turnY) / (enemy.z / 200) * (H/400);
+    const screenSize = enemy.size / (enemy.z / 200) * 2;
+    
+    if (screenX > -100 && screenX < W+100 && screenY > -100 && screenY < H*0.55+100) {
+      // 敌机始终可见：远距离显示为小光点，中近距离显示完整形状
+      if (enemy.z > 280) {
+        // 远距离：红色/黄色小光点
+        const dotColor = enemy.type === 'battleship' ? '#ff0' : '#f44';
+        const dotSize = Math.max(2, screenSize * 0.5);
+        ctx.fillStyle = dotColor;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, dotSize, 0, Math.PI*2);
+        ctx.fill();
+        // 光晕
+        ctx.fillStyle = `rgba(${enemy.type === 'battleship' ? '255,255,0' : '255,50,50'},0.3)`;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, dotSize + 2, 0, Math.PI*2);
+        ctx.fill();
+      } else if (enemy.z > 180) {
+        // 中距离：小形状
+        const s = Math.max(3, screenSize);
+        drawEnemyShape(screenX, screenY, s, enemy.type);
+      } else {
+        // 近距离：大形状，带填充色
+        const s = Math.max(5, screenSize);
+        drawEnemyShape(screenX, screenY, s, enemy.type);
+      }
+    }
+  });
+  
+  // 绘制盟军（绿色三角，考虑转向偏移）
+  alliedFighters.forEach(ally => {
+    if (!ally.alive) return;
+    const screenX = W/2 + (ally.x + turnX) / (ally.z / 200) * (W/400);
+    const screenY = H*0.28 + (ally.y + turnY) / (ally.z / 200) * (H/400);
+    const screenSize = 8 / (ally.z / 200) * 2;
+    
+    if (screenX > -100 && screenX < W+100 && screenY > -100 && screenY < H*0.55+100) {
+      ctx.fillStyle = '#0f0';
+      ctx.strokeStyle = '#0f0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(screenX, screenY - screenSize);
+      ctx.lineTo(screenX - screenSize * 0.6, screenY + screenSize * 0.4);
+      ctx.lineTo(screenX + screenSize * 0.6, screenY + screenSize * 0.4);
+      ctx.closePath();
+      ctx.stroke();
+      // 友军标识
+      ctx.fillStyle = 'rgba(0,255,0,0.5)';
+      ctx.fillRect(screenX - 2, screenY - screenSize - 4, 4, 3);
+    }
+  });
+  
+  // 检查是否有敌机在准星范围内
+  let targetLocked = false;
+  const checkTurnX = -viewAngleX * 300;
+  const checkTurnY = -viewAngleY * 200;
+  cockpitEnemies.forEach(enemy => {
+    if (!enemy.alive || targetLocked) return;
+    const sx = W/2 + (enemy.x + checkTurnX) / (enemy.z / 200) * (W/400);
+    const sy = H*0.28 + (enemy.y + checkTurnY) / (enemy.z / 200) * (H/400);
+    const d = Math.sqrt((sx - W/2) ** 2 + (sy - H*0.28) ** 2);
+    if (d < 50) targetLocked = true;
+  });
+  
+  // 中央固定十字准星
+  const cx = W/2;
+  const cy = H * 0.28;
+  const crossColor = targetLocked ? '#f44' : '#fff';
+  ctx.strokeStyle = crossColor;
+  ctx.lineWidth = targetLocked ? 2 : 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 15, cy);
+  ctx.lineTo(cx - 5, cy);
+  ctx.moveTo(cx + 5, cy);
+  ctx.lineTo(cx + 15, cy);
+  ctx.moveTo(cx, cy - 15);
+  ctx.lineTo(cx, cy - 5);
+  ctx.moveTo(cx, cy + 5);
+  ctx.lineTo(cx, cy + 15);
+  ctx.stroke();
+  ctx.strokeStyle = targetLocked ? 'rgba(255,50,50,0.7)' : 'rgba(255,255,255,0.5)';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 20, 0, Math.PI*2);
+  ctx.stroke();
+  
+  // 激光特效
+  if (laserFiring && laserCooldown > 5) {
+    const lAlpha = (laserCooldown - 5) / 3;
+    // 外层光晕
+    ctx.strokeStyle = `rgba(255,100,100,${lAlpha * 0.4})`;
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(W/2, H*0.28 + 40);
+    ctx.lineTo(W/2, H*0.28 - 100);
+    ctx.stroke();
+    // 内层白核
+    ctx.strokeStyle = `rgba(255,255,255,${lAlpha * 0.9})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(W/2, H*0.28 + 40);
+    ctx.lineTo(W/2, H*0.28 - 100);
+    ctx.stroke();
+    // 屏幕闪光
+    ctx.fillStyle = `rgba(255,255,255,${lAlpha * 0.15})`;
+    ctx.fillRect(0, 0, W, H*0.55);
+  }
+  
+  // 命中敌机闪烁（白色高亮）
+  if (laserHitEnemy && laserHitEnemy.alive && laserCooldown > 5) {
+    const turnX2 = -viewAngleX * 300;
+    const turnY2 = -viewAngleY * 200;
+    const hx = W/2 + (laserHitEnemy.x + turnX2) / (laserHitEnemy.z / 200) * (W/400);
+    const hy = H*0.28 + (laserHitEnemy.y + turnY2) / (laserHitEnemy.z / 200) * (H/400);
+    const hs = laserHitEnemy.size / (laserHitEnemy.z / 200) * 2;
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.beginPath();
+    ctx.arc(hx, hy, hs + 4, 0, Math.PI*2);
+    ctx.fill();
+  }
+  
+  // 被击中闪红
+  if (hitFlash > 0) {
+    ctx.fillStyle = `rgba(255,0,0,${hitFlash * 0.3})`;
+    ctx.fillRect(0, 0, W, H*0.55);
+  }
+  
+  ctx.restore();
+  
+  // 座舱边框
+  drawCockpitFrame();
+  
+  // 仪表盘
+  drawDashboard();
+  
+  // 模式指示器
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '10px "Courier New"';
+  ctx.textAlign = 'right';
+  ctx.fillText('COCKPIT', W - 10, 15);
+}
+
+function drawEnemyShape(x, y, size, type) {
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 1.5;
+  
+  if (type === 'fighter') {
+    // 红色填充三角形
+    ctx.fillStyle = '#e33';
+    ctx.beginPath();
+    ctx.moveTo(x, y - size);
+    ctx.lineTo(x - size * 0.7, y + size * 0.5);
+    ctx.lineTo(x + size * 0.7, y + size * 0.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#f88';
+    ctx.stroke();
+  } else if (type === 'cruiser') {
+    // 橙色填充菱形
+    ctx.fillStyle = '#e82';
+    ctx.beginPath();
+    ctx.moveTo(x, y - size);
+    ctx.lineTo(x - size * 0.7, y);
+    ctx.lineTo(x, y + size);
+    ctx.lineTo(x + size * 0.7, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#fb8';
+    ctx.stroke();
+    // 中心引擎光
+    ctx.fillStyle = '#ff0';
+    ctx.fillRect(x - size*0.2, y - size*0.3, size*0.4, size*0.6);
+  } else {
+    // 母舰 - 金色复杂形状
+    ctx.fillStyle = '#e80';
+    ctx.fillRect(x - size*0.6, y - size*0.3, size*1.2, size*0.6);
+    ctx.fillRect(x - size*0.3, y - size*0.6, size*0.6, size*1.2);
+    ctx.strokeStyle = '#fc0';
+    ctx.strokeRect(x - size*0.6, y - size*0.3, size*1.2, size*0.6);
+    ctx.strokeRect(x - size*0.3, y - size*0.6, size*0.6, size*1.2);
+    // 核心光点
+    ctx.fillStyle = '#ff0';
+    ctx.beginPath();
+    ctx.arc(x, y, size*0.15, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function drawCockpitFrame() {
+  // 左右斜向银灰色像素舱壁
+  ctx.fillStyle = '#2a2a35';
+  // 左上
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(120, H * 0.55);
+  ctx.lineTo(0, H * 0.55);
+  ctx.closePath();
+  ctx.fill();
+  // 右上
+  ctx.beginPath();
+  ctx.moveTo(W, 0);
+  ctx.lineTo(W - 120, H * 0.55);
+  ctx.lineTo(W, H * 0.55);
+  ctx.closePath();
+  ctx.fill();
+  // 左下
+  ctx.beginPath();
+  ctx.moveTo(0, H);
+  ctx.lineTo(80, H * 0.55 + 100);
+  ctx.lineTo(0, H * 0.55 + 100);
+  ctx.closePath();
+  ctx.fill();
+  // 右下
+  ctx.beginPath();
+  ctx.moveTo(W, H);
+  ctx.lineTo(W - 80, H * 0.55 + 100);
+  ctx.lineTo(W, H * 0.55 + 100);
+  ctx.closePath();
+  ctx.fill();
+  
+  // 挡风玻璃框架
+  ctx.strokeStyle = '#555';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(110, 0, W - 220, H * 0.55);
+  
+  // 故障时舱壁闪红
+  if (!radOk && !comOk && !engOk) {
+    const alpha = 0.3 + Math.sin(frameCount * 0.2) * 0.2;
+    ctx.fillStyle = `rgba(255,0,0,${alpha})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+}
+
+function drawDashboard() {
+  const panelY = H * 0.55;
+  const panelH = H - panelY;
+  
+  // 仪表盘背景
+  ctx.fillStyle = '#1a1a2a';
+  ctx.fillRect(0, panelY, W, panelH);
+  ctx.fillStyle = '#222';
+  ctx.fillRect(20, panelY + 10, W - 40, panelH - 20);
+  
+  // 左侧：ENERGY
+  ctx.fillStyle = '#888';
+  ctx.font = '10px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('ENERGY', 70, panelY + 25);
+  // 能量条背景
+  ctx.fillStyle = '#333';
+  ctx.fillRect(40, panelY + 32, 60, 130);
+  // 能量条
+  const energyRatio = energy / maxEnergy;
+  const energyColor = energyRatio > 0.5 ? '#ff0' : energyRatio > 0.25 ? '#f80' : '#f00';
+  ctx.fillStyle = energyColor;
+  ctx.fillRect(40, panelY + 32 + 130 * (1 - energyRatio), 60, 130 * energyRatio);
+  ctx.strokeStyle = '#555';
+  ctx.strokeRect(40, panelY + 32, 60, 130);
+  ctx.fillStyle = '#fff';
+  ctx.fillText(Math.floor(energy), 70, panelY + 175);
+  
+  // 左侧：SHIELD (下方)
+  ctx.fillStyle = '#888';
+  ctx.fillText('SHIELD', 70, panelY + 190);
+  ctx.fillStyle = '#333';
+  ctx.fillRect(40, panelY + 197, 60, 15);
+  const shieldRatio = shield / maxShield;
+  ctx.fillStyle = '#f80';
+  ctx.fillRect(40, panelY + 197, 60 * shieldRatio, 15);
+  ctx.strokeStyle = '#555';
+  ctx.strokeRect(40, panelY + 197, 60, 15);
+  
+  // 中央：三维球星雷达
+  const radarX = 250, radarY = panelY + 30, radarR = 60;
+  
+  // 3D球体网格
+  ctx.fillStyle = '#001030';
+  ctx.beginPath();
+  ctx.ellipse(radarX, radarY, radarR, radarR * 0.7, 0, 0, Math.PI*2);
+  ctx.fill();
+  
+  // 纬线（水平椭圆）
+  for (let lat = -1; lat <= 1; lat += 0.5) {
+    const ry = radarY + lat * radarR * 0.7;
+    const rx = radarR * Math.sqrt(1 - lat * lat);
+    ctx.strokeStyle = lat === 0 ? '#1a5a8a' : '#0a3a5a';
+    ctx.lineWidth = lat === 0 ? 1.2 : 0.6;
+    ctx.beginPath();
+    ctx.ellipse(radarX, ry, rx, radarR * 0.15, 0, 0, Math.PI*2);
+    ctx.stroke();
+  }
+  // 经线（垂直椭圆）
+  const rotAngle = viewAngleX * 0.5; // 球体随视角旋转
+  for (let lon = -1; lon <= 1; lon += 0.5) {
+    const cx = radarX + lon * radarR * Math.cos(rotAngle);
+    const cy = radarY + lon * radarR * Math.sin(rotAngle) * 0.7;
+    ctx.strokeStyle = lon === 0 ? '#1a5a8a' : '#0a3a5a';
+    ctx.lineWidth = lon === 0 ? 1.2 : 0.6;
+    ctx.beginPath();
+    ctx.ellipse(cx, radarY, radarR * 0.2, radarR * 0.7, rotAngle * 0.3, 0, Math.PI*2);
+    ctx.stroke();
+  }
+  
+  // 外框
+  ctx.strokeStyle = '#1a5a8a';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.ellipse(radarX, radarY, radarR, radarR * 0.7, 0, 0, Math.PI*2);
+  ctx.stroke();
+  
+  // 雷达扫描线（旋转）
+  const scanAngle = frameCount * 0.04;
+  const scanX = radarX + Math.cos(scanAngle) * radarR;
+  const scanY = radarY + Math.sin(scanAngle) * radarR * 0.7;
+  ctx.strokeStyle = 'rgba(0,180,100,0.4)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(radarX, radarY);
+  ctx.lineTo(scanX, scanY);
+  ctx.stroke();
+  // 扫描线拖尾
+  const trailGrad = ctx.createLinearGradient(radarX, radarY, scanX, scanY);
+  trailGrad.addColorStop(0, 'rgba(0,255,100,0.15)');
+  trailGrad.addColorStop(1, 'rgba(0,255,100,0)');
+  ctx.fillStyle = trailGrad;
+  ctx.beginPath();
+  ctx.moveTo(radarX, radarY);
+  ctx.arc(radarX, radarY, radarR, scanAngle - 0.3, scanAngle, false);
+  ctx.closePath();
+  ctx.fill();
+  
+  // 脉冲环（周期性扩散）
+  const pulsePhase = (frameCount % 120) / 120;
+  const pulseR = radarR * pulsePhase;
+  ctx.strokeStyle = `rgba(0,200,100,${0.3 * (1 - pulsePhase)})`;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.ellipse(radarX, radarY, pulseR, pulseR * 0.7, 0, 0, Math.PI*2);
+  ctx.stroke();
+  
+  if (radOk) {
+    // 使用与座舱相同的透视投影参数
+    const rTurnX = -viewAngleX * 300;
+    const rTurnY = -viewAngleY * 200;
+    let nearCenter = false;
+    
+    // 深度排序：远的先画，近的后画
+    const allRadarObjects = [];
+    
+    cockpitEnemies.forEach(enemy => {
+      if (!enemy.alive) return;
+      // 与座舱相同的透视投影：screen = center + (world + turn) / (z/200) * scale
+      const nx = (enemy.x + rTurnX) / (enemy.z / 200) * (radarR / 200);
+      const ny = (enemy.y + rTurnY) / (enemy.z / 200) * (radarR * 0.7 / 200);
+      
+      allRadarObjects.push({
+        rx: radarX + nx,
+        ry: radarY + ny,
+        depth: enemy.z,
+        type: 'enemy',
+        blink: 0.6 + Math.sin(frameCount * 0.1 + enemy.x) * 0.4,
+        size: Math.max(2, 5 - enemy.z / 100), // 近大远小
+      });
+    });
+    
+    cockpitAsteroids.forEach(ast => {
+      if (!ast.alive) return;
+      const nx = (ast.x + rTurnX) / (ast.z / 200) * (radarR / 200);
+      const ny = (ast.y + rTurnY) / (ast.z / 200) * (radarR * 0.7 / 200);
+      
+      allRadarObjects.push({
+        rx: radarX + nx,
+        ry: radarY + ny,
+        depth: ast.z,
+        type: 'asteroid',
+        size: Math.max(1, 3 - ast.z / 150),
+      });
+    });
+    
+    alliedFighters.forEach(ally => {
+      if (!ally.alive) return;
+      const nx = (ally.x + rTurnX) / (ally.z / 200) * (radarR / 200);
+      const ny = (ally.y + rTurnY) / (ally.z / 200) * (radarR * 0.7 / 200);
+      
+      allRadarObjects.push({
+        rx: radarX + nx,
+        ry: radarY + ny,
+        depth: ally.z,
+        type: 'ally',
+        size: Math.max(2, 4 - ally.z / 120),
+      });
+    });
+    
+    // 深度排序：远的先画（z大的先画）
+    allRadarObjects.sort((a, b) => b.depth - a.depth);
+    
+    allRadarObjects.forEach(obj => {
+      // 裁剪到椭圆球体范围内
+      const dx = (obj.rx - radarX) / radarR;
+      const dy = (obj.ry - radarY) / (radarR * 0.7);
+      if (dx * dx + dy * dy > 1) return;
+      
+      if (obj.type === 'enemy') {
+        ctx.fillStyle = `rgba(255,50,50,${obj.blink})`;
+        ctx.fillRect(obj.rx - obj.size/2, obj.ry - obj.size/2, obj.size, obj.size);
+      } else if (obj.type === 'asteroid') {
+        ctx.fillStyle = `rgba(150,150,150,${0.4 + obj.depth / 400})`;
+        ctx.fillRect(obj.rx - obj.size/2, obj.ry - obj.size/2, obj.size, obj.size);
+      } else if (obj.type === 'ally') {
+        ctx.fillStyle = `rgba(0,220,0,${0.7 + obj.depth / 500})`;
+        ctx.fillRect(obj.rx - obj.size/2, obj.ry - obj.size/2, obj.size, obj.size);
+      }
+    });
+    
+    // 检查准星锁定（与座舱相同的判断逻辑）
+    cockpitEnemies.forEach(enemy => {
+      if (!enemy.alive || nearCenter) return;
+      const sx = W/2 + (enemy.x + rTurnX) / (enemy.z / 200) * (W/400);
+      const sy = H*0.28 + (enemy.y + rTurnY) / (enemy.z / 200) * (H/400);
+      const d = Math.sqrt((sx - W/2) ** 2 + (sy - H*0.28) ** 2);
+      if (d < 50) nearCenter = true;
+    });
+    
+    // 自身标记 - 中心绿点
+    ctx.fillStyle = nearCenter ? '#ff0' : '#0f0';
+    ctx.beginPath();
+    ctx.arc(radarX, radarY, 3, 0, Math.PI*2);
+    ctx.fill();
+    // 机头方向线（跟随转向）
+    const dirX = viewAngleX * 30;
+    const dirY = -8 + viewAngleY * 6;
+    ctx.strokeStyle = '#0f0';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(radarX, radarY);
+    ctx.lineTo(radarX + dirX, radarY + dirY);
+    ctx.stroke();
+  } else {
+    // 雷达损坏 - 雪花噪点
+    for (let i = 0; i < 30; i++) {
+      const nx = radarX - radarR + Math.random() * radarR * 2;
+      const ny = radarY - radarR + Math.random() * radarR * 2;
+      ctx.fillStyle = Math.random() > 0.5 ? '#fff' : '#333';
+      ctx.fillRect(nx, ny, 2, 2);
+    }
+  }
+  
+  ctx.fillStyle = '#888';
+  ctx.fillText('RADAR', radarX, radarY + radarR + 15);
+  
+  // 右侧：故障指示灯
+  const indX = 480;
+  ctx.fillStyle = '#888';
+  ctx.font = '10px "Courier New"';
+  ctx.textAlign = 'left';
+  ctx.fillText('RAD', indX, panelY + 40);
+  ctx.fillText('COM', indX, panelY + 70);
+  ctx.fillText('ENG', indX, panelY + 100);
+  
+  // 指示灯
+  drawIndicator(indX + 40, panelY + 32, radOk);
+  drawIndicator(indX + 40, panelY + 62, comOk);
+  drawIndicator(indX + 40, panelY + 92, engOk);
+  
+  // 信息提示
+  ctx.fillStyle = '#888';
+  ctx.font = '9px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('方向键:机体转向 | Z:加速 | X:激光 | Tab:星图', W/2 + 250, panelY + 25);
+  
+  // 积分和盟军
+  ctx.fillStyle = '#ff0';
+  ctx.font = '10px "Courier New"';
+  ctx.fillText(`CR:${credits}`, W/2 + 250, panelY + 45);
+  ctx.fillStyle = '#0f0';
+  ctx.fillText(`盟军:${alliedFighters.length}/${MAX_ALLIES}`, W/2 + 250, panelY + 60);
+  
+  // 升级等级
+  ctx.fillStyle = '#0af';
+  ctx.font = '9px "Courier New"';
+  let upgStr = '升级:';
+  if (upgradeLevels.energy > 0) upgStr += ` E${upgradeLevels.energy}`;
+  if (upgradeLevels.shield > 0) upgStr += ` S${upgradeLevels.shield}`;
+  if (upgradeLevels.laser > 0) upgStr += ` L${upgradeLevels.laser}`;
+  if (upgradeLevels.engine > 0) upgStr += ` M${upgradeLevels.engine}`;
+  if (upgStr === '升级:') upgStr += ' 无';
+  ctx.fillText(upgStr, W/2 + 250, panelY + 78);
+  
+  // 消息提示
+  if (messageTimer > 0) {
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 14px "Courier New"';
+    ctx.textAlign = 'center';
+    const msgAlpha = Math.min(1, messageTimer / 30);
+    ctx.fillStyle = `rgba(255,255,255,${msgAlpha})`;
+    ctx.fillText(messageText, W/2, panelY - 10);
+  }
+  
+  // 权威值和占领区域显示
+  ctx.fillStyle = '#0af';
+  ctx.font = '10px "Courier New"';
+  ctx.textAlign = 'left';
+  ctx.fillText(`权威: ${authority} Lv${authorityLevel} | 占领: ${conqueredZones}`, 10, panelY + 15);
+  
+  // 占领通知（大字体闪烁）
+  if (conquestNotificationTimer > 0) {
+    conquestNotificationTimer--;
+    const notifAlpha = Math.min(1, conquestNotificationTimer / 60);
+    const pulse = Math.sin(conquestNotificationTimer * 0.1) * 0.2 + 0.8;
+    ctx.fillStyle = `rgba(0,255,100,${notifAlpha * pulse})`;
+    ctx.font = 'bold 16px "Courier New"';
+    ctx.textAlign = 'center';
+    ctx.fillText(conquestNotification, W/2, H * 0.35);
+    // 光晕效果
+    ctx.fillStyle = `rgba(0,200,50,${notifAlpha * 0.3})`;
+    ctx.font = 'bold 20px "Courier New"';
+    ctx.fillText(conquestNotification, W/2, H * 0.35);
+  }
+}
+
+function drawIndicator(x, y, ok) {
+  ctx.fillStyle = ok ? '#0f0' : '#f00';
+  ctx.fillRect(x, y, 12, 12);
+  ctx.fillStyle = '#000';
+  ctx.font = '8px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText(ok ? 'OK' : 'NG', x + 6, y + 10);
+}
+
+// 绘制跃迁特效 - 超光速曲速飞行
+function drawWarpEffect() {
+  const progress = warpTimer / warpDuration;
+  
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  
+  if (warpPhase === 0) {
+    // === 出境曲速：画面中心向四周放射密集蓝白光轨 ===
+    ctx.save();
+    ctx.translate(W/2, H/2);
+    
+    // 核心光晕
+    const coreSize = 60 * (1 - progress);
+    const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, coreSize + 30);
+    coreGrad.addColorStop(0, 'rgba(255,255,255,1)');
+    coreGrad.addColorStop(0.2, 'rgba(200,230,255,0.9)');
+    coreGrad.addColorStop(0.5, 'rgba(100,180,255,0.4)');
+    coreGrad.addColorStop(1, 'rgba(0,20,80,0)');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, coreSize + 30, 0, Math.PI*2);
+    ctx.fill();
+    
+    // 密集放射状光轨（200条线，从中心向外辐射）
+    const trailCount = 200;
+    for (let i = 0; i < trailCount; i++) {
+      // 使用黄金角分布保证均匀放射
+      const angle = (i * 2.39996) + frameCount * 0.005;
+      const startDist = 2 + (i % 20) * 1.5;
+      const length = 30 + (i % 15) * 15 + progress * 200;
+      const endDist = startDist + length;
+      
+      const x1 = Math.cos(angle) * startDist;
+      const y1 = Math.sin(angle) * startDist * 0.6;
+      const x2 = Math.cos(angle) * endDist;
+      const y2 = Math.sin(angle) * endDist * 0.6;
+      
+      // 线条亮度：中心亮、向外渐暗；部分随机闪烁
+      const brightness = Math.max(0.1, (1 - endDist / 500) * (0.7 + Math.sin(i * 0.5 + frameCount * 0.05) * 0.3));
+      const r = 180 + 75 * brightness;
+      const g = 200 + 55 * brightness;
+      const b = 255;
+      ctx.strokeStyle = `rgba(${r},${g},${b},${brightness * 0.8})`;
+      ctx.lineWidth = 0.3 + brightness * 1.2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    
+    // 额外长线条（营造速度感）
+    for (let i = 0; i < 60; i++) {
+      const angle = (i * 1.618) + frameCount * 0.01;
+      const length = 80 + progress * 300 + (i % 12) * 20;
+      const offset = 3 + (i % 8) * 4;
+      
+      const x1 = Math.cos(angle) * offset;
+      const y1 = Math.sin(angle) * offset * 0.6;
+      const x2 = Math.cos(angle) * (offset + length);
+      const y2 = Math.sin(angle) * (offset + length) * 0.6;
+      
+      const fade = Math.max(0, (1 - (offset + length) / 600) * (0.5 - progress * 0.3));
+      ctx.strokeStyle = `rgba(220,240,255,${fade})`;
+      ctx.lineWidth = 0.5 + fade;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    
+    // 近核心区密集短光带（动态模糊感）
+    for (let i = 0; i < 100; i++) {
+      const angle = (i * 0.111) + Math.sin(i) * 0.5 + frameCount * 0.03;
+      const dist = 5 + (i % 10) * 3;
+      const len = 10 + (i % 5) * 5 + progress * 80;
+      
+      const x1 = Math.cos(angle) * dist;
+      const y1 = Math.sin(angle) * dist * 0.6;
+      const x2 = Math.cos(angle) * (dist + len);
+      const y2 = Math.sin(angle) * (dist + len) * 0.6;
+      
+      const nearAlpha = (1 - dist / 40) * 0.6;
+      ctx.strokeStyle = `rgba(200,230,255,${nearAlpha})`;
+      ctx.lineWidth = 0.8 + (1 - dist / 40) * 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    
+    ctx.restore();
+    
+    // 边缘蓝色光晕
+    const edgeAlpha = progress * 0.3;
+    ctx.fillStyle = `rgba(0,50,150,${edgeAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+    
+    // 白屏过渡（progress > 0.75 时）
+    if (progress > 0.75) {
+      const flashAlpha = (progress - 0.75) / 0.25;
+      ctx.fillStyle = `rgba(255,255,255,${flashAlpha * flashAlpha})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+    
+    // WARP 文字（闪烁+光晕）
+    ctx.textAlign = 'center';
+    const textAlpha = 0.6 + Math.sin(progress * 12) * 0.4;
+    ctx.fillStyle = `rgba(200,230,255,${textAlpha})`;
+    ctx.font = 'bold 22px "Courier New"';
+    ctx.fillText('WARP', W/2, H/2 + 90);
+    // 文字光晕
+    ctx.fillStyle = `rgba(100,180,255,${textAlpha * 0.3})`;
+    ctx.font = 'bold 28px "Courier New"';
+    ctx.fillText('WARP', W/2, H/2 + 90);
+  } else {
+    // === 入境曲速：光轨从中心向外扩散，白屏消退 ===
+    const exitProgress = progress;
+    
+    // 白屏消退
+    const flashAlpha = Math.max(0, 1 - exitProgress * 2);
+    ctx.fillStyle = `rgba(255,255,255,${flashAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+    
+    ctx.save();
+    ctx.translate(W/2, H/2);
+    
+    // 扩散光轨（从中心向外展开）
+    const trailCount = 200;
+    for (let i = 0; i < trailCount; i++) {
+      const angle = (i * 2.39996) + frameCount * 0.005;
+      const startDist = 2 + (i % 20) * 1.5;
+      const length = 30 + (i % 15) * 15 + (1 - exitProgress) * 200;
+      const endDist = startDist + length;
+      
+      const x1 = Math.cos(angle) * startDist;
+      const y1 = Math.sin(angle) * startDist * 0.6;
+      const x2 = Math.cos(angle) * endDist;
+      const y2 = Math.sin(angle) * endDist * 0.6;
+      
+      const brightness = Math.max(0, (1 - endDist / 500) * exitProgress * 0.8);
+      ctx.strokeStyle = `rgba(180,220,255,${brightness})`;
+      ctx.lineWidth = 0.3 + brightness * 1.0;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    
+    // 核心光晕（散开）
+    const coreSize = 60 * exitProgress;
+    const coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, coreSize + 30);
+    coreGrad.addColorStop(0, 'rgba(255,255,255,1)');
+    coreGrad.addColorStop(0.2, 'rgba(200,230,255,0.8)');
+    coreGrad.addColorStop(0.5, 'rgba(100,180,255,0.3)');
+    coreGrad.addColorStop(1, 'rgba(0,20,80,0)');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, coreSize + 30, 0, Math.PI*2);
+    ctx.fill();
+    
+    ctx.restore();
+    
+    // 文字：ARRIVED（渐显）
+    if (exitProgress > 0.3) {
+      const arrivedAlpha = Math.min(1, (exitProgress - 0.3) / 0.3);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = `rgba(200,230,255,${arrivedAlpha})`;
+      ctx.font = 'bold 22px "Courier New"';
+      ctx.fillText('ARRIVED', W/2, H/2 + 90);
+    }
+  }
+}
+
+// 绘制Game Over
+function drawGameOver() {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  
+  // 红色闪烁边框
+  const alpha = 0.5 + Math.sin(gameOverTimer * 0.1) * 0.5;
+  ctx.strokeStyle = `rgba(255,0,0,${alpha})`;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(20, 20, W - 40, H - 40);
+  
+  ctx.fillStyle = '#f00';
+  ctx.font = 'bold 40px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('GAME OVER', W/2, H/2 - 20);
+  
+  ctx.fillStyle = '#fff';
+  ctx.font = '16px "Courier New"';
+  ctx.fillText('能量耗尽，任务失败', W/2, H/2 + 30);
+  ctx.fillText('按 Enter 返回标题', W/2, H/2 + 60);
+}
+
+// 绘制结局画面
+function drawEnding() {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 36px "Courier New"';
+  ctx.textAlign = 'center';
+  
+  if (endingType === 'good') {
+    ctx.fillText('MISSION COMPLETE', W/2, 150);
+    ctx.fillStyle = '#ff0';
+    ctx.font = '20px "Courier New"';
+    ctx.fillText('完美结局 - 银河得救!', W/2, 200);
+    ctx.fillStyle = '#fff';
+    ctx.font = '14px "Courier New"';
+    ctx.fillText('你集齐了全部七把钥匙', W/2, 250);
+    ctx.fillText('击败了巴图拉黑暗母舰', W/2, 275);
+    ctx.fillText('银河联邦恢复了和平', W/2, 300);
+  } else {
+    ctx.fillText('MISSION END', W/2, 150);
+    ctx.fillStyle = '#888';
+    ctx.font = '20px "Courier New"';
+    ctx.fillText('普通结局', W/2, 200);
+    ctx.fillStyle = '#fff';
+    ctx.font = '14px "Courier New"';
+    ctx.fillText('敌军已被清除，但巴图拉仍在潜伏...', W/2, 250);
+  }
+  
+  ctx.fillStyle = '#aaa';
+  ctx.font = '14px "Courier New"';
+  ctx.fillText(`存活星球: ${countAlivePlanets()}`, W/2, 350);
+  ctx.fillText(`消耗能量: ${100 - Math.floor(energy)}`, W/2, 375);
+  ctx.fillText(`收集钥匙: ${keys}/${maxKeys}`, W/2, 400);
+  
+  ctx.fillStyle = '#fff';
+  ctx.font = '16px "Courier New"';
+  ctx.fillText('按 Enter 返回标题', W/2, 480);
+}
+
+function countAlivePlanets() {
+  let count = 0;
+  for (let y = 0; y < MAP_SIZE; y++) {
+    for (let x = 0; x < MAP_SIZE; x++) {
+      if (starMap[y][x].type === 'planet' && starMap[y][x].planetAlive) count++;
+    }
+  }
+  return count;
+}
+
+// ============ 更新逻辑 ============
+
+function update() {
+  frameCount++;
+  
+  if (gameState === STATE.TITLE) {
+    updateTitle();
+  } else if (gameState === STATE.PLAYING) {
+    updatePlaying();
+  } else if (gameState === STATE.SHOP) {
+    // 商店不随时间更新
+  } else if (gameState === STATE.WARP) {
+    updateWarp();
+  } else if (gameState === STATE.GAMEOVER) {
+    gameOverTimer++;
+    if (keyJustPressed['Enter']) {
+      gameState = STATE.TITLE;
+      gameOverTimer = 0;
+    }
+  } else if (gameState === STATE.ENDING) {
+    endingTimer++;
+    if (endingTimer > 120 && keyJustPressed['Enter']) {
+      gameState = STATE.TITLE;
+      endingTimer = 0;
+    }
+  }
+  
+  // 清除单帧按键
+  for (let k in keyJustPressed) {
+    keyJustPressed[k] = false;
+  }
+}
+
+function updateTitle() {
+  if (keyJustPressed['ArrowUp']) {
+    modeSelectIndex = (modeSelectIndex - 1 + 3) % 3;
+  }
+  if (keyJustPressed['ArrowDown']) {
+    modeSelectIndex = (modeSelectIndex + 1) % 3;
+  }
+  if (keyJustPressed['Enter']) {
+    if (modeSelectIndex === 0) gameMode = MODE.TRAINING;
+    else if (modeSelectIndex === 1) gameMode = MODE.COMMAND;
+    else gameMode = MODE.ADVENTURE;
+    initGame();
+  }
+}
+
+function updatePlaying() {
+  // 消息计时器
+  if (messageTimer > 0) messageTimer--;
+  
+  // 激光冷却
+  if (laserCooldown > 0) laserCooldown--;
+  if (laserCooldown <= 3) laserFiring = false;
+  
+  // 屏幕震动衰减
+  if (screenShake > 0) screenShake *= 0.9;
+  if (screenShake < 0.1) screenShake = 0;
+  
+  // 被击中闪红衰减
+  if (hitFlash > 0) hitFlash -= 0.02;
+  
+  // 护盾自动恢复
+  shieldRegenTimer++;
+  if (shieldRegenTimer > 60 && engOk) {
+    if (shield < maxShield) {
+      shield = Math.min(maxShield, shield + 0.5);
+      energy -= 0.02;
+    }
+    shieldRegenTimer = 0;
+  }
+  
+  updateCockpitEnemies();
+  updateCockpitAsteroids();
+  updateAlliedFighters();
+  updateMapEnemies();
+  checkEnergyDeath();
+}
+
+function updateAlliedFighters() {
+  alliedFighters.forEach(ally => {
+    if (!ally.alive) return;
+    // 盟军跟随玩家视野移动
+    ally.z += (Math.random() - 0.5) * 0.3;
+    ally.z = Math.max(50, Math.min(400, ally.z));
+    ally.x += (Math.random() - 0.5) * 0.8;
+    ally.y += (Math.random() - 0.5) * 0.8;
+    
+    // 盟军自动攻击附近敌机
+    ally.fireTimer--;
+    if (ally.fireTimer <= 0) {
+      ally.fireTimer = 40 + Math.random() * 40;
+      let closestEnemy = null;
+      let closestDist = Infinity;
+      cockpitEnemies.forEach(enemy => {
+        if (!enemy.alive) return;
+        const d = Math.sqrt((enemy.x - ally.x) ** 2 + (enemy.y - ally.y) ** 2 + (enemy.z - ally.z) ** 2);
+        if (d < closestDist) { closestDist = d; closestEnemy = enemy; }
+      });
+      if (closestEnemy && closestDist < 200) {
+        closestEnemy.hp--;
+        if (closestEnemy.hp <= 0) {
+          closestEnemy.alive = false;
+          credits += 2;
+          screenShake = 3;
+        }
+      }
+    }
+  });
+  // 清除阵亡盟军
+  alliedFighters = alliedFighters.filter(a => a.alive);
+}
+
+function updateCockpitEnemies() {
+  cockpitEnemies.forEach(enemy => {
+    if (!enemy.alive) return;
+    
+    // 移动
+    enemy.x += enemy.vx * (hasDalto ? 0.5 : 1);
+    enemy.y += enemy.vy * (hasDalto ? 0.5 : 1);
+    enemy.z += (Math.random() - 0.5) * 0.5;
+    
+    // 边界
+    if (Math.abs(enemy.x) > 350) enemy.vx *= -1;
+    if (Math.abs(enemy.y) > 250) enemy.vy *= -1;
+    enemy.z = Math.max(40, Math.min(320, enemy.z));
+    
+    // 射击
+    enemy.fireTimer--;
+    if (enemy.fireTimer <= 0) {
+      enemy.fireTimer = 60 + Math.random() * 120;
+      // 敌机在正面视野内才会开火
+      if (enemy.z < 300 && Math.abs(enemy.x) < 100 && Math.abs(enemy.y) < 80) {
+        // 有一定概率攻击盟军
+        if (alliedFighters.length > 0 && Math.random() < 0.3) {
+          const ally = alliedFighters[Math.floor(Math.random() * alliedFighters.length)];
+          if (ally && ally.alive) {
+            ally.hp--;
+            if (ally.hp <= 0) ally.alive = false;
+          }
+        } else {
+          hitPlayer(3 + Math.random() * 5);
+        }
+      }
+    }
+  });
+  
+  // 清理远处敌人并补充
+  cockpitEnemies = cockpitEnemies.filter(e => e.alive);
+  const cluster = getCurrentEnemyCluster();
+  const targetCount = cluster ? Math.min(cluster.strength, 10) : 3;
+  if (cockpitEnemies.length < targetCount && cluster && cluster.strength > 0) {
+    spawnEnemy();
+  }
+}
+
+function updateCockpitAsteroids() {
+  cockpitAsteroids.forEach(ast => {
+    if (!ast.alive) return;
+    ast.x += ast.vx;
+    ast.y += ast.vy;
+    ast.z -= 0.3;
+    if (ast.z < 20) {
+      ast.z = 250 + Math.random() * 150;
+      ast.x = (Math.random() - 0.5) * 350;
+      ast.y = (Math.random() - 0.5) * 250;
+    }
+    if (Math.abs(ast.x) > 400) ast.vx *= -1;
+    if (Math.abs(ast.y) > 300) ast.vy *= -1;
+  });
+  cockpitAsteroids = cockpitAsteroids.filter(a => a.alive);
+  
+  // 补充小行星（在小行星带区域）
+  if (starMap[playerMapY] && starMap[playerMapY][playerMapX] && starMap[playerMapY][playerMapX].type === 'asteroid') {
+    if (cockpitAsteroids.length < 8) spawnAsteroid();
+  }
+}
+
+function updateMapEnemies() {
+  // 敌军AI：移动和进攻
+  if (gameMode === MODE.TRAINING) return;
+  
+  mapEnemyClusters.forEach(cluster => {
+    if (cluster.strength <= 0) return;
+    
+    cluster.attackTimer--;
+    if (cluster.attackTimer <= 0) {
+      const speed = hasDalto ? 180 : 100;
+      cluster.attackTimer = speed + Math.floor(Math.random() * speed);
+      
+      // 相邻行星/基地受到攻击
+      const dirs = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,-1],[1,-1],[-1,1]];
+      const targets = [];
+      dirs.forEach(([dx, dy]) => {
+        const nx = cluster.x + dx;
+        const ny = cluster.y + dy;
+        if (nx >= 0 && nx < MAP_SIZE && ny >= 0 && ny < MAP_SIZE) {
+          const cell = starMap[ny][nx];
+          if ((cell.type === 'planet' && cell.planetAlive) || (cell.type === 'base' && !cell.baseDestroyed)) {
+            targets.push({ x: nx, y: ny });
+          }
+        }
+      });
+      
+      if (targets.length > 0) {
+        const target = targets[Math.floor(Math.random() * targets.length)];
+        const cell = starMap[target.y][target.x];
+        const defenseChance = hasBarrier ? 0.3 : 0.6;
+        if (Math.random() < defenseChance) {
+          if (cell.type === 'planet') {
+            cell.planetAlive = false;
+            showMessage(`行星 [${target.x},${target.y}] 被摧毁!`);
+          } else if (cell.type === 'base') {
+            cell.baseDestroyed = true;
+            showMessage(`空间站 [${target.x},${target.y}] 被摧毁!`);
+          }
+        }
+      }
+    }
+  });
+}
+
+function hitPlayer(damage) {
+  if (shield > 0) {
+    const shieldDmg = damage * 0.7;
+    shield -= shieldDmg;
+    if (shield < 0) {
+      energy += shield; // 溢出伤害扣能量
+      shield = 0;
+    }
+  } else {
+    energy -= damage;
+  }
+  
+  hitFlash = 1;
+  screenShake = Math.max(screenShake, damage * 0.5);
+  
+  // 随机损坏部件
+  if (Math.random() < 0.15) {
+    const parts = ['rad', 'com', 'eng'];
+    const part = parts[Math.floor(Math.random() * parts.length)];
+    if (part === 'rad' && radOk) { radOk = false; showMessage('RAD 雷达损坏!'); }
+    if (part === 'com' && comOk) { comOk = false; showMessage('COM 火控电脑损坏!'); }
+    if (part === 'eng' && engOk) { engOk = false; showMessage('ENG 引擎损坏!'); }
+  }
+}
+
+function showMessage(msg) {
+  messageText = msg;
+  messageTimer = 90;
+}
+
+function checkEnergyDeath() {
+  if (energy <= 0) {
+    energy = 0;
+    gameState = STATE.GAMEOVER;
+    gameOverTimer = 0;
+  }
+}
+
+// ============ 玩家行动 ============
+
+function fireLaser() {
+  if (laserCooldown > 0) return;
+  if (!comOk && Math.random() < 0.5) {
+    showMessage('COM故障! 瞄准失败');
+    laserCooldown = 6;
+    return;
+  }
+  
+  laserCooldown = 8;
+  laserFiring = true;
+  laserHitEnemy = null;
+  energy -= 0.5;
+  
+  let hit = false;
+  const turnX = -viewAngleX * 300;
+  const turnY = -viewAngleY * 200;
+  let aimX = W/2;
+  let aimY = H * 0.28;
+  
+  // 软锁定：自动微调准星向最近敌机
+  if (comOk) {
+    let nearestDist = Infinity;
+    let nearestEnemy = null;
+    cockpitEnemies.forEach(enemy => {
+      if (!enemy.alive) return;
+      const sx = W/2 + (enemy.x + turnX) / (enemy.z / 200) * (W/400);
+      const sy = H*0.28 + (enemy.y + turnY) / (enemy.z / 200) * (H/400);
+      const d = Math.sqrt((sx - aimX) ** 2 + (sy - aimY) ** 2);
+      if (d < nearestDist) { nearestDist = d; nearestEnemy = enemy; }
+    });
+    // 在80px范围内自动微调瞄准
+    if (nearestDist < 80 && nearestEnemy) {
+      const sx = W/2 + (nearestEnemy.x + turnX) / (nearestEnemy.z / 200) * (W/400);
+      const sy = H*0.28 + (nearestEnemy.y + turnY) / (nearestEnemy.z / 200) * (H/400);
+      aimX += (sx - aimX) * 0.5;
+      aimY += (sy - aimY) * 0.5;
+    }
+  }
+  
+  // 检查敌机
+  cockpitEnemies.forEach(enemy => {
+    if (!enemy.alive) return;
+    const screenX = W/2 + (enemy.x + turnX) / (enemy.z / 200) * (W/400);
+    const screenY = H*0.28 + (enemy.y + turnY) / (enemy.z / 200) * (H/400);
+    const screenSize = enemy.size / (enemy.z / 200) * 2;
+    
+    const dist = Math.sqrt((screenX - aimX) ** 2 + (screenY - aimY) ** 2);
+    const hitRadius = Math.max(30, screenSize + 25);
+    
+    if (dist < hitRadius) {
+      const dmg = 1 + upgradeLevels.laser;
+      enemy.hp -= dmg;
+      laserHitEnemy = enemy;
+      energy += 0.3; // 命中小回能
+      if (enemy.hp <= 0) {
+        enemy.alive = false;
+        credits += (enemy.type === 'battleship' ? 10 : enemy.type === 'cruiser' ? 5 : 3);
+        screenShake = 5;
+        if (enemy.isBoss) {
+          showMessage('巴图拉母舰击破!');
+          for (let sy = 0; sy < MAP_SIZE; sy++) {
+            for (let sx = 0; sx < MAP_SIZE; sx++) {
+              if (starMap[sy][sx].type === 'darkstar') {
+                starMap[sy][sx].type = 'empty';
+              }
+            }
+          }
+          setTimeout(() => {
+            endingType = 'good';
+            gameState = STATE.ENDING;
+            endingTimer = 0;
+          }, 2000);
+        }
+        const cluster = getCurrentEnemyCluster();
+        if (cluster) {
+          const prevStrength = cluster.strength;
+          cluster.strength = Math.max(0, cluster.strength - 1);
+          // 检查是否刚刚占领该区域
+          if (prevStrength > 0 && cluster.strength === 0) {
+            conqueredZones++;
+            authority += 10;
+            updateAuthorityLevel();
+            conquestNotification = `区域 (${cluster.x},${cluster.y}) 已占领! 权威值 +10`;
+            conquestNotificationTimer = 180;
+            showMessage(`区域已占领! 权威值 ${authority}`);
+          }
+        }
+        showMessage('敌机击毁!');
+        laserHitEnemy = null;
+      }
+      hit = true;
+    }
+  });
+  
+  // 检查小行星
+  cockpitAsteroids.forEach(ast => {
+    if (!ast.alive) return;
+    const screenX = W/2 + (ast.x + turnX) / (ast.z / 200) * (W/400);
+    const screenY = H*0.28 + (ast.y + turnY) / (ast.z / 200) * (H/400);
+    const screenSize = ast.size / (ast.z / 200) * 2;
+    
+    const dist = Math.sqrt((screenX - aimX) ** 2 + (screenY - aimY) ** 2);
+    if (dist < Math.max(25, screenSize + 20)) {
+      ast.alive = false;
+      asteroidKillCount++;
+      screenShake = 3;
+      hit = true;
+      
+      if (!hasBarrier && asteroidKillCount >= 32) {
+        hasBarrier = true;
+        showMessage('GET ITEM BARRIER');
+      }
+      if (!hasDalto && asteroidKillCount >= daltoAsteroidThreshold) {
+        hasDalto = true;
+        showMessage('GET ITEM DALTO');
+      }
+    }
+  });
+  
+  if (!hit && comOk) {
+    showMessage('未命中');
+  }
+}
+
+function fireTorpedo() {
+  if (photonTorpedoes <= 0) {
+    showMessage('鱼雷耗尽!');
+    return;
+  }
+  if (!comOk) {
+    showMessage('COM故障! 鱼雷禁用');
+    return;
+  }
+  
+  photonTorpedoes--;
+  energy -= 2;
+  
+  const cluster = getCurrentEnemyCluster();
+  if (cluster) {
+    const dmg = 3 + Math.floor(Math.random() * 3);
+    cluster.strength = Math.max(0, cluster.strength - dmg);
+    showMessage(`光子鱼雷! 削弱敌群 ${dmg}`);
+  } else {
+    showMessage('当前无敌军集群');
+  }
+}
+
+function warpTo(x, y) {
+  if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE) return;
+  if (x === playerMapX && y === playerMapY) return;
+  
+  const dist = Math.abs(x - playerMapX) + Math.abs(y - playerMapY);
+  const cost = dist * 3;
+  
+  if (energy < cost) {
+    showMessage('能量不足! 无法跃迁');
+    return;
+  }
+  
+  energy -= cost;
+  playerMapX = x;
+  playerMapY = y;
+  warpTimer = 0;
+  warpPhase = 0;
+  gameState = STATE.WARP;
+  
+  // 到达补给基地
+  if (starMap[y][x].type === 'base' && !starMap[y][x].baseDestroyed) {
+    // 补满能量和修复（在跃迁后执行）
+    setTimeout(() => {
+      energy = maxEnergy;
+      shield = maxShield;
+      radOk = true;
+      comOk = true;
+      engOk = true;
+      showMessage('补给完成! 全机修复');
+    }, 1500);
+  }
+  
+  // 到达行星（冒险模式收集钥匙）
+  if (gameMode === MODE.ADVENTURE && starMap[y][x].type === 'planet' && starMap[y][x].planetAlive && starMap[y][x].planetKey !== null) {
+    const cluster = mapEnemyClusters.find(c => c.x === x && c.y === y);
+    if (!cluster || cluster.strength <= 0) {
+      keys++;
+      starMap[y][x].planetKey = null;
+      showMessage(`获得钥匙! (${keys}/${maxKeys})`);
+      
+      // 检查是否集齐钥匙
+      if (keys >= maxKeys) {
+        // 解锁暗星
+        showMessage('暗星坐标已解锁!');
+        // 找一个空位置放置暗星
+        let placed = false;
+        for (let dy = 0; dy < MAP_SIZE && !placed; dy++) {
+          for (let dx = 0; dx < MAP_SIZE && !placed; dx++) {
+            if (starMap[dy][dx].type === 'empty' || starMap[dy][dx].type === 'enemy') {
+              // 清除该位置的敌军集群
+              const cluster = mapEnemyClusters.find(c => c.x === dx && c.y === dy);
+              if (cluster) cluster.strength = 0;
+              starMap[dy][dx].type = 'darkstar';
+              placed = true;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // 到达暗星（最终BOSS）
+  if (starMap[y][x].type === 'darkstar') {
+    setTimeout(() => {
+      initFinalBoss();
+    }, 1500);
+  }
+}
+
+function initFinalBoss() {
+  cockpitEnemies = [];
+  cockpitEnemies.push({
+    x: 0, y: 0, z: 350,
+    type: 'battleship',
+    size: 40, hp: 15, maxHp: 15,
+    speed: 0.2,
+    vx: 0.2, vy: 0.1,
+    fireTimer: 40,
+    alive: true,
+    isBoss: true,
+  });
+  showMessage('WARNING: 巴图拉母舰!');
+}
+
+function updateWarp() {
+  warpTimer++;
+  if (warpPhase === 0 && warpTimer >= warpDuration / 2) {
+    // 出境阶段完成，切换到入境阶段
+    warpPhase = 1;
+    warpTimer = 0;
+  } else if (warpPhase === 1 && warpTimer >= warpDuration / 2) {
+    // 入境阶段完成，进入游戏
+    gameState = STATE.PLAYING;
+    warpTimer = 0;
+    warpPhase = 0;
+    viewAngleX = 0;
+    viewAngleY = 0;
+    initCockpitEnemies();
+    initCockpitStars();
+    checkWinCondition();
+  }
+}
+
+function checkWinCondition() {
+  // 击败暗星BOSS
+  if (gameMode === MODE.ADVENTURE && starMap[playerMapY] && starMap[playerMapY][playerMapX] && starMap[playerMapY][playerMapX].type === 'darkstar') {
+    const bossEnemy = cockpitEnemies.find(e => e.isBoss);
+    if (bossEnemy && !bossEnemy.alive) {
+      endingType = 'good';
+      gameState = STATE.ENDING;
+      endingTimer = 0;
+      
+      // 添加积分奖励
+      addEndingPoints('good');
+      return;
+    }
+  }
+  
+  // 检查是否所有敌军被清除
+  const allEnemiesDead = mapEnemyClusters.every(c => c.strength <= 0);
+  if (allEnemiesDead) {
+    if (gameMode === MODE.ADVENTURE && keys >= maxKeys) {
+      // 需要先打暗星
+      // 检查暗星是否还存在
+      let darkStarExists = false;
+      for (let y = 0; y < MAP_SIZE; y++) {
+        for (let x = 0; x < MAP_SIZE; x++) {
+          if (starMap[y][x].type === 'darkstar') darkStarExists = true;
+        }
+      }
+      if (!darkStarExists) {
+        endingType = 'good';
+        gameState = STATE.ENDING;
+        endingTimer = 0;
+        
+        // 添加积分奖励
+        addEndingPoints('good');
+      }
+    } else {
+      endingType = 'bad';
+      gameState = STATE.ENDING;
+      endingTimer = 0;
+      
+      // 添加积分奖励
+      addEndingPoints('bad');
+    }
+  }
+}
+
+// 添加结局积分奖励
+function addEndingPoints(type) {
+  let points = 0;
+  
+  // 基础奖励：根据存活星球数
+  const alivePlanets = countAlivePlanets();
+  points += alivePlanets * 20;
+  
+  // 钥匙收集奖励（冒险模式）
+  if (gameMode === MODE.ADVENTURE) {
+    points += keys * 50;
+  }
+  
+  // 占领区域奖励
+  points += conqueredZones * 30;
+  
+  // 权威值奖励
+  points += authority * 5;
+  
+  // 击杀敌机奖励（游戏内 credits 转换）
+  points += Math.floor(credits / 2);
+  
+  // 结局奖励
+  if (type === 'good') {
+    points += 500; // 完美结局额外500积分
+  } else {
+    points += 200; // 普通结局200积分
+  }
+  
+  // 添加到积分系统
+  if (window.PointsSystem) {
+    PointsSystem.addPoints(PointsSystem.GAME_KEYS.STAR_LUSTER, points);
+    PointsSystem.addWin(PointsSystem.GAME_KEYS.STAR_LUSTER);
+  }
+}
+
+// ============ 渲染 ============
+
+// 绘制商店界面
+function drawShop() {
+  // 半透明遮罩
+  ctx.fillStyle = 'rgba(0,0,0,0.85)';
+  ctx.fillRect(0, 0, W, H);
+  
+  const shopX = 150, shopY = 80;
+  const shopW = 500, shopH = 420;
+  
+  // 商店面板
+  ctx.fillStyle = '#0a1230';
+  ctx.strokeStyle = '#2a6aac';
+  ctx.lineWidth = 2;
+  ctx.fillRect(shopX, shopY, shopW, shopH);
+  ctx.strokeRect(shopX, shopY, shopW, shopH);
+  
+  // 标题
+  ctx.fillStyle = '#ff0';
+  ctx.font = 'bold 22px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('补 给 基 地', W/2, shopY + 30);
+  
+  ctx.fillStyle = '#aaa';
+  ctx.font = '14px "Courier New"';
+  ctx.fillText(`积分: ${credits} CR | 权威: ${authority} (Lv${authorityLevel}) | 已占领: ${conqueredZones}`, W/2, shopY + 52);
+  
+  // 分隔线
+  ctx.strokeStyle = '#2a4a7a';
+  ctx.beginPath();
+  ctx.moveTo(shopX + 20, shopY + 60);
+  ctx.lineTo(shopX + shopW - 20, shopY + 60);
+  ctx.stroke();
+  
+  // 左侧：补给品
+  ctx.fillStyle = '#0af';
+  ctx.font = 'bold 14px "Courier New"';
+  ctx.textAlign = 'left';
+  ctx.fillText('--- 补给 ---', shopX + 30, shopY + 85);
+  
+  const supplyItems = [
+    { text: '能量补满', cost: 20, desc: `${Math.floor(energy)}/${maxEnergy} → ${maxEnergy}` },
+    { text: '护盾补满', cost: 15, desc: `${Math.floor(shield)}/${maxShield} → ${maxShield}` },
+    { text: '全机维修', cost: 30, desc: '修复雷达/火控/引擎' },
+    { text: '光子鱼雷x3', cost: 25, desc: `当前: ${photonTorpedoes}发` },
+  ];
+  
+  supplyItems.forEach((item, i) => {
+    const iy = shopY + 108 + i * 28;
+    if (i === shopSelected) {
+      ctx.fillStyle = '#ff0';
+      ctx.fillRect(shopX + 25, iy - 14, shopW - 50, 22);
+    }
+    ctx.fillStyle = i === shopSelected ? '#000' : '#fff';
+    ctx.font = '13px "Courier New"';
+    ctx.fillText(`${item.text}`, shopX + 35, iy + 4);
+    ctx.fillStyle = i === shopSelected ? '#000' : '#888';
+    ctx.font = '11px "Courier New"';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${item.cost}CR ${item.desc}`, shopX + shopW - 35, iy + 4);
+    ctx.textAlign = 'left';
+  });
+  
+  // 右侧：升级
+  ctx.fillStyle = '#0af';
+  ctx.font = 'bold 14px "Courier New"';
+  ctx.fillText('--- 属性升级 ---', shopX + 30, shopY + 228);
+  
+  const upgradeItems = [
+    { text: '能量上限', level: upgradeLevels.energy, max: 5, cost: 40, desc: `${maxEnergy} → ${maxEnergy + 20}` },
+    { text: '护盾上限', level: upgradeLevels.shield, max: 5, cost: 35, desc: `${maxShield} → ${maxShield + 20}` },
+    { text: '激光威力', level: upgradeLevels.laser, max: 3, cost: 45, desc: `等级 ${upgradeLevels.laser}/${3}` },
+    { text: '引擎速度', level: upgradeLevels.engine, max: 3, cost: 35, desc: `等级 ${upgradeLevels.engine}/${3}` },
+  ];
+  
+  upgradeItems.forEach((item, i) => {
+    const idx = i + 4;
+    const iy = shopY + 252 + i * 28;
+    if (idx === shopSelected) {
+      ctx.fillStyle = '#ff0';
+      ctx.fillRect(shopX + 25, iy - 14, shopW - 50, 22);
+    }
+    const maxed = item.level >= item.max;
+    ctx.fillStyle = idx === shopSelected ? '#000' : (maxed ? '#444' : '#fff');
+    ctx.font = '13px "Courier New"';
+    const lvStr = maxed ? 'MAX' : `Lv${item.level}`;
+    ctx.fillText(`${item.text} [${lvStr}]`, shopX + 35, iy + 4);
+    ctx.fillStyle = idx === shopSelected ? '#000' : (maxed ? '#444' : '#888');
+    ctx.font = '11px "Courier New"';
+    ctx.textAlign = 'right';
+    const costStr = maxed ? '已满' : `${item.cost}CR ${item.desc}`;
+    ctx.fillText(costStr, shopX + shopW - 35, iy + 4);
+    ctx.textAlign = 'left';
+  });
+  
+  // 盟军招募
+  const allyIdx = 8;
+  const aiy = shopY + 364;
+  if (allyIdx === shopSelected) {
+    ctx.fillStyle = '#ff0';
+    ctx.fillRect(shopX + 25, aiy - 14, shopW - 50, 22);
+  }
+  const allyFull = alliedFighters.length >= MAX_ALLIES;
+  const allyCost = getAllyCost();
+  const discountText = authorityLevel > 0 ? ` (折扣-${authorityLevel * 5}CR)` : '';
+  ctx.fillStyle = allyIdx === shopSelected ? '#000' : (allyFull ? '#444' : '#fff');
+  ctx.font = '13px "Courier New"';
+  ctx.fillText(`招募盟军 [${alliedFighters.length}/${MAX_ALLIES}]`, shopX + 35, aiy + 4);
+  ctx.fillStyle = allyIdx === shopSelected ? '#000' : (allyFull ? '#444' : '#888');
+  ctx.font = '11px "Courier New"';
+  ctx.textAlign = 'right';
+  ctx.fillText(allyFull ? '已满' : `${allyCost}CR 盟军战机支援${discountText}`, shopX + shopW - 35, aiy + 4);
+  ctx.textAlign = 'left';
+  
+  // 底部提示
+  ctx.fillStyle = '#666';
+  ctx.font = '12px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('上下键选择 | Z/Enter确认购买 | X/Backspace退出商店', W/2, shopY + shopH - 12);
+  
+  // 交易反馈
+  drawTransactionFeedback();
+}
+
+function render() {
+  ctx.clearRect(0, 0, W, H);
+  
+  if (gameState === STATE.TITLE) {
+    drawTitleScreen();
+  } else if (gameState === STATE.SHOP) {
+    drawShop();
+  } else if (gameState === STATE.WARP) {
+    drawWarpEffect();
+  } else if (gameState === STATE.GAMEOVER) {
+    drawGameOver();
+  } else if (gameState === STATE.ENDING) {
+    drawEnding();
+  } else if (gameState === STATE.PLAYING) {
+    if (currentViewMode === 'starmap') {
+      drawStarMap();
+    } else {
+      drawCockpit();
+      drawBottomStatus();
+    }
+  }
+}
+
+// ============ 输入处理 ============
+
+let currentViewMode = 'cockpit'; // 'cockpit' 或 'starmap'
+
+document.addEventListener('keydown', (e) => {
+  const gameKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'z', 'Z', 'x', 'X', 'Tab', 'Enter', 'Backspace'];
+  if (gameKeys.includes(e.key)) {
+    e.preventDefault();
+  }
+  keysDown[e.key] = true;
+  if (!keyJustPressed[e.key]) {
+    keyJustPressed[e.key] = true;
+    handleKeyPress(e.key);
+  }
+});
+
+document.addEventListener('keyup', (e) => {
+  keysDown[e.key] = false;
+});
+
+function handleKeyPress(key) {
+  if (gameState === STATE.TITLE) {
+    return;
+  }
+  
+  if (gameState === STATE.SHOP) {
+    handleShopInput(key);
+    return;
+  }
+  
+  if (gameState === STATE.GAMEOVER || gameState === STATE.ENDING) {
+    if (key === 'Enter') {
+      gameState = STATE.TITLE;
+      gameOverTimer = 0;
+      endingTimer = 0;
+    }
+    return;
+  }
+  
+  if (gameState === STATE.WARP) return;
+  
+  if (key === 'Tab') {
+    currentViewMode = currentViewMode === 'cockpit' ? 'starmap' : 'cockpit';
+    return;
+  }
+  
+  if (currentViewMode === 'starmap') {
+    handleStarMapInput(key);
+  } else {
+    handleCockpitInput(key);
+  }
+}
+
+function handleShopInput(key) {
+  switch(key) {
+    case 'ArrowUp': shopSelected = Math.max(0, shopSelected - 1); break;
+    case 'ArrowDown': shopSelected = Math.min(8, shopSelected + 1); break;
+    case 'z':
+    case 'Z':
+    case 'Enter':
+      purchaseItem(shopSelected);
+      break;
+    case 'x':
+    case 'X':
+    case 'Backspace':
+      gameState = STATE.PLAYING;
+      currentViewMode = 'starmap';
+      break;
+  }
+}
+
+function purchaseItem(index) {
+  // 补给品
+  if (index === 0) {
+    if (energy >= maxEnergy) {
+      showMessage('能量已满，无需补给');
+    } else if (credits >= 20) {
+      credits -= 20; energy = maxEnergy;
+      showMessage('能量补满! (消费 20CR)');
+    } else {
+      showMessage('积分不足! 需要 20CR');
+    }
+  } else if (index === 1) {
+    if (shield >= maxShield) {
+      showMessage('护盾已满，无需补给');
+    } else if (credits >= 15) {
+      credits -= 15; shield = maxShield;
+      showMessage('护盾补满! (消费 15CR)');
+    } else {
+      showMessage('积分不足! 需要 15CR');
+    }
+  } else if (index === 2) {
+    if (credits >= 30) {
+      credits -= 30; radOk = true; comOk = true; engOk = true;
+      showMessage('全机维修完成! (消费 30CR)');
+    } else {
+      showMessage('积分不足! 需要 30CR');
+    }
+  } else if (index === 3) {
+    if (credits >= 25) {
+      credits -= 25; photonTorpedoes += 3;
+      showMessage('获得3发光子鱼雷! (消费 25CR)');
+    } else {
+      showMessage('积分不足! 需要 25CR');
+    }
+  } else if (index === 4) {
+    // 能量上限升级
+    if (upgradeLevels.energy >= 5) {
+      showMessage('能量上限已达最高级');
+    } else if (credits >= 40) {
+      credits -= 40; upgradeLevels.energy++;
+      maxEnergy = 100 + upgradeLevels.energy * 20;
+      energy = Math.min(energy, maxEnergy);
+      showMessage(`能量上限升级至 ${maxEnergy}! (消费 40CR)`);
+    } else {
+      showMessage('积分不足! 需要 40CR');
+    }
+  } else if (index === 5) {
+    // 护盾上限升级
+    if (upgradeLevels.shield >= 5) {
+      showMessage('护盾上限已达最高级');
+    } else if (credits >= 35) {
+      credits -= 35; upgradeLevels.shield++;
+      maxShield = 100 + upgradeLevels.shield * 20;
+      shield = Math.min(shield, maxShield);
+      showMessage(`护盾上限升级至 ${maxShield}! (消费 35CR)`);
+    } else {
+      showMessage('积分不足! 需要 35CR');
+    }
+  } else if (index === 6) {
+    // 激光威力升级
+    if (upgradeLevels.laser >= 3) {
+      showMessage('激光威力已达最高级');
+    } else if (credits >= 45) {
+      credits -= 45; upgradeLevels.laser++;
+      showMessage(`激光威力升级至 Lv${upgradeLevels.laser}! (消费 45CR)`);
+    } else {
+      showMessage('积分不足! 需要 45CR');
+    }
+  } else if (index === 7) {
+    // 引擎速度升级
+    if (upgradeLevels.engine >= 3) {
+      showMessage('引擎速度已达最高级');
+    } else if (credits >= 35) {
+      credits -= 35; upgradeLevels.engine++;
+      showMessage(`引擎速度升级至 Lv${upgradeLevels.engine}! (消费 35CR)`);
+    } else {
+      showMessage('积分不足! 需要 35CR');
+    }
+  } else if (index === 8) {
+    // 招募盟军
+    const allyCost = getAllyCost();
+    if (alliedFighters.length >= MAX_ALLIES) {
+      showMessage(`盟军已满! 最大上限 ${MAX_ALLIES} 架`);
+    } else if (credits >= allyCost) {
+      credits -= allyCost;
+      alliedFighters.push({
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 150,
+        z: 150 + Math.random() * 100,
+        hp: 3, maxHp: 3,
+        fireTimer: 30,
+        alive: true,
+      });
+      const discountMsg = authorityLevel > 0 ? ` (权威折扣 Lv${authorityLevel})` : '';
+      showMessage(`盟军战机加入! [${alliedFighters.length}/${MAX_ALLIES}] (消费 ${allyCost}CR)${discountMsg}`);
+    } else {
+      showMessage(`积分不足! 招募需要 ${allyCost}CR`);
+    }
+  }
+}
+
+// ============ 发送消息 + 交易反馈 ============
+let shopFeedback = '';
+let shopFeedbackTimer = 0;
+
+function showMessage(msg) {
+  messageText = msg;
+  messageTimer = 90;
+  // 如果在商店中，同时显示交易反馈
+  if (gameState === STATE.SHOP) {
+    shopFeedback = msg;
+    shopFeedbackTimer = 90;
+  }
+}
+
+function drawTransactionFeedback() {
+  if (shopFeedbackTimer > 0) {
+    shopFeedbackTimer--;
+    const alpha = Math.min(1, shopFeedbackTimer / 30);
+    ctx.fillStyle = `rgba(0,255,100,${alpha})`;
+    ctx.font = 'bold 14px "Courier New"';
+    ctx.textAlign = 'center';
+    ctx.fillText(shopFeedback, 400, 530);
+  }
+}
+
+function handleStarMapInput(key) {
+  switch(key) {
+    case 'ArrowUp': playerMapY = Math.max(0, playerMapY - 1); break;
+    case 'ArrowDown': playerMapY = Math.min(MAP_SIZE - 1, playerMapY + 1); break;
+    case 'ArrowLeft': playerMapX = Math.max(0, playerMapX - 1); break;
+    case 'ArrowRight': playerMapX = Math.min(MAP_SIZE - 1, playerMapX + 1); break;
+    case 'Enter':
+      // 在补给基地打开商店
+      if (starMap[playerMapY] && starMap[playerMapY][playerMapX] && 
+          starMap[playerMapY][playerMapX].type === 'base' && !starMap[playerMapY][playerMapX].baseDestroyed) {
+        gameState = STATE.SHOP;
+        shopSelected = 0;
+      }
+      // 在敌军区域自动跃迁进入战斗
+      else if (starMap[playerMapY] && starMap[playerMapY][playerMapX] && 
+          starMap[playerMapY][playerMapX].type === 'enemy') {
+        warpTo(playerMapX, playerMapY);
+        currentViewMode = 'cockpit';
+      }
+      // 在小行星带自动跃迁
+      else if (starMap[playerMapY] && starMap[playerMapY][playerMapX] && 
+          starMap[playerMapY][playerMapX].type === 'asteroid') {
+        warpTo(playerMapX, playerMapY);
+        currentViewMode = 'cockpit';
+      }
+      break;
+    case 'z':
+    case 'Z':
+      warpTo(playerMapX, playerMapY);
+      currentViewMode = 'cockpit';
+      break;
+    case 'x':
+    case 'X':
+      fireTorpedo();
+      break;
+  }
+}
+
+function handleCockpitInput(key) {
+  const baseSpeed = engOk ? 0.12 : 0.06;
+  const turnSpeed = baseSpeed * (1 + upgradeLevels.engine * 0.3);
+  switch(key) {
+    case 'ArrowUp': viewAngleY = Math.max(-1, viewAngleY - turnSpeed); break;
+    case 'ArrowDown': viewAngleY = Math.min(1, viewAngleY + turnSpeed); break;
+    case 'ArrowLeft': viewAngleX = Math.max(-1, viewAngleX - turnSpeed); break;
+    case 'ArrowRight': viewAngleX = Math.min(1, viewAngleX + turnSpeed); break;
+    case 'z':
+    case 'Z':
+      // 加速推进
+      energy -= 0.5;
+      cockpitEnemies.forEach(e => { e.z += 5; });
+      cockpitAsteroids.forEach(a => { a.z += 3; });
+      break;
+    case 'x':
+    case 'X':
+      fireLaser();
+      break;
+  }
+}
+
+// 持续按键处理
+function handleContinuousInput() {
+  if (gameState !== STATE.PLAYING) return;
+  if (currentViewMode !== 'cockpit') return;
+  
+  const baseSpeed = engOk ? 0.01 : 0.005;
+  const turnSpeed = baseSpeed * (1 + upgradeLevels.engine * 0.3);
+  
+  if (keysDown['ArrowUp']) viewAngleY = Math.max(-1, viewAngleY - turnSpeed);
+  if (keysDown['ArrowDown']) viewAngleY = Math.min(1, viewAngleY + turnSpeed);
+  if (keysDown['ArrowLeft']) viewAngleX = Math.max(-1, viewAngleX - turnSpeed);
+  if (keysDown['ArrowRight']) viewAngleX = Math.min(1, viewAngleX + turnSpeed);
+  if (keysDown['z'] || keysDown['Z']) {
+    boostSpeed = 1;
+    energy -= 0.3;
+    cockpitEnemies.forEach(e => { e.z += 3; });
+    cockpitAsteroids.forEach(a => { a.z += 2; });
+  } else {
+    boostSpeed = 0;
+  }
+  if (keysDown['x'] || keysDown['X']) {
+    fireLaser(); // 连射支持
+  }
+}
+
+// ============ 触屏控制支持 ============
+
+let touchBtnState = {};
+
+function initTouchControls() {
+  const buttons = {
+    'btnUp': 'ArrowUp',
+    'btnDown': 'ArrowDown',
+    'btnLeft': 'ArrowLeft',
+    'btnRight': 'ArrowRight',
+    'btnX': 'x',
+    'btnZ': 'z',
+    'btnTab': 'Tab',
+    'btnEnter': 'Enter',
+    'btnTabAlt': 'Tab',
+    'btnEnterAlt': 'Enter'
+  };
+
+  Object.keys(buttons).forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const key = buttons[id];
+        touchBtnState[key] = true;
+        keysDown[key] = true;
+        if (!keyJustPressed[key]) {
+          keyJustPressed[key] = true;
+          handleKeyPress(key);
+        }
+      }, { passive: false });
+
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        const key = buttons[id];
+        touchBtnState[key] = false;
+        keysDown[key] = false;
+      }, { passive: false });
+
+      btn.addEventListener('mousedown', () => {
+        const key = buttons[id];
+        touchBtnState[key] = true;
+        keysDown[key] = true;
+        if (!keyJustPressed[key]) {
+          keyJustPressed[key] = true;
+          handleKeyPress(key);
+        }
+      });
+
+      btn.addEventListener('mouseup', () => {
+        const key = buttons[id];
+        touchBtnState[key] = false;
+        keysDown[key] = false;
+      });
+    }
+  });
+}
+
+// 持续按键处理（支持触屏长按）
+function handleContinuousInput() {
+  if (gameState !== STATE.PLAYING) return;
+  if (currentViewMode !== 'cockpit') return;
+  
+  const baseSpeed = engOk ? 0.01 : 0.005;
+  const turnSpeed = baseSpeed * (1 + upgradeLevels.engine * 0.3);
+  
+  if (keysDown['ArrowUp'] || touchBtnState['ArrowUp']) viewAngleY = Math.max(-1, viewAngleY - turnSpeed);
+  if (keysDown['ArrowDown'] || touchBtnState['ArrowDown']) viewAngleY = Math.min(1, viewAngleY + turnSpeed);
+  if (keysDown['ArrowLeft'] || touchBtnState['ArrowLeft']) viewAngleX = Math.max(-1, viewAngleX - turnSpeed);
+  if (keysDown['ArrowRight'] || touchBtnState['ArrowRight']) viewAngleX = Math.min(1, viewAngleX + turnSpeed);
+  if ((keysDown['z'] || keysDown['Z'] || touchBtnState['z']) && gameState === STATE.PLAYING) {
+    boostSpeed = 1;
+    energy -= 0.3;
+    cockpitEnemies.forEach(e => { e.z += 3; });
+    cockpitAsteroids.forEach(a => { a.z += 2; });
+  } else {
+    boostSpeed = 0;
+  }
+  if ((keysDown['x'] || keysDown['X'] || touchBtnState['x']) && gameState === STATE.PLAYING) {
+    fireLaser(); // 连射支持
+  }
+}
+
+// ============ 游戏循环 ============
+
+function gameLoop() {
+  update();
+  handleContinuousInput();
+  render();
+  requestAnimationFrame(gameLoop);
+}
+
+// ============ 启动 ============
+initCockpitStars();
+initTouchControls();
+gameLoop();
+
+console.log('Star Luster - 太空立体战 - Ready');
+console.log('方向键:移动/瞄准 | Z:A确认/加速 | X:B开火/鱼雷 | Tab:切换星图/座舱 | Enter:开始');
+</script>
+</body>
+</html>

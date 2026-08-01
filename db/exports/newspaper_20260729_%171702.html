@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>昨日晚报 - 2026年07月29日</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        body {
+            font-family: "Georgia", "Times New Roman", "Noto Serif SC", "Songti SC", serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fdfaf3;
+            color: #1a1a1a;
+            line-height: 1.75;
+            font-feature-settings: "liga" 1, "onum" 1;
+        }
+        .newspaper-header {
+            border: 3px double #1a1a1a;
+            padding: 24px 28px;
+            margin-bottom: 30px;
+            position: relative;
+            background: #fdfaf3;
+        }
+        .newspaper-header::before,
+        .newspaper-header::after {
+            content: "";
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            height: 1px;
+            background: #1a1a1a;
+        }
+        .newspaper-header::before { top: 6px; }
+        .newspaper-header::after { bottom: 6px; }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #6b6b6b;
+            letter-spacing: 1px;
+            font-variant: small-caps;
+            text-transform: lowercase;
+            border-bottom: 1px solid #2c2c2c;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .header-title {
+            text-align: center;
+            padding: 8px 0;
+        }
+        .header-title h1 {
+            font-family: "Georgia", "Times New Roman", "Noto Serif SC", serif;
+            font-size: 48px;
+            font-weight: 900;
+            font-style: italic;
+            margin: 0;
+            letter-spacing: 6px;
+            line-height: 1;
+            color: #1a1a1a;
+        }
+        .header-subtitle {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #6b6b6b;
+            text-transform: uppercase;
+            margin-top: 6px;
+            font-variant: small-caps;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 20px;
+            background: #1a1a1a;
+            color: #fdfaf3;
+            font-size: 11px;
+            flex-wrap: wrap;
+            letter-spacing: 2px;
+        }
+        .bar-item { font-weight: 400; font-variant: small-caps; }
+        .bar-item span { color: #b8860b; font-weight: 700; }
+        .bar-divider { color: #fdfaf3; opacity: 0.4; }
+        .newspaper-section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        .section-header h2 {
+            font-family: "Georgia", "Times New Roman", "Noto Serif SC", serif;
+            font-size: 24px;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+        }
+        .section-count {
+            font-size: 11px;
+            color: #6b6b6b;
+            font-variant: small-caps;
+            letter-spacing: 1px;
+        }
+        .featured-article {
+            border: 3px double #1a1a1a;
+            padding: 24px;
+            margin-bottom: 28px;
+            background: linear-gradient(180deg, transparent 0%, rgba(139, 0, 0, 0.03) 100%), #fdfaf3;
+            page-break-inside: avoid;
+        }
+        .featured-image {
+            width: 100%;
+            height: 280px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 3px double #1a1a1a;
+        }
+        .featured-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
+            pointer-events: none;
+        }
+        .featured-image-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-variant: small-caps;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .featured-kicker {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8b0000;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 3px solid #8b0000;
+            width: fit-content;
+            font-variant: small-caps;
+        }
+        .featured-title {
+            font-family: "Georgia", "Times New Roman", "Noto Serif SC", serif;
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            line-height: 1.2;
+            margin: 10px 0;
+            color: #1a1a1a;
+        }
+        .featured-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .featured-summary {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #3a3a3a;
+            column-count: 2;
+            column-gap: 24px;
+            text-align: justify;
+            hyphens: auto;
+            margin: 16px 0;
+        }
+        .featured-summary .drop-cap::first-letter {
+            float: left;
+            font-family: "Georgia", "Times New Roman", serif;
+            font-size: 4.5em;
+            line-height: 0.85;
+            font-weight: 900;
+            color: #8b0000;
+            margin: 0.05em 0.1em 0 0;
+            padding: 0.08em 0.12em;
+            border: 2px solid #8b0000;
+            background: #f4efe6;
+        }
+        .featured-meta {
+            font-size: 11px;
+            color: #6b6b6b;
+            padding-top: 12px;
+            border-top: 1px solid #2c2c2c;
+            letter-spacing: 1px;
+            font-variant: small-caps;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .featured-meta .news-source {
+            font-weight: 700;
+            color: #8b0000;
+        }
+        .news-analysis {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .analysis-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 10px;
+            color: white;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 0;
+        }
+        .analysis-badge.warning {
+            background: #8b0000 !important;
+        }
+        .analysis-badge.warning-light {
+            background: #b8860b !important;
+        }
+        .analysis-badge.info {
+            background: #2c2c2c !important;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .news-card {
+            background: #fdfaf3;
+            border: 1px solid #2c2c2c;
+            padding: 18px;
+            page-break-inside: avoid;
+            transition: all 0.25s ease;
+        }
+        .news-card:hover {
+            box-shadow: 4px 4px 0 #2c2c2c;
+            transform: translate(-2px, -2px);
+        }
+        .news-image {
+            width: 100%;
+            height: 160px;
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #2c2c2c;
+        }
+        .news-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
+            pointer-events: none;
+        }
+        .news-image-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-variant: small-caps;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .news-kicker {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8b0000;
+            margin-bottom: 6px;
+            padding-bottom: 3px;
+            border-bottom: 2px solid #8b0000;
+            width: fit-content;
+            font-variant: small-caps;
+        }
+        .news-title {
+            font-family: "Georgia", "Times New Roman", "Noto Serif SC", serif;
+            font-size: 17px;
+            font-weight: 900;
+            line-height: 1.35;
+            margin: 0 0 8px 0;
+            color: #1a1a1a;
+        }
+        .news-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .news-title a:hover {
+            color: #8b0000;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 3px;
+        }
+        .news-summary {
+            font-size: 13px;
+            line-height: 1.75;
+            color: #3a3a3a;
+            margin: 0 0 12px 0;
+            text-align: justify;
+        }
+        .news-meta {
+            font-size: 10px;
+            color: #6b6b6b;
+            padding-top: 10px;
+            border-top: 1px solid #2c2c2c;
+            letter-spacing: 1px;
+            font-variant: small-caps;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .news-source {
+            font-weight: 700;
+            color: #8b0000;
+        }
+        .news-stance-tag {
+            font-size: 10px;
+            color: #8b0000;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .newspaper-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 3px double #1a1a1a;
+            text-align: center;
+            font-size: 11px;
+            color: #6b6b6b;
+            letter-spacing: 2px;
+        }
+        .newspaper-footer p {
+            margin: 5px 0;
+        }
+        @media print {
+            body { padding: 0; background: white; }
+            .no-print { display: none; }
+        }
+        @media (max-width: 600px) {
+            .news-grid { grid-template-columns: 1fr; }
+            .featured-summary { column-count: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="newspaper-header">
+        <div class="header-top">
+            <span>Vol. 26 · No. 210</span>
+            <span>2026年07月29日</span>
+            <span>Price: Free</span>
+        </div>
+        <div class="header-title">
+            <h1>昨日晚报 - 2026年07月29日</h1>
+            <div class="header-subtitle">ShiBoSi Daily · 市舶司昨日晚报</div>
+        </div>
+        <div class="header-bar">
+            <span class="bar-item">Date: <span>2026年07月29日</span></span>
+            <span class="bar-divider">|</span>
+            <span class="bar-item">Count: <span>20</span></span>
+            <span class="bar-divider">|</span>
+            <span class="bar-item">Exported: <span>2026-07-29 17:17:02</span></span>
+        </div>
+    </div>
+    <div class="newspaper-section">
+        <div class="section-header">
+            <h2>科技</h2>
+            <span class="section-count">13 条</span>
+        </div>
+        <div class="featured-article">
+            <div class="featured-image" style="background:linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                <span class="featured-image-label">科技</span>
+            </div>
+            <div class="news-analysis">
+                <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+            </div>
+            <span class="featured-kicker">科技</span>
+            <h2 class="featured-title"><a href="https://36kr.com/newsflashes/3916448764931714?f=rss" target="_blank">山西省制造业振兴升级股权投资基金登记成立，出资额100.1亿</a></h2>
+            <p class="featured-summary"><span class="drop-cap">3</span>6氪获悉，天眼查App显示，近日，山西省制造业振兴升级股权投资基金合伙企业（有限合伙）成立，执行事务合伙人为国投创新投资管理有限公司，出资额100.1亿人民币，经营范围为以私募基金从事股权投资、投资管理、资产管理等活动。合伙人信息显示，该基金由山西产投资本管理有限公司、山西建设...</p>
+            <div class="featured-meta">
+                <span>来源：<span class="news-source"><div class="news-analysis" style="margin-top:12px;"><span class="analysis-badge info" style="background:#2c2c2c;">📊 交叉分析</span></div>
+                <p style="font-size:12px;color:#6b6b6b;margin:6px 0 0 0;font-style:italic;">【分析】该新闻立场较为中立，政治倾向分数: -0.10。涉及话题: 经济。交叉验证置信度: +0.80。综合判定: 结论可靠。</p></span></span>
+                <span>时间：36氪</span>
+            </div>
+        </div>
+%!(EXTRA string=2026-07-29T16:56:46Z)        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(145deg, #2d1b4e 0%, #4a2c6d 50%, #6b3fa0 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916450014506377?f=rss" target="_blank">爱马仕二季度销售增长7%</a></h3>
+                <p class="news-summary">法国奢侈品集团爱马仕近日公布的第二季度业绩显示，该公司当季销售额达41亿欧元，按固定汇率计算同比增长7%，符合市场预期。从区域市场看，除中东地区外，所有市场在截至6月底的三�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(130deg, #1a3a1a 0%, #2d5a2d 50%, #4a7c4a 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916453580352897?f=rss" target="_blank">甘肃能源：庆阳绿电聚合试点项目二期100万千瓦新能源项目获核准</a></h3>
+                <p class="news-summary">36氪获悉，甘肃能源公告，公司全资子公司酒汇公司所属甘肃电投庆阳新能源有限责任公司投资建设的甘肃庆阳东数西算产业园区绿电聚合试点项目二期工程100万千瓦新能源项目，近日获得�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(155deg, #3a1a1a 0%, #5a2d2d 50%, #8b4a4a 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916454493400710?f=rss" target="_blank">虹软科技：实际控制人提议1亿元至1.5亿元回购股份</a></h3>
+                <p class="news-summary">36氪获悉，虹软科技公告，公司实际控制人、董事长、总经理HuiDeng提议公司使用自有资金以集中竞价交易方式回购股份，回购资金总额不低于1亿元(含)，不超过1.5亿元(含)，回购股份将用于�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(135deg, #2c1810 0%, #5c3d2e 50%, #8b6f4e 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916465434668421?f=rss" target="_blank">乘联分会：7月1-26日全国乘用车新能源市场零售73.8万辆，同比下降2%</a></h3>
+                <p class="news-summary">36氪获悉，乘联分会发布数据，7月1-26日，全国乘用车市场零售112.3万辆，同比去年7月同期下降18%，较上月同期下降13%，今年以来累计零售982.4万辆，同比下降20%；7月1-26日，全国乘用车新能�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916467077836418?f=rss" target="_blank">国产首颗OLED TDDI芯片量产</a></h3>
+                <p class="news-summary">36氪获悉，近日，集创北方自主研发的国内首颗OLED显示触控一体化（TDDI）芯片ICNA3611实现在国内知名品牌主流机型中的规模化量产。</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(145deg, #2d1b4e 0%, #4a2c6d 50%, #6b3fa0 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916455460679298?f=rss" target="_blank">Anthropic首席执行官等多位AI大牛签署联名信，呼吁控制人工智能发展步伐</a></h3>
+                <p class="news-summary">超过1100名来自领先人工智能公司的高管及员工联名签署了一封公开信，呼吁美国政府 “支持国际社会共同打造技术与治理工具，以此对前沿自动化人工智能的发展节奏实施有序管控”。这�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(130deg, #1a3a1a 0%, #2d5a2d 50%, #4a7c4a 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916449220783745?f=rss" target="_blank">济南科技创业投资集团增资至15.1亿，增幅约104%</a></h3>
+                <p class="news-summary">36氪获悉，天眼查App显示，近日，济南科技创业投资集团有限公司发生工商变更，新增济南工业投资控股集团有限公司为股东，同时，注册资本由7.4亿人民币增至约15.1亿人民币，增幅约104%。...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(155deg, #3a1a1a 0%, #5a2d2d 50%, #8b4a4a 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916469934812806?f=rss" target="_blank">美联储主席沃什或因多重考量在本次会议暂缓加息</a></h3>
+                <p class="news-summary">本周，美国联邦储备委员会将召开联邦公开市场委员会（FOMC）议息会议。尽管金融市场预测当前存在接近四成的加息概率，且美联储内部决策层面临分歧，但受宏观经济数据研判、内部政策...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(135deg, #2c1810 0%, #5c3d2e 50%, #8b6f4e 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916472632454537?f=rss" target="_blank">国联民生：司法拍卖竞得民生证券0.02%股份将成全资子公司</a></h3>
+                <p class="news-summary">36氪获悉，国联民生公告，2026年7月29日，公司通过司法拍卖竞得泛海控股持有的民生证券242.43万股股份（占总股本0.02%），成交价格509.11万元，并已收到《成交确认书》。交易尚需办理股份�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916473736015232?f=rss" target="_blank">扎克伯格：美国不应为了在竞赛中占据优势，而封禁中国AI模型</a></h3>
+                <p class="news-summary">据英国《金融时报》、路透社7月29日报道，美国元公司首席执行官扎克伯格在接受媒体采访时表示，美国不应为了在人工智能（AI）竞赛中占据优势，而封禁中国AI模型。（环球网）</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(145deg, #2d1b4e 0%, #4a2c6d 50%, #6b3fa0 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/p/3916187215408776?f=rss" target="_blank">AI智能浪潮重塑母婴赛道，吸牛裤如何实现 “智能育儿”？</a></h3>
+                <p class="news-summary">导语： 
+ 凌晨三点，新手爸妈第三次起身，摸黑查看宝宝尿裤有无侧漏、臀部是否闷出红疹。依靠经验熬夜看护的传统育儿模式，已是无数家庭的共同困扰。而随着 AI 技术产业化落地，这一...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:56:46Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(130deg, #1a3a1a 0%, #2d5a2d 50%, #4a7c4a 100%);">
+                    <span class="news-image-label">科技</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">科技</span>
+                <h3 class="news-title"><a href="https://36kr.com/newsflashes/3916413032230536?f=rss" target="_blank">国家人工智能产业基金入股艾捷科芯</a></h3>
+                <p class="news-summary">36氪获悉，天眼查App显示，近日，北京艾捷科芯科技有限公司发生工商变更，新增国家人工智能产业投资基金合伙企业（有限合伙）为股东，同时，注册资本由约528万人民币增至约541万人民�...</p>
+                <div class="news-meta">
+                    <span class="news-source">36氪</span>
+                    <span>🕐 2026-07-29T16:24:32Z</span>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="newspaper-section">
+        <div class="section-header">
+            <h2>综合</h2>
+            <span class="section-count">7 条</span>
+        </div>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(130deg, #1a3a1a 0%, #2d5a2d 50%, #4a7c4a 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/gn/2026/07-29/10668636.shtml" target="_blank">《国家文物事业发展“十五五”规划》印发</a></h3>
+                <p class="news-summary">原标题：新华社权威快报｜《国家文物事业发展“十五五”规划》印发</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:50:25Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(155deg, #3a1a1a 0%, #5a2d2d 50%, #8b4a4a 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#c62828">← 倾向保守</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/gn/2026/07-29/10668624.shtml" target="_blank">拾光纪·愿同中国共同寻求解决方案，斯洛伐克总统这样对习主席说</a></h3>
+                <p class="news-summary">“我们应当在人工智能等新技术领域共同寻求解决方案”，7月28日，在同习近平主席会谈时，斯洛伐克总统佩列格里尼这样说。习主席在2026世界人工智能大会暨人工智能全球治理高级别会议...</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:48:47Z</span>
+                    <span class="news-stance-tag">立场偏左</span>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(135deg, #2c1810 0%, #5c3d2e 50%, #8b6f4e 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/ll/2026/07-29/10668593.shtml" target="_blank">从千年宣纸“破圈”，看文化传承守正与创新</a></h3>
+                <p class="news-summary">【好评中国】中安时评 | 从千年宣纸“破圈”，看文化传承守正与创新</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:46:59Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/sh/2026/07-29/10668602.shtml" target="_blank">西方年轻人热衷的“Chinamaxxing”是啥？</a></h3>
+                <p class="news-summary">一个热词出现在国外媒体和社交平台上——Chinamaxxing。</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:41:21Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(145deg, #2d1b4e 0%, #4a2c6d 50%, #6b3fa0 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/sh/2026/07-29/10668629.shtml" target="_blank">“方向盘”被抢了吗？一定有人在说谎！民警侦查实验证伪</a></h3>
+                <p class="news-summary">2025年5月的一天，武汉某工业园内，惊险一幕突然上演。一辆轿车猛然启动，将车外一名男子拖行十余米。随后，车辆撞向路旁停着的车，男子摔落受伤。事发之后，司机却给出了另一种说�...</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:36:28Z</span>
+                    
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(130deg, #1a3a1a 0%, #2d5a2d 50%, #4a7c4a 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#ef5350">↖ 中左</span><span class="analysis-badge info">置信度: 中等</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/cj/2026/07-29/10668594.shtml" target="_blank">中国科技创新秉持开放包容、互利共赢理念</a></h3>
+                <p class="news-summary">中国科技创新秉持开放包容、互利共赢理念(国际论坛)</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:33:56Z</span>
+                    <span class="news-stance-tag">立场中左</span>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image" style="background:linear-gradient(155deg, #3a1a1a 0%, #5a2d2d 50%, #8b4a4a 100%);">
+                    <span class="news-image-label">综合</span>
+                </div>
+                <div class="news-analysis">
+                    <span class="analysis-badge" style="background:#757575">○ 中立</span><span class="analysis-badge info">置信度: 高</span>
+                </div>
+                <span class="news-kicker">综合</span>
+                <h3 class="news-title"><a href="https://www.chinanews.com.cn/ll/2026/07-29/10668591.shtml" target="_blank">读懂中国“丰收筑底、科技蓄力”的硬核经济</a></h3>
+                <p class="news-summary">【好评中国】中安时评 | 读懂中国“丰收筑底、科技蓄力”的硬核经济</p>
+                <div class="news-meta">
+                    <span class="news-source">中国新闻网</span>
+                    <span>🕐 2026-07-29T16:29:28Z</span>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="newspaper-footer">
+        <p>本文由市舶司昨日晚报自动生成</p>
+        <p>Generated by ShiBoSi Newspaper · 2026-07-29 17:17:02</p>
+    </div>
+</body>
+</html>

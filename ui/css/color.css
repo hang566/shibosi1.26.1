@@ -1,0 +1,48 @@
+:root{
+    /* 文字色系 */
+    --TitleColor: #1a1a1a;
+    --text: #333;
+    --text-secondary: #666;
+    --text-placeholder: #999;
+    --CardText: #444;
+    --ModalText: #222;
+    --text-success: #67c23a;
+    --text-warning: #e6a23c;
+    --text-error: #f56c6c;
+
+    /* 背景色系 */
+    --bg: #ffffff;
+    --mainBG: #f5f7fa; /* 修正拼写 mian → main */
+    --botBG: #f0f2f5;
+    --ModalBG: #fff;
+    --backdrop: rgba(0,0,0,0.5);
+
+    /* 边框、分割线 */
+    --border-color: #e4e7ed;
+    --card-border: #ebeef5;
+    --divider: #dcdfe6;
+
+    /* 按钮交互 */
+    --btn-bg: #409eff;
+    --btn-text: #fff;
+    --btn-hover: #66b1ff;
+    --btn-danger: #f56c6c;
+
+    /* 阴影 */
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --modal-shadow: 0 6px 24px rgba(0,0,0,0.12);
+
+    /* 圆角 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+
+    /* 间距 */
+    --gap-sm: 8px;
+    --gap-md: 16px;
+    --gap-lg: 24px;
+
+    /* 激活高亮 */
+    --highlight: #409eff;
+    --active-bg: rgba(64,158,255,0.08);
+}

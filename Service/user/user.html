@@ -1,0 +1,2831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人中心 · 市舶司</title>
+
+    <!-- UI 设计系统模块 -->
+    <link href="../../ui/css/modules/variables.css" rel="stylesheet">
+    <link href="../../ui/css/modules/base.css" rel="stylesheet">
+    <link href="../../ui/css/modules/display.css" rel="stylesheet">
+    <link href="../../ui/css/modules/feedback.css" rel="stylesheet">
+    <link href="../../ui/css/modules/forms.css" rel="stylesheet">
+    <link href="../../ui/css/modules/layout.css" rel="stylesheet">
+    <link href="../../ui/css/modules/navigation.css" rel="stylesheet">
+
+    <!-- 项目全局样式 -->
+    <link href="../../css/search.css" rel="stylesheet">
+    <link href="../../css/weather.css" rel="stylesheet">
+    <link href="../../css/theme.css" rel="stylesheet">
+    <link href="../../css/apps.css" rel="stylesheet">
+    <link href="../../css/QuickSettings.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <!-- 用户账户组件（跨页面通用）-->
+    <script src="../../js/userAccount.js" defer></script>
+
+    <style>
+        /* ====== 用户中心布局 ====== */
+        /* ---------- 整体布局容器（桌面端为侧边栏预留空间）---------- */
+        .user-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: margin-left .28s ease;
+        }
+
+        .user-layout.with-sidebar {
+            margin-left: 260px;
+        }
+
+        .user-layout.collapsed-sidebar {
+            margin-left: 0;
+        }
+
+        /* ---------- 顶部导航栏---------- */
+        .user-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            box-sizing: border-box;
+        }
+
+        .user-header-bar .brand {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .user-header-bar .search-wrapper {
+            flex: 1;
+            max-width: 480px;
+        }
+
+        .user-header-bar .search-wrapper input {
+            width: 100%;
+        }
+
+        .user-header-bar .points-badge {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--main);
+            white-space: nowrap;
+            background: var(--block-bg);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ---------- 主体布局 ---------- */
+        .user-body {
+            display: block;
+            flex: 1;
+            padding: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: 0;
+            box-sizing: border-box;
+        }
+
+        .sidebar-toggle-btn {
+            display: inline-flex;
+            width: 32px;
+            height: 32px;
+            background: var(--block-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-sub);
+            font-size: 14px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            padding: 0;
+        }
+
+        .sidebar-toggle-btn:hover {
+            color: var(--main);
+            border-color: var(--main);
+        }
+
+        /* ---------- 侧边栏---------- */
+        .user-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 500;
+            transform: translateX(0);
+            transition: transform .28s ease;
+        }
+
+        .user-sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .user-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .user-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .user-sidebar::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .user-sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--text-sub);
+        }
+
+        .sidebar-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 400;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .28s ease;
+        }
+
+        .sidebar-mask.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .user-sidebar .panel {
+            margin: 0;
+            padding: 14px;
+        }
+
+        .user-sidebar .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-line);
+        }
+
+        .user-sidebar .user-profile-card {
+            text-align: center;
+        }
+
+        .user-sidebar .avatar-large {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--main), #5856d6);
+            border: 3px solid var(--block-bg);
+        }
+
+        .user-sidebar .avatar-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-sidebar .user-nickname {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .user-sidebar .user-role {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            background: var(--block-bg);
+            color: var(--text-sub);
+        }
+
+        .user-sidebar .user-role.admin {
+            background: rgba(245, 63, 63, 0.1);
+            color: var(--danger);
+        }
+
+        .user-sidebar .user-bio {
+            font-size: 12px;
+            color: var(--text-placeholder);
+            margin-top: 8px;
+            line-height: 1.5;
+            min-height: 0;
+        }
+
+        .points-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(88,86,214,0.1));
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+
+        .points-display .points-icon {
+            font-size: 22px;
+        }
+
+        .points-display .points-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--main);
+        }
+
+        .points-display .points-label {
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-sub);
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-menu-item:hover {
+            background: var(--block-bg);
+            color: var(--text);
+        }
+
+        .nav-menu-item.active {
+            background: var(--block-bg);
+            color: var(--main);
+            font-weight: 600;
+        }
+
+        .nav-menu-item .nav-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-menu-item .nav-badge {
+            margin-left: auto;
+            background: var(--main);
+            color: #fff;
+            font-size: 11px;
+            padding: 1px 7px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* ---------- 主内容区 ---------- */
+        .main-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+            min-width: 0;
+        }
+
+        .content-header h1 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .content-header .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-header .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--main);
+            color: #fff;
+            font-size: 12px;
+            padding: 0 6px;
+        }
+
+        .view-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            border: 1px solid var(--border);
+        }
+
+        /* ---------- 概览视图 ---------- */
+        .overview-hero {
+            background: linear-gradient(135deg, var(--main), #5856d6);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+        }
+
+        .overview-hero h2 {
+            margin: 0 0 4px;
+            font-size: 22px;
+            position: relative;
+        }
+
+        .overview-hero p {
+            margin: 0;
+            opacity: 0.85;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        .overview-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .overview-section-header {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .overview-section-header h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .overview-section-body {
+            padding: 14px 18px;
+        }
+
+        /* ---------- 收藏/历史 视图 ---------- */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--block-bg);
+            border-radius: var(--radius-md);
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .filter-bar input {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            transition: var(--transition);
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .item-card:hover {
+            border-color: var(--main);
+            box-shadow: var(--shadow);
+        }
+
+        .item-card .item-favicon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--block-bg);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .item-card .item-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-card .item-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .item-card .item-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .item-card .item-title a:hover {
+            color: var(--main);
+        }
+
+        .item-card .item-url {
+            font-size: 12px;
+            color: var(--text-placeholder);
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+
+        .item-card .item-desc {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .item-card .item-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-placeholder);
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .item-card .item-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .item-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-placeholder);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: var(--transition);
+            min-width: auto;
+        }
+
+        .item-action-btn:hover {
+            color: var(--danger);
+            background: rgba(245, 63, 63, 0.1);
+        }
+
+        .item-source-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            background: var(--block-bg);
+            color: var(--text-sub);
+        }
+
+        .item-source-tag.search { background: rgba(0,122,255,0.1); color: var(--main); }
+        .item-source-tag.news { background: rgba(255,149,0,0.1); color: #ff9500; }
+        .item-source-tag.game { background: rgba(0,180,42,0.1); color: var(--success); }
+        .item-source-tag.home { background: rgba(88,86,214,0.1); color: #5856d6; }
+
+        /* ---------- 积分视图 ---------- */
+        .points-hero {
+            background: linear-gradient(135deg, var(--warning, #ffc107), #ff9500);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .points-hero .big-points {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .points-hero .points-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+
+        .points-log-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .points-log-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .points-log-item:last-child {
+            border-bottom: none;
+        }
+
+        .points-log-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .points-log-icon.earn { background: rgba(0,180,42,0.1); color: var(--success); }
+        .points-log-icon.spend { background: rgba(245,63,63,0.1); color: var(--danger); }
+
+        .points-log-info {
+            flex: 1;
+        }
+
+        .points-log-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .points-log-desc {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .points-log-amount {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .points-log-amount.earn { color: var(--success); }
+        .points-log-amount.spend { color: var(--danger); }
+
+        /* ---------- 设置视图 ---------- */
+        .settings-form {
+            max-width: 520px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--block-bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: var(--transition);
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--main);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 20px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            transition: var(--transition);
+            min-width: auto;
+        }
+
+        .btn:hover {
+            border-color: var(--main);
+            color: var(--main);
+        }
+
+        .btn-primary {
+            background: var(--main);
+            color: #fff;
+            border-color: var(--main);
+        }
+
+        .btn-primary:hover {
+            background: rgba(0, 122, 255, 0.9);
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ---------- 空状态---------- */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-placeholder);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state .empty-text {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state .empty-hint {
+            font-size: 12px;
+        }
+
+        /* ---------- Toast 提示 ---------- */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            font-size: 13px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: toastIn 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .toast.success { border-color: var(--success); color: var(--success); }
+        .toast.error { border-color: var(--danger); color: var(--danger); }
+        .toast.warning { border-color: var(--warning); color: var(--warning); }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ---------- 登录提示 ---------- */
+        .login-prompt {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .login-prompt .lock-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .login-prompt h2 {
+            font-size: 20px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .login-prompt p {
+            color: var(--text-placeholder);
+            margin-bottom: 24px;
+        }
+
+        /* ---------- 底部 ---------- */
+        .user-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-line);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-placeholder);
+        }
+
+        /* ---------- 响应式---------- */
+        @media (max-width: 950px) {
+            .user-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .user-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .user-layout.with-sidebar {
+                margin-left: 0;
+            }
+
+            .user-body {
+                padding: 10px;
+            }
+
+            .user-header-bar {
+                padding: 8px 12px;
+                gap: 10px;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+
+            .user-header-bar .search-wrapper {
+                max-width: 100%;
+            }
+
+            .content-header {
+                padding: 4px 0;
+            }
+        }
+
+        @media (min-width: 951px) {
+            .sidebar-mask {
+                display: none;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .user-header-bar {
+                flex-wrap: wrap;
+                padding: 8px 10px;
+                gap: 8px;
+            }
+
+            .user-header-bar .brand {
+                font-size: 15px;
+            }
+
+            .user-header-bar .search-wrapper {
+                flex-basis: 100%;
+                max-width: 100%;
+                order: 3;
+            }
+
+            .user-header-bar .points-badge {
+                padding: 3px 10px;
+                font-size: 12px;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .overview-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .item-card {
+                flex-direction: column;
+            }
+
+            .item-card .item-actions {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .user-body {
+                padding: 8px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .points-hero .big-points {
+                font-size: 36px;
+            }
+        }
+
+        /* ============ 同步/退出确认对话框 ============ */
+        .sync-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .sync-modal-content {
+            background: var(--card-bg, #fff);
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .sync-modal-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .sync-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary, #1c1c1e);
+            margin-bottom: 12px;
+        }
+
+        .sync-modal-desc {
+            font-size: 14px;
+            color: var(--text-secondary, #666);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .sync-modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .sync-modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sync-modal-btn.primary {
+            background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%);
+            color: #fff;
+        }
+
+        .sync-modal-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0, 122, 255, 0.4);
+        }
+
+        .sync-modal-btn.secondary {
+            background: var(--bg-secondary, #f5f5f7);
+            color: var(--text-primary, #1c1c1e);
+        }
+
+        .sync-modal-btn.secondary:hover {
+            background: var(--hover-bg, #e8e8ed);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ====== 登录管理 ====== */
+        .login-mgr-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .login-mgr-tab {
+            padding: 10px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-sub, #999);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all .2s;
+        }
+        .login-mgr-tab.active {
+            color: var(--main);
+            border-bottom-color: var(--main);
+        }
+        .login-mgr-tab:hover {
+            color: var(--main);
+        }
+        .login-mgr-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .login-mgr-stat-card {
+            background: var(--block-bg, var(--card-bg));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+        .login-mgr-stat-card .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--main);
+        }
+        .login-mgr-stat-card .stat-label {
+            font-size: 12px;
+            color: var(--text-sub, #999);
+            margin-top: 4px;
+        }
+        .login-record-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .login-record-table th {
+            text-align: left;
+            padding: 10px 12px;
+            background: var(--block-bg, var(--card-bg));
+            color: var(--text-sub, #999);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .login-record-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        .login-record-table tr:hover td {
+            background: var(--block-bg, rgba(0,0,0,0.02));
+        }
+        .login-status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .login-status-badge.success {
+            background: rgba(52, 199, 89, 0.15);
+            color: #34C759;
+        }
+        .login-status-badge.failed {
+            background: rgba(255, 59, 48, 0.15);
+            color: #FF3B30;
+        }
+        .snapshot-card {
+            background: var(--block-bg, var(--card-bg));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .snapshot-card .snapshot-info {
+            flex: 1;
+        }
+        .snapshot-card .snapshot-time {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .snapshot-card .snapshot-details {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .snapshot-card .snapshot-detail-item {
+            font-size: 12px;
+            color: var(--text-sub, #999);
+        }
+        .snapshot-card .snapshot-detail-item strong {
+            color: var(--text);
+        }
+        .snapshot-diff {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .snapshot-diff.up { background: rgba(52,199,89,0.15); color: #34C759; }
+        .snapshot-diff.down { background: rgba(255,59,48,0.15); color: #FF3B30; }
+        .snapshot-diff.same { background: rgba(142,142,147,0.15); color: #8E8E93; }
+        .login-mgr-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-sub, #999);
+        }
+        .login-mgr-empty .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .login-mgr-toolbar {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 侧边栏（独立于布局流，fixed定位）-->
+    <aside class="user-sidebar" id="userSidebar">
+        <!-- 用户信息卡片 -->
+        <div class="panel user-profile-card" id="userProfileCard">
+            <div class="avatar-large" id="userAvatar">U</div>
+            <div class="user-nickname" id="userNickname">加载中...</div>
+            <div class="user-role" id="userRole" style="display:none;">普通用户</div>
+            <div class="user-bio" id="userBio"></div>
+        </div>
+
+        <!-- 积分展示 -->
+        <div class="panel">
+            <div class="points-display">
+                <span class="points-icon">💎</span>
+                <div>
+                    <div class="points-value" id="sidebarPoints">0</div>
+                    <div class="points-label">我的积分</div>
+                </div>
+            </div>
+            <button class="btn" onclick="showView('points')" style="width:100%;">积分明细 →</button>>
+        </div>
+
+        <!-- 导航菜单 -->
+        <div class="panel">
+            <div class="panel-title">功能</div>
+            <nav class="nav-menu">
+                <button class="nav-menu-item active" data-view="home">
+                    <span class="nav-icon">🏠</span>
+                    <span>概览</span>
+                </button>
+                <button class="nav-menu-item" data-view="favorites">
+                    <span class="nav-icon">⭐</span>
+                    <span>我的收藏</span>
+                    <span class="nav-badge" id="favCountBadge" style="display:none;">0</span>
+                </button>
+                <button class="nav-menu-item" data-view="history">
+                    <span class="nav-icon">🕒</span>
+                    <span>浏览历史</span>
+                    <span class="nav-badge" id="histCountBadge" style="display:none;">0</span>
+                </button>
+                <button class="nav-menu-item" data-view="points">
+                    <span class="nav-icon">💎</span>
+                    <span>积分中心</span>
+                </button>
+                <button class="nav-menu-item" data-view="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>账号设置</span>
+                </button>
+                <button class="nav-menu-item" data-view="loginMgr">
+                    <span class="nav-icon">🔐</span>
+                    <span>登录管理</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- 快捷跳转 -->
+        <div class="panel">
+            <div class="panel-title">快捷入口</div>
+            <button class="btn" onclick="goToPage('../../index.html')" style="width:100%;margin-bottom:8px;">🏠 返回首页</button>
+            <button class="btn" onclick="goToPage('../game/home.html')" style="width:100%;margin-bottom:8px;">🎮 游戏中心</button>
+            <button class="btn" onclick="goToPage('../Scraper/Scraper.html')" style="width:100%;">🔍 搜罗器</button>
+            <button class="btn" onclick="goToPage('../Newspaper/home.html')" style="width:100%;">📰 新闻中心</button>
+        </div>
+
+        <!-- 登出按钮 -->
+        <div class="panel" id="logoutPanel" style="display:none;">
+            <button class="btn btn-danger" id="logoutBtn" style="width:100%;">退出登录</button>>
+        </div>
+    </aside>
+
+    <!-- 侧边栏遮罩-->
+    <div class="sidebar-mask" id="sidebarMask"></div>
+
+    <div class="user-layout">
+
+        <!-- ===== 顶部导航栏===== -->
+        <header class="user-header-bar">
+            <button class="sidebar-toggle-btn" id="sidebarToggle" title="侧边栏">☰</button>
+            <div class="brand">
+                <a href="../../index.html" style="color:inherit;text-decoration:none;">市舶司</a>
+                <span>|</span>
+                用户中心
+            </div>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="搜索收藏、历史记录..." />
+            </div>
+            <div class="points-badge">积分 <span id="pointsCount">0</span></div>
+        </header>
+
+        <!-- ===== 主内容区 ===== -->
+        <div class="user-body">
+
+            <!-- 主内容-->
+            <main class="main-content">
+                <div class="card" style="padding:0;overflow:hidden;">
+                    <!-- 视图头部 -->
+                    <div class="content-header" style="padding:16px 20px;border-bottom:1px solid var(--border);">
+                        <div class="header-left">
+                            <div class="header-meta">
+                                <h1 id="viewTitle">概览</h1>
+                                <span class="badge" id="itemCount">0</span>
+                            </div>
+                            <div class="browser-status" id="viewSubtitle">欢迎回到市舶司用户中心</div>
+                        </div>
+                        <div class="view-controls" id="viewControls"></div>
+                    </div>
+
+                    <!-- 视图内容容器 -->
+                    <div id="viewContainer" style="padding:0;"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- 底部 -->
+        <div class="user-footer">
+            市舶司 · 个人中心 | 整合收藏、历史、积分管理
+        </div>
+    </div>
+
+    <!-- Toast 容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== 业务逻辑脚本 ===== -->
+    <script src="../../js/pointsSystem.js"></script>
+    <script src="../../js/syncManager.js"></script>
+    <script src="../../js/search/utils.js"></script>
+    <script src="../../js/app.js"></script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ============ 全局状态============
+        const state = {
+            currentView: 'home',
+            searchQuery: '',
+            user: null,
+            favorites: [],
+            history: [],
+            pointsLogs: []
+        };
+
+        // ============ DOM 元素 ============
+        const els = {
+            sidebarToggle: document.getElementById('sidebarToggle'),
+            userSidebar: document.getElementById('userSidebar'),
+            sidebarMask: document.getElementById('sidebarMask'),
+            userLayout: document.querySelector('.user-layout'),
+            userBody: document.querySelector('.user-body'),
+            userHeaderBar: document.querySelector('.user-header-bar'),
+            searchInput: document.getElementById('searchInput'),
+            pointsCount: document.getElementById('pointsCount'),
+            userAvatar: document.getElementById('userAvatar'),
+            userNickname: document.getElementById('userNickname'),
+            userRole: document.getElementById('userRole'),
+            userBio: document.getElementById('userBio'),
+            sidebarPoints: document.getElementById('sidebarPoints'),
+            viewTitle: document.getElementById('viewTitle'),
+            viewSubtitle: document.getElementById('viewSubtitle'),
+            itemCount: document.getElementById('itemCount'),
+            viewControls: document.getElementById('viewControls'),
+            viewContainer: document.getElementById('viewContainer'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            logoutPanel: document.getElementById('logoutPanel'),
+            favCountBadge: document.getElementById('favCountBadge'),
+            histCountBadge: document.getElementById('histCountBadge'),
+            toastContainer: document.getElementById('toastContainer')
+        };
+
+        // ============ 工具函数 ============
+        function showToast(msg, type) {
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + (type || '');
+            toast.textContent = msg;
+            els.toastContainer.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                toast.style.transition = 'all 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"]/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
+            })[m]);
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return '';
+            const d = new Date(timestamp);
+            const now = new Date();
+            const diff = now - d;
+            if (diff < 60000) return '刚刚';
+            if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
+            if (diff < 604800000) return Math.floor(diff / 86400000) + ' 天前';
+            return d.toLocaleDateString();
+        }
+
+        // ============ 侧边栏控制============
+        let sidebarOpen = window.innerWidth > 950;
+
+        function applySidebarState() {
+            const isDesktop = window.innerWidth > 950;
+            if (isDesktop) {
+                els.userSidebar.classList.toggle('collapsed', !sidebarOpen);
+                els.userSidebar.classList.remove('open');
+                els.sidebarMask.classList.remove('show');
+                els.userLayout.classList.toggle('with-sidebar', sidebarOpen);
+            } else {
+                els.userSidebar.classList.toggle('open', sidebarOpen);
+                els.userSidebar.classList.remove('collapsed');
+                els.sidebarMask.classList.toggle('show', sidebarOpen);
+                els.userLayout.classList.remove('with-sidebar');
+            }
+            els.sidebarToggle.textContent = sidebarOpen ? '✕' : '☰';
+        }
+
+        function toggleSidebar() {
+            sidebarOpen = !sidebarOpen;
+            applySidebarState();
+        }
+
+        els.sidebarToggle.addEventListener('click', toggleSidebar);
+        els.sidebarMask.addEventListener('click', toggleSidebar);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && sidebarOpen && window.innerWidth <= 950) {
+                toggleSidebar();
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            sidebarOpen = window.innerWidth > 950;
+            applySidebarState();
+        });
+
+        // 初始化侧边栏状态
+        applySidebarState();
+
+        // ============ 视图切换 ============
+        const VIEW_CONFIG = {
+            home: { title: '概览', subtitle: '欢迎回到市舶司用户中心', icon: '🏠' },
+            favorites: { title: '我的收藏', subtitle: '管理您收藏的内容', icon: '⭐' },
+            history: { title: '浏览历史', subtitle: '查看您最近的浏览记录', icon: '🕒' },
+            points: { title: '积分中心', subtitle: '查看积分明细和获取方式', icon: '💎' },
+            settings: { title: '账号设置', subtitle: '管理您的账号信息', icon: '⚙️' },
+            loginMgr: { title: '登录管理', subtitle: '查看登录记录与账户快照', icon: '🔐' }
+        };
+
+        function showView(view) {
+            state.currentView = view;
+            const config = VIEW_CONFIG[view];
+            if (!config) return;
+
+            // 更新导航菜单激活状态
+            document.querySelectorAll('.nav-menu-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.view === view);
+            });
+
+            // 更新头部
+            els.viewTitle.textContent = config.icon + ' ' + config.title;
+            els.viewSubtitle.textContent = config.subtitle;
+
+            // 渲染视图
+            renderView(view);
+
+            // 更新 URL hash
+            if (window.location.hash !== '#view=' + view) {
+                history.replaceState(null, '', '#view=' + view);
+            }
+        }
+
+        function renderView(view) {
+            els.viewControls.innerHTML = '';
+
+            switch (view) {
+                case 'home': renderHome(); break;
+                case 'favorites': renderFavorites(); break;
+                case 'history': renderHistory(); break;
+                case 'points': renderPoints(); break;
+                case 'settings': renderSettings(); break;
+                case 'loginMgr': renderLoginManager(); break;
+            }
+        }
+
+        // ============ 登录状态检查============
+        function checkAuth() {
+            // 1. 优先使用全局账户组件
+            if (window.ShiboSiAccount) {
+                const user = ShiboSiAccount.getUser();
+                if (user) {
+                    state.user = user;
+                    renderUserInfo();
+                    return true;
+                }
+            }
+            // 2. 检查本地token
+            const token = localStorage.getItem('shibosi_token');
+            if (token) {
+                // 先尝试从本地缓存读取用户信息
+                try {
+                    const cached = sessionStorage.getItem('shibosi_user_cache_v1');
+                    if (cached) {
+                        const user = JSON.parse(cached);
+                        if (user) {
+                            state.user = user;
+                            renderUserInfo();
+                            // 后台静默验证
+                            fetch('/api/v1/auth/profile', {
+                                headers: { 'Authorization': 'Bearer ' + token }
+                            }).then(resp => resp.json()).then(data => {
+                                if (data && data.data) {
+                                    state.user = data.data;
+                                    sessionStorage.setItem('shibosi_user_cache_v1', JSON.stringify(data.data));
+                                    renderUserInfo();
+                                }
+                            }).catch(() => {
+                                // 后端不可用，使用缓存数据
+                            });
+                            return true;
+                        }
+                    }
+                } catch (e) {}
+
+                // 没有缓存，尝试从API获取
+                fetch('/api/v1/auth/profile', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(resp => resp.json()).then(data => {
+                    if (data && data.data) {
+                        state.user = data.data;
+                        sessionStorage.setItem('shibosi_user_cache_v1', JSON.stringify(data.data));
+                        renderUserInfo();
+                    } else {
+                        showLoginPrompt();
+                    }
+                }).catch(() => {
+                    // 后端连接失败，尝试从本地存储读取
+                    try {
+                        const users = JSON.parse(localStorage.getItem('shibosi_users') || '[]');
+                        // ?token 解析用户?
+                        const decoded = atob(token.replace('local_', '').split(':')[0] || '');
+                        const localUser = users.find(u => u.username === decoded);
+                        if (localUser) {
+                            delete localUser.password;
+                            state.user = localUser;
+                            renderUserInfo();
+                            showToast('当前离线模式，使用本地账号', 'warning');
+                        } else {
+                            showLoginPrompt();
+                        }
+                    } catch (e) {
+                        showLoginPrompt();
+                    }
+                });
+                return true; // ?token 认为已登录（验证中）
+            }
+            showLoginPrompt();
+            return false;
+        }
+
+        function renderUserInfo() {
+            const u = state.user;
+            if (!u) return;
+
+            // 头像
+            if (u.avatar) {
+                els.userAvatar.innerHTML = '<img src="' + escapeHtml(u.avatar) + '" alt="avatar" />';
+            } else {
+                els.userAvatar.textContent = (u.nickname || u.username || 'U').charAt(0).toUpperCase();
+            }
+
+            // 昵称
+            els.userNickname.textContent = u.nickname || u.username || '用户';
+
+            // 角色
+            if (u.role === 'admin') {
+                els.userRole.textContent = '管理员';
+                els.userRole.classList.add('admin');
+                els.userRole.style.display = 'inline-block';
+            } else {
+                els.userRole.style.display = 'none';
+            }
+
+            // // 
+            els.userBio.textContent = u.bio || '';
+            els.userBio.style.display = u.bio ? 'block' : 'none';
+
+            // 登出按钮
+            els.logoutPanel.style.display = 'block';
+        }
+
+        function showLoginPrompt() {
+            els.viewContainer.innerHTML = `
+                <div class="login-prompt">
+                    <div class="lock-icon">🔒</div>
+                    <h2>请先登录</h2>
+                    <p>登录后即可使用收藏、历史、积分等功能</p>
+                    <button class="btn btn-primary" onclick="goLogin()">前往登录 →</button>
+                </div>
+            `;
+            els.itemCount.textContent = '';
+            els.logoutPanel.style.display = 'none';
+
+            // 更新侧边栏为访客状态
+            els.userAvatar.textContent = '👤';
+            els.userNickname.textContent = '未登录';
+            els.userRole.style.display = 'none';
+            els.userBio.textContent = '登录后解锁全部功能';
+        }
+
+        // ============ 概览视图 ============
+        function renderHome() {
+            const totalPoints = getTotalPoints();
+            const favCount = state.favorites.length;
+            const histCount = state.history.length;
+
+            els.viewContainer.innerHTML = `
+                <div style="padding:20px;">
+                    <div class="overview-hero">
+                        <h2>你好，${escapeHtml(state.user ? (state.user.nickname || state.user.username) : '访客')}！</h2>
+                        <p>欢迎回到市舶司用户中心，探索更多精彩内容</p>
+                    </div>
+
+                    <div class="overview-stats">
+                        <div class="stat-card" onclick="showView('points')" style="cursor:pointer;">
+                            <div class="stat-icon">💎</div>
+                            <div class="stat-value">${totalPoints}</div>
+                            <div class="stat-label">我的积分</div>
+                        </div>
+                        <div class="stat-card" onclick="showView('favorites')" style="cursor:pointer;">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-value">${favCount}</div>
+                            <div class="stat-label">收藏数量</div>
+                        </div>
+                        <div class="stat-card" onclick="showView('history')" style="cursor:pointer;">
+                            <div class="stat-icon">🕒</div>
+                            <div class="stat-value">${histCount}</div>
+                            <div class="stat-label">历史记录</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎮</div>
+                            <div class="stat-value">${getGameCount()}</div>
+                            <div class="stat-label">游戏对局</div>
+                        </div>
+                    </div>
+
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>最近积分记录</h3>
+                            <button class="btn" onclick="showView('points')" style="font-size:12px;padding:4px 12px;">查看全部</button>
+                        </div>
+                        <div class="overview-section-body" id="recentPoints">
+                            <div class="empty-state" style="padding:30px 20px;">
+                                <div class="empty-text">暂无积分记录</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>快捷操作</h3>
+                        </div>
+                        <div class="overview-section-body" style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button class="btn btn-primary" onclick="goToPage('../../index.html')">🏠 返回首页</button>
+                            <button class="btn" onclick="showView('favorites')">⭐ 查看收藏</button>
+                            <button class="btn" onclick="showView('settings')">⚙️ 账号设置</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            renderRecentPoints();
+        }
+
+        function renderRecentPoints() {
+            const container = document.getElementById('recentPoints');
+            if (!container) return;
+
+            const logs = getPointsLogs().slice(0, 5);
+            if (!logs.length) {
+                container.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-text">暂无积分记录</div></div>';
+                return;
+            }
+
+            container.innerHTML = logs.map(log => {
+                const isEarn = log.type === 'earn';
+                return `
+                    <div class="points-log-item">
+                        <div class="points-log-icon ${isEarn ? 'earn' : 'spend'}">
+                            ${isEarn ? '⬆️' : '⬇️'}
+                        </div>
+                        <div class="points-log-info">
+                            <div class="points-log-title">${escapeHtml(log.title || '积分')}</div>
+                            <div class="points-log-desc">${escapeHtml(log.desc || '')}</div>
+                        </div>
+                        <div class="points-log-amount ${isEarn ? 'earn' : 'spend'}">
+                            ${isEarn ? '+' : '-'}${log.points}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getTotalPoints() {
+            if (window.PointsSystem) {
+                return PointsSystem.getTotalPoints();
+            }
+            return parseInt(localStorage.getItem('game_total_points') || '0', 10);
+        }
+
+        function getPointsLogs() {
+            try {
+                const raw = localStorage.getItem('points_history');
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function getGameCount() {
+            try {
+                const raw = localStorage.getItem('game_stats');
+                if (!raw) return 0;
+                const stats = JSON.parse(raw);
+                let count = 0;
+                Object.keys(stats).forEach(k => {
+                    count += (stats[k].gamesPlayed || 0);
+                });
+                return count;
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        // ============ 收藏视图 ============
+        function renderFavorites() {
+            const isAuth = checkAuth();
+
+            if (!isAuth) {
+                showLoginPrompt();
+                return;
+            }
+
+            // 创建筛选栏
+            els.viewControls.innerHTML = `
+                <select id="favSourceFilter" style="padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--card-bg);color:var(--text);font-size:13px;">
+                    <option value="all">全部来源</option>
+                    <option value="search">搜索</option>
+                    <option value="news">新闻</option>
+                    <option value="game">游戏</option>
+                    <option value="home">首页</option>
+                </select>
+            `;
+
+            els.viewControls.querySelector('#favSourceFilter').addEventListener('change', function () {
+                renderFavoritesList(this.value);
+            });
+
+            renderFavoritesList('all');
+        }
+
+        function renderFavoritesList(source) {
+            const favorites = loadFavorites();
+            const filtered = source === 'all' ? favorites : favorites.filter(f => f.source === source);
+            const search = state.searchQuery.toLowerCase();
+
+            const display = filtered.filter(f => {
+                if (!search) return true;
+                return (f.title || '').toLowerCase().includes(search) ||
+                    (f.url || '').toLowerCase().includes(search) ||
+                    (f.content || '').toLowerCase().includes(search);
+            });
+
+            els.itemCount.textContent = display.length;
+            els.favCountBadge.textContent = favorites.length;
+            els.favCountBadge.style.display = favorites.length > 0 ? 'inline-block' : 'none';
+
+            if (!display.length) {
+                els.viewContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <div class="empty-text">还没有收藏</div>
+                        <div class="empty-hint">在搜索、新闻、游戏等页面点击收藏按钮添加</div>
+                    </div>
+                `;
+                return;
+            }
+
+            els.viewContainer.innerHTML = `
+                <div class="item-list" id="favList" style="padding:16px 20px;"></div>
+            `;
+
+            const listEl = document.getElementById('favList');
+            listEl.innerHTML = display.map(item => createFavoriteCard(item)).join('');
+
+            // 绑定删除事件
+            listEl.querySelectorAll('.delete-fav').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const id = this.dataset.id;
+                    deleteFavorite(id);
+                });
+            });
+        }
+
+        function createFavoriteCard(item) {
+            const sourceLabels = { search: '搜索', news: '新闻', game: '游戏', home: '首页', other: '其他' };
+            const sourceClass = item.source || 'other';
+
+            return `
+                <div class="item-card">
+                    <div class="item-favicon">
+                        ${item.source === 'news' ? '📰' : item.source === 'game' ? '🎮' : item.source === 'search' ? '🔍' : '🔗'}
+                    </div>
+                    <div class="item-body">
+                        <div class="item-title">
+                            ${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${escapeHtml(item.title || '无标题')}</a>` : escapeHtml(item.title || '无标题')}
+                        </div>
+                        ${item.url ? `<div class="item-url">${escapeHtml(item.url)}</div>` : ''}
+                        ${item.content ? `<div class="item-desc">${escapeHtml(item.content)}</div>` : ''}
+                        <div class="item-meta">
+                            <span class="item-source-tag ${sourceClass}">${sourceLabels[sourceClass] || '其他'}</span>
+                            ${item.created_at ? `<span>🕒 ${formatDate(item.created_at)}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="item-action-btn delete-fav" data-id="${item.id}" title="删除收藏">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadFavorites() {
+            // 优先从后端加载，如果失败则从本地加载
+            try {
+                const raw = localStorage.getItem('shibosi_favorites');
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function deleteFavorite(id) {
+            showToast('删除中...', 'warning');
+            const favs = loadFavorites();
+            const updated = favs.filter(f => f.id !== id);
+            localStorage.setItem('shibosi_favorites', JSON.stringify(updated));
+            if (window.SyncManager) SyncManager.markFavoritesDirty();
+            showToast('已删除收藏', 'success');
+            state.favorites = updated;
+            renderFavoritesList(document.getElementById('favSourceFilter')?.value || 'all');
+        }
+
+        // ============ 历史视图 ============
+        function renderHistory() {
+            const isAuth = checkAuth();
+            if (!isAuth) {
+                showLoginPrompt();
+                return;
+            }
+
+            els.viewControls.innerHTML = `
+                <button class="btn" id="clearHistoryBtn" style="font-size:12px;padding:6px 14px;">清空历史</button>
+            `;
+
+            document.getElementById('clearHistoryBtn').addEventListener('click', function () {
+                if (confirm('确定清空所有浏览历史吗？')) {
+                    localStorage.removeItem('shibosi_history');
+                    if (window.SyncManager) SyncManager.markHistoryDirty();
+                    showToast('历史已清空', 'success');
+                    state.history = [];
+                    renderHistoryList();
+                }
+            });
+
+            renderHistoryList();
+        }
+
+        function renderHistoryList() {
+            const history = loadHistory();
+            const search = state.searchQuery.toLowerCase();
+            const display = history.filter(h => {
+                if (!search) return true;
+                return (h.title || '').toLowerCase().includes(search) ||
+                    (h.url || '').toLowerCase().includes(search);
+            });
+
+            els.itemCount.textContent = display.length;
+            els.histCountBadge.textContent = history.length;
+            els.histCountBadge.style.display = history.length > 0 ? 'inline-block' : 'none';
+
+            if (!display.length) {
+                els.viewContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🕒</div>
+                        <div class="empty-text">暂无浏览历史</div>
+                        <div class="empty-hint">您的浏览记录将在此处显示</div>
+                    </div>
+                `;
+                return;
+            }
+
+            els.viewContainer.innerHTML = `
+                <div class="item-list" style="padding:16px 20px;"></div>
+            `;
+
+            const listEl = els.viewContainer.querySelector('.item-list');
+            listEl.innerHTML = display.map(item => `
+                <div class="item-card">
+                    <div class="item-favicon">📖</div>
+                    <div class="item-body">
+                        <div class="item-title">
+                            ${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${escapeHtml(item.title || '无标题')}</a>` : escapeHtml(item.title || '无标题')}
+                        </div>
+                        ${item.url ? `<div class="item-url">${escapeHtml(item.url)}</div>` : ''}
+                        <div class="item-meta">
+                            <span>🕒 ${formatDate(item.timestamp)}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        ${item.url ? `<a class="item-action-btn" href="${escapeHtml(item.url)}" target="_blank" title="访问">🔗</a>` : ''}
+                        <button class="item-action-btn delete-hist" data-id="${item.id}" title="删除">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+
+            listEl.querySelectorAll('.delete-hist').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const id = this.dataset.id;
+                    deleteHistoryItem(id);
+                });
+            });
+        }
+
+        function loadHistory() {
+            try {
+                const raw = localStorage.getItem('shibosi_history');
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function deleteHistoryItem(id) {
+            const hist = loadHistory();
+            const updated = hist.filter(h => h.id !== id);
+            localStorage.setItem('shibosi_history', JSON.stringify(updated));
+            if (window.SyncManager) SyncManager.markHistoryDirty();
+            showToast('已删除', 'success');
+            state.history = updated;
+            renderHistoryList();
+        }
+
+        // ============ 积分视图 ============
+        function renderPoints() {
+            const totalPoints = getTotalPoints();
+            const logs = getPointsLogs();
+
+            els.viewContainer.innerHTML = `
+                <div style="padding:20px;">
+                    <div class="points-hero">
+                        <div class="big-points">${totalPoints}</div>
+                        <div class="points-label">当前积分总额</div>
+                    </div>
+
+                    <div class="overview-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">⬆️</div>
+                            <div class="stat-value">${logs.filter(l => l.type === 'earn').reduce((s, l) => s + l.points, 0)}</div>
+                            <div class="stat-label">累计获得</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⬇️</div>
+                            <div class="stat-value">${logs.filter(l => l.type === 'spend').reduce((s, l) => s + l.points, 0)}</div>
+                            <div class="stat-label">累计消耗</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-value">${logs.length}</div>
+                            <div class="stat-label">总记录数</div>
+                        </div>
+                    </div>
+
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>积分明细</h3>
+                            <button class="btn" id="exportPointsBtn" style="font-size:12px;padding:4px 12px;">导出记录</button>
+                        </div>
+                        <div class="overview-section-body" style="padding:0;max-height:500px;overflow-y:auto;">
+                            ${renderPointsLogsList(logs)}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const exportBtn = document.getElementById('exportPointsBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', exportPointsLogs);
+            }
+        }
+
+        function renderPointsLogsList(logs) {
+            if (!logs.length) {
+                return '<div class="empty-state" style="padding:40px 20px;"><div class="empty-icon">📋</div><div class="empty-text">暂无积分记录</div><div class="empty-hint">通过搜索、游戏等方式获取积分</div></div>';
+            }
+
+            return `
+                <div class="points-log-list">
+                    ${logs.map(log => {
+                        const isEarn = log.type === 'earn';
+                        return `
+                            <li class="points-log-item">
+                                <div class="points-log-icon ${isEarn ? 'earn' : 'spend'}">
+                                    ${isEarn ? '⬆️' : '⬇️'}
+                                </div>
+                                <div class="points-log-info">
+                                    <div class="points-log-title">${escapeHtml(log.title || '积分操作')}</div>
+                                    <div class="points-log-desc">${escapeHtml(log.desc || '')} · ${formatDate(log.timestamp)}</div>
+                                </div>
+                                <div class="points-log-amount ${isEarn ? 'earn' : 'spend'}">
+                                    ${isEarn ? '+' : '-'}${log.points}
+                                </div>
+                            </li>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function exportPointsLogs() {
+            if (window.PointsSystem) {
+                const logs = PointsSystem.exportLogs();
+                const json = JSON.stringify(logs, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'points_logs_' + Date.now() + '.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('积分记录已导出', 'success');
+            } else {
+                showToast('积分系统未加载', 'error');
+            }
+        }
+
+        // ============ 登录管理视图 ============
+        var LOGIN_RECORDS_KEY = 'shibosi_login_records';
+        var ACCOUNT_SNAPSHOTS_KEY = 'shibosi_account_snapshots';
+        var _loginMgrTab = 'records'; // 'records' | 'snapshots'
+
+        function getLoginRecords() {
+            try { return JSON.parse(localStorage.getItem(LOGIN_RECORDS_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+
+        function getAccountSnapshots() {
+            try { return JSON.parse(localStorage.getItem(ACCOUNT_SNAPSHOTS_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+
+        function saveLoginRecords(records) {
+            // 最多保留 200 条
+            localStorage.setItem(LOGIN_RECORDS_KEY, JSON.stringify(records.slice(-200)));
+        }
+
+        function saveAccountSnapshots(snapshots) {
+            // 最多保留 50 条
+            localStorage.setItem(ACCOUNT_SNAPSHOTS_KEY, JSON.stringify(snapshots.slice(-50)));
+        }
+
+        /** 解析浏览器信息 */
+        function parseBrowserInfo() {
+            var ua = navigator.userAgent;
+            var browser = '未知';
+            var platform = '未知';
+            if (/Chrome\/([\d.]+)/.test(ua) && !/Edg/.test(ua)) browser = 'Chrome ' + RegExp.$1.split('.')[0];
+            else if (/Edg\/([\d.]+)/.test(ua)) browser = 'Edge ' + RegExp.$1.split('.')[0];
+            else if (/Firefox\/([\d.]+)/.test(ua)) browser = 'Firefox ' + RegExp.$1.split('.')[0];
+            else if (/Safari\/([\d.]+)/.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+            if (/Windows NT 10/.test(ua)) platform = 'Windows';
+            else if (/Mac OS X/.test(ua)) platform = 'macOS';
+            else if (/Linux/.test(ua)) platform = 'Linux';
+            else if (/Android/.test(ua)) platform = 'Android';
+            else if (/iPhone|iPad/.test(ua)) platform = 'iOS';
+            return { browser: browser, platform: platform, ua: ua };
+        }
+
+        /** 记录一次登录事件 */
+        function recordLoginEvent(status, detail) {
+            var records = getLoginRecords();
+            var info = parseBrowserInfo();
+            var now = new Date();
+            records.push({
+                time: now.getTime(),
+                timeStr: now.getFullYear() + '-' +
+                    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(now.getDate()).padStart(2, '0') + ' ' +
+                    String(now.getHours()).padStart(2, '0') + ':' +
+                    String(now.getMinutes()).padStart(2, '0') + ':' +
+                    String(now.getSeconds()).padStart(2, '0'),
+                browser: info.browser,
+                platform: info.platform,
+                ip: detail || '',
+                status: status || 'success'
+            });
+            saveLoginRecords(records);
+        }
+
+        /** 创建账户快照 */
+        function createAccountSnapshot() {
+            var u = state.user || {};
+            var snapshots = getAccountSnapshots();
+            var now = new Date();
+            var timeStr = now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0') + ':' +
+                String(now.getSeconds()).padStart(2, '0');
+            var snapshot = {
+                time: now.getTime(),
+                timeStr: timeStr,
+                username: u.username || u.user_name || '',
+                role: u.role || 'user',
+                points: getTotalPoints(),
+                nickname: u.nickname || '',
+                email: u.email || '',
+                favoritesCount: (state.favorites || []).length,
+                historyCount: (state.history || []).length
+            };
+            snapshots.push(snapshot);
+            saveAccountSnapshots(snapshots);
+            return snapshot;
+        }
+
+        /** 计算快照间差异 */
+        function calcSnapshotDiff(curr, prev) {
+            if (!prev) return null;
+            var diff = curr.points - prev.points;
+            if (diff > 0) return { cls: 'up', text: '+' + diff };
+            if (diff < 0) return { cls: 'down', text: '' + diff };
+            return { cls: 'same', text: '0' };
+        }
+
+        function renderLoginManager() {
+            var isAuth = checkAuth();
+            if (!isAuth) {
+                showLoginPrompt();
+                return;
+            }
+
+            var records = getLoginRecords();
+            var snapshots = getAccountSnapshots();
+
+            // 统计数据
+            var today = new Date().toDateString();
+            var todayCount = records.filter(function (r) {
+                return new Date(r.time).toDateString() === today;
+            }).length;
+            var weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+            var weekCount = records.filter(function (r) { return r.time >= weekAgo; }).length;
+            var lastLogin = records.length > 0 ? records[records.length - 1].timeStr : '无';
+
+            els.viewContainer.innerHTML = '' +
+                '<div style="padding:20px;">' +
+                // 统计卡片
+                '<div class="login-mgr-stats">' +
+                '  <div class="login-mgr-stat-card"><div class="stat-value">' + records.length + '</div><div class="stat-label">总登录次数</div></div>' +
+                '  <div class="login-mgr-stat-card"><div class="stat-value">' + todayCount + '</div><div class="stat-label">今日登录</div></div>' +
+                '  <div class="login-mgr-stat-card"><div class="stat-value">' + weekCount + '</div><div class="stat-label">本周登录</div></div>' +
+                '  <div class="login-mgr-stat-card"><div class="stat-value">' + snapshots.length + '</div><div class="stat-label">账户快照数</div></div>' +
+                '</div>' +
+                // 标签页
+                '<div class="login-mgr-tabs">' +
+                '  <button class="login-mgr-tab ' + (_loginMgrTab === 'records' ? 'active' : '') + '" onclick="_switchLoginMgrTab(\'records\')">📋 登录记录</button>' +
+                '  <button class="login-mgr-tab ' + (_loginMgrTab === 'snapshots' ? 'active' : '') + '" onclick="_switchLoginMgrTab(\'snapshots\')">📸 账户快照</button>' +
+                '</div>' +
+                // 工具栏
+                '<div class="login-mgr-toolbar">' +
+                '  <button class="btn" onclick="createSnapshotNow()">📸 立即创建快照</button>' +
+                '  <button class="btn btn-danger" onclick="clearLoginMgrData(\'' + _loginMgrTab + '\')">🗑️ 清空' + (_loginMgrTab === 'records' ? '记录' : '快照') + '</button>' +
+                '</div>' +
+                // 内容区
+                '<div id="loginMgrContent"></div>' +
+                '</div>';
+
+            renderLoginMgrContent();
+        }
+
+        function renderLoginMgrContent() {
+            var container = document.getElementById('loginMgrContent');
+            if (!container) return;
+
+            if (_loginMgrTab === 'records') {
+                var records = getLoginRecords();
+                if (records.length === 0) {
+                    container.innerHTML = '<div class="login-mgr-empty"><div class="empty-icon">📋</div><div>暂无登录记录</div><div style="font-size:12px;margin-top:8px;">登录事件会自动记录</div></div>';
+                    return;
+                }
+                var rows = records.slice().reverse().map(function (r, i) {
+                    return '<tr>' +
+                        '<td>' + escapeHtml(r.timeStr) + '</td>' +
+                        '<td>' + escapeHtml(r.platform) + '</td>' +
+                        '<td>' + escapeHtml(r.browser) + '</td>' +
+                        '<td>' + (r.ip ? escapeHtml(r.ip) : '<span style="color:var(--text-sub,#999);">—</span>') + '</td>' +
+                        '<td><span class="login-status-badge ' + (r.status === 'success' ? 'success' : 'failed') + '">' + (r.status === 'success' ? '成功' : '失败') + '</span></td>' +
+                        '<td><button class="btn" style="padding:2px 8px;font-size:12px;" onclick="deleteLoginRecord(' + (records.length - 1 - i) + ')">删除</button></td>' +
+                        '</tr>';
+                }).join('');
+                container.innerHTML = '<table class="login-record-table"><thead><tr>' +
+                    '<th>时间</th><th>设备</th><th>浏览器</th><th>IP/备注</th><th>状态</th><th>操作</th>' +
+                    '</tr></thead><tbody>' + rows + '</tbody></table>';
+            } else {
+                var snapshots = getAccountSnapshots();
+                if (snapshots.length === 0) {
+                    container.innerHTML = '<div class="login-mgr-empty"><div class="empty-icon">📸</div><div>暂无账户快照</div><div style="font-size:12px;margin-top:8px;">点击「立即创建快照」记录当前账户状态</div></div>';
+                    return;
+                }
+                var cards = snapshots.slice().reverse().map(function (s, i) {
+                    var realIdx = snapshots.length - 1 - i;
+                    var prev = realIdx > 0 ? snapshots[realIdx - 1] : null;
+                    var diff = calcSnapshotDiff(s, prev);
+                    var diffHtml = diff ? '<span class="snapshot-diff ' + diff.cls + '">' + diff.text + ' 💎</span>' : '';
+                    return '<div class="snapshot-card">' +
+                        '<div class="snapshot-info">' +
+                        '  <div class="snapshot-time">' + escapeHtml(s.timeStr) + '</div>' +
+                        '  <div class="snapshot-details">' +
+                        '    <span class="snapshot-detail-item">用户 <strong>' + escapeHtml(s.username) + '</strong></span>' +
+                        '    <span class="snapshot-detail-item">角色 <strong>' + escapeHtml(s.role) + '</strong></span>' +
+                        '    <span class="snapshot-detail-item">积分 <strong>' + s.points + '</strong> ' + diffHtml + '</span>' +
+                        (s.nickname ? '<span class="snapshot-detail-item">昵称 <strong>' + escapeHtml(s.nickname) + '</strong></span>' : '') +
+                        (s.email ? '<span class="snapshot-detail-item">邮箱 <strong>' + escapeHtml(s.email) + '</strong></span>' : '') +
+                        '    <span class="snapshot-detail-item">收藏 <strong>' + s.favoritesCount + '</strong></span>' +
+                        '    <span class="snapshot-detail-item">历史 <strong>' + s.historyCount + '</strong></span>' +
+                        '  </div>' +
+                        '</div>' +
+                        '<button class="btn" style="padding:4px 10px;font-size:12px;" onclick="deleteAccountSnapshot(' + realIdx + ')">删除</button>' +
+                        '</div>';
+                }).join('');
+                container.innerHTML = cards;
+            }
+        }
+
+        // 暴露给 onclick 的全局函数
+        window._switchLoginMgrTab = function (tab) {
+            _loginMgrTab = tab;
+            document.querySelectorAll('.login-mgr-tab').forEach(function (t) {
+                t.classList.toggle('active', t.textContent.indexOf(tab === 'records' ? '登录记录' : '账户快照') !== -1);
+            });
+            // 更新工具栏按钮文字
+            var toolbar = document.querySelector('.login-mgr-toolbar');
+            if (toolbar) {
+                var clearBtn = toolbar.querySelectorAll('button')[1];
+                if (clearBtn) clearBtn.setAttribute('onclick', 'clearLoginMgrData(\'' + tab + '\')');
+            }
+            renderLoginMgrContent();
+        };
+
+        window.createSnapshotNow = function () {
+            createAccountSnapshot();
+            showToast('快照已创建', 'success');
+            renderLoginMgrContent();
+        };
+
+        window.clearLoginMgrData = function (tab) {
+            var msg = tab === 'records' ? '确定要清空所有登录记录吗？' : '确定要清空所有账户快照吗？';
+            if (!confirm(msg)) return;
+            if (tab === 'records') {
+                localStorage.removeItem(LOGIN_RECORDS_KEY);
+            } else {
+                localStorage.removeItem(ACCOUNT_SNAPSHOTS_KEY);
+            }
+            showToast('已清空', 'success');
+            renderLoginManager();
+        };
+
+        window.deleteLoginRecord = function (idx) {
+            var records = getLoginRecords();
+            records.splice(idx, 1);
+            saveLoginRecords(records);
+            renderLoginMgrContent();
+        };
+
+        window.deleteAccountSnapshot = function (idx) {
+            var snapshots = getAccountSnapshots();
+            snapshots.splice(idx, 1);
+            saveAccountSnapshots(snapshots);
+            renderLoginMgrContent();
+        };
+
+        // ============ 设置视图 ============
+        function renderSettings() {
+            const isAuth = checkAuth();
+            if (!isAuth) {
+                showLoginPrompt();
+                return;
+            }
+
+            const u = state.user || {};
+            els.viewContainer.innerHTML = `
+                <div style="padding:20px;">
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>个人信息</h3>
+                        </div>
+                        <div class="overview-section-body">
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>昵称</label>
+                                    <input type="text" id="nicknameInput" value="${escapeHtml(u.nickname || '')}" placeholder="设置您的昵称" />
+                                </div>
+                                <div class="form-group">
+                                    <label>邮箱</label>
+                                    <input type="email" id="emailInput" value="${escapeHtml(u.email || '')}" placeholder="your@email.com" />
+                                </div>
+                                <div class="form-group">
+                                    <label>个人// /label>
+                                    <textarea id="bioInput" placeholder="介绍丢下自?..">${escapeHtml(u.bio || '')}</textarea>
+                                </div>
+                                <button class="btn btn-primary" id="saveProfileBtn">保存修改</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>修改密码</h3>
+                        </div>
+                        <div class="overview-section-body">
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>当前密码</label>
+                                    <input type="password" id="oldPassword" placeholder="请输入当前密码" />
+                                </div>
+                                <div class="form-group">
+                                    <label>新密码</label>
+                                    <input type="password" id="newPassword" placeholder="至少6位" />
+                                </div>
+                                <div class="form-group">
+                                    <label>确认新密码</label>
+                                    <input type="password" id="confirmPassword" placeholder="再次输入新密码" />
+                                </div>
+                                <button class="btn btn-primary" id="changePasswordBtn">修改密码</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>数据管理</h3>
+                        </div>
+                        <div class="overview-section-body">
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                                <button class="btn" id="exportDataBtn">📤 导出我的数据</button>
+                                <button class="btn" id="importDataBtn">📥 导入数据</button>
+                                <button class="btn btn-danger" id="clearLocalBtn">🗑️清除本地缓存</button>
+                            </div>
+                            <input type="file" id="importFile" accept=".json" style="display:none;" />
+                        </div>
+                    </div>
+
+                    <div class="overview-section">
+                        <div class="overview-section-header">
+                            <h3>账号信息</h3>
+                        </div>
+                        <div class="overview-section-body">
+                            <div style="font-size:13px;color:var(--text-sub);line-height:2;">
+                                <div>用户名：${escapeHtml(u.username || '未知')}</div>
+                                <div>注册时间：${u.created_at ? formatDate(new Date(u.created_at).getTime()) : '未知'}</div>
+                                <div>最后登录：${u.last_login ? formatDate(new Date(u.last_login).getTime()) : '未知'}</div>
+                                <div>角色：${u.role === 'admin' ? '管理员' : '普通用户'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 绑定事件
+            document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+            document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
+            document.getElementById('exportDataBtn').addEventListener('click', exportMyData);
+            document.getElementById('importDataBtn').addEventListener('click', function () {
+                document.getElementById('importFile').click();
+            });
+            document.getElementById('importFile').addEventListener('change', importMyData);
+            document.getElementById('clearLocalBtn').addEventListener('click', clearLocalCache);
+        }
+
+        function saveProfile() {
+            const nickname = document.getElementById('nicknameInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim();
+            const bio = document.getElementById('bioInput').value.trim();
+
+            if (state.user) {
+                state.user.nickname = nickname;
+                state.user.email = email;
+                state.user.bio = bio;
+                try {
+                    sessionStorage.setItem('shibosi_user_cache_v1', JSON.stringify(state.user));
+                } catch (e) {}
+                renderUserInfo();
+                showToast('个人信息已保存', 'success');
+            }
+        }
+
+        function changePassword() {
+            const oldPwd = document.getElementById('oldPassword').value;
+            const newPwd = document.getElementById('newPassword').value;
+            const confirmPwd = document.getElementById('confirmPassword').value;
+
+            if (!oldPwd || !newPwd || !confirmPwd) {
+                showToast('请填写完整的密码信息', 'warning');
+                return;
+            }
+            if (newPwd !== confirmPwd) {
+                showToast('两次输入的新密码不一致', 'warning');
+                return;
+            }
+            if (newPwd.length < 6) {
+                showToast('新密码至少需要6位', 'warning');
+                return;
+            }
+
+            const token = localStorage.getItem('shibosi_token');
+            if (token) {
+                fetch('/api/v1/auth/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        old_password: oldPwd,
+                        new_password: newPwd
+                    })
+                }).then(resp => resp.json()).then(data => {
+                    if (data && data.success) {
+                        showToast('密码修改成功', 'success');
+                        document.getElementById('oldPassword').value = '';
+                        document.getElementById('newPassword').value = '';
+                        document.getElementById('confirmPassword').value = '';
+                    } else {
+                        showToast((data && data.message) || '修改失败', 'error');
+                    }
+                }).catch(() => {
+                    showToast('网络错误，请稍后重试', 'error');
+                });
+            } else {
+                showToast('请先登录', 'warning');
+            }
+        }
+
+        function exportMyData() {
+            const data = {
+                user: state.user,
+                favorites: loadFavorites(),
+                history: loadHistory(),
+                points: getPointsLogs(),
+                exportTime: new Date().toISOString()
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'shibosi_data_' + Date.now() + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('数据已导出', 'success');
+        }
+
+        function importMyData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (data.favorites) {
+                        localStorage.setItem('shibosi_favorites', JSON.stringify(data.favorites));
+                        if (window.SyncManager) SyncManager.markFavoritesDirty();
+                    }
+                    if (data.history) {
+                        localStorage.setItem('shibosi_history', JSON.stringify(data.history));
+                        if (window.SyncManager) SyncManager.markHistoryDirty();
+                    }
+                    if (data.points && window.PointsSystem) {
+                        // 合并积分记录
+                        const existing = getPointsLogs();
+                        const merged = [...data.points, ...existing];
+                        localStorage.setItem('points_history', JSON.stringify(merged));
+                        if (window.SyncManager) {
+                            SyncManager.addPointsRecord({
+                                points: merged.length,
+                                reason: '数据导入',
+                                time: new Date().toISOString()
+                            });
+                        }
+                    }
+                    showToast('数据导入成功', 'success');
+                    // 刷新当前视图
+                    showView(state.currentView);
+                } catch (err) {
+                    showToast('导入失败：文件格式错误', 'error');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        function clearLocalCache() {
+            if (!confirm('确定要清除所有本地缓存数据吗？\n这将清除收藏、历史、积分记录等本地数据')) return;
+
+            if (confirm('此操作不可恢复，确认继续？')) {
+                const keys = ['shibosi_favorites', 'shibosi_history', 'points_history'];
+                keys.forEach(k => localStorage.removeItem(k));
+                showToast('本地缓存已清空', 'success');
+                // 刷新视图
+                state.favorites = [];
+                state.history = [];
+                showView(state.currentView);
+            }
+        }
+
+        // ============ 积分更新 ============
+        function updatePointsDisplay() {
+            const total = getTotalPoints();
+            els.pointsCount.textContent = total;
+            els.sidebarPoints.textContent = total;
+        }
+
+        // ============ 退出登录============
+        function doLogout() {
+            showLogoutConfirmDialog();
+        }
+
+        /**
+         * 显示逢出登录确认对话框（出时始终清空所有本地数据）
+         */
+        function showLogoutConfirmDialog() {
+            const modal = document.createElement('div');
+            modal.className = 'sync-modal';
+            modal.innerHTML = `
+                <div class="sync-modal-content">
+                    <div class="sync-modal-icon">🚪</div>
+                    <div class="sync-modal-title">退出登录</div>
+                    <div class="sync-modal-desc">
+                        确定要退出登录吗？<br>
+                        退出后将清空本地所有数据（收藏、历史、积分等）<br>
+                        <span style="font-size:12px;color:var(--text-sub,#999);">如需保留数据，请先在设置中同步到云端</span>
+                    </div>
+                    <div class="sync-modal-buttons">
+                        <button class="sync-modal-btn secondary" id="logoutCancelBtn">取消</button>
+                        <button class="sync-modal-btn primary" id="logoutConfirmBtn" style="background:linear-gradient(135deg,#FF3B30,#FF9500);">确认退出</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('#logoutCancelBtn').addEventListener('click', function() {
+                modal.remove();
+            });
+
+            modal.querySelector('#logoutConfirmBtn').addEventListener('click', function() {
+                modal.remove();
+                performLogout();
+            });
+        }
+
+        /**
+         * 执行逢出登录（始终清空所有本地数据）
+         */
+        function performLogout() {
+            // 记录退出登录事件
+            try { recordLoginEvent('success', '用户主动退出'); } catch (e) {}
+
+            // 通知 SyncManager 登出
+            if (window.SyncManager) {
+                SyncManager.handleLogout();
+            }
+
+            // 调用后端登出接口
+            const token = localStorage.getItem('shibosi_token');
+            if (token) {
+                fetch('http://localhost:8084/api/v1/auth/logout', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).catch(() => {});
+            }
+
+            // 清除登录状?
+            localStorage.removeItem('shibosi_token');
+            sessionStorage.removeItem('shibosi_user_cache_v1');
+            state.user = null;
+
+            // 始终清空所有本地用户数?
+            clearLocalUserData();
+
+            if (window.ShiboSiAccount) {
+                ShiboSiAccount.logout();
+            }
+
+            showToast('已退出登录，本地数据已清空', 'success');
+            
+            // 重新加载页面
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+        }
+
+        /**
+         * 清空本地用户数据
+         */
+        function clearLocalUserData() {
+            try {
+                localStorage.removeItem('shibosi_favorites');
+                localStorage.removeItem('shibosi_history');
+                localStorage.removeItem('game_total_points');
+                localStorage.removeItem('points_history');
+                localStorage.removeItem('game_stats');
+                localStorage.removeItem('shibosi_settings');
+                localStorage.removeItem('shibosi_shortcuts');
+                localStorage.removeItem('shibosi_groups');
+                localStorage.removeItem('shibosi_sync_state');
+                localStorage.removeItem('shibosi_login_at');
+                localStorage.removeItem('shibosi_user_data');
+                localStorage.removeItem('shibosi_user_profile');
+                localStorage.removeItem('shibosi_user_extra');
+                localStorage.removeItem('primoUI_theme');
+            } catch (e) {
+                console.warn('清空本地数据失败:', e);
+            }
+        }
+
+        // ============ 全局函数（供 onclick 调用?============
+        window.showView = showView;
+        window.goToPage = function (url) {
+            window.location.href = url;
+        };
+        window.goLogin = function () {
+            const redirect = encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+            window.location.href = 'SignUpORSignIn.html?redirect=' + redirect;
+        };
+
+        // ============ 事件绑定 ============
+        document.querySelectorAll('.nav-menu-item').forEach(item => {
+            item.addEventListener('click', function () {
+                showView(this.dataset.view);
+            });
+        });
+
+        els.searchInput.addEventListener('input', function () {
+            state.searchQuery = this.value;
+            // 根据当前视图刷新
+            if (state.currentView === 'favorites') {
+                renderFavoritesList(document.getElementById('favSourceFilter')?.value || 'all');
+            } else if (state.currentView === 'history') {
+                renderHistoryList();
+            }
+        });
+
+        els.logoutBtn.addEventListener('click', doLogout);
+
+        // 监听积分变化
+        if (window.PointsSystem) {
+            PointsSystem.onUpdate(function () {
+                updatePointsDisplay();
+                if (state.currentView === 'points' || state.currentView === 'home') {
+                    renderView(state.currentView);
+                }
+            });
+        }
+
+        // 监听 ShiboSiAccount 变化
+        if (window.ShiboSiAccount) {
+            ShiboSiAccount.onChange(function (user) {
+                state.user = user;
+                if (user) {
+                    renderUserInfo();
+                    showView(state.currentView);
+                } else {
+                    showLoginPrompt();
+                }
+            });
+        }
+
+        // ============ 初始?============
+        function init() {
+            // 检查登录状?
+            const isLoggedIn = checkAuth();
+
+            // 加载本地数据
+            state.favorites = loadFavorites();
+            state.history = loadHistory();
+
+            // 更新积分显示
+            updatePointsDisplay();
+
+            // 登录成功后触发云端同?
+            if (isLoggedIn && state.user) {
+                if (window.SyncManager) {
+                    SyncManager.handleLogin(state.user).then(function(result) {
+                        // 同步完成后刷新数据显示
+                        if (!result || !result.skipped) {
+                            refreshAllData();
+                        }
+                    }).catch(function() {
+                        // 离线模式，忽略同步错?
+                    });
+                }
+
+                // 自动记录登录事件（每次进入用户中心记录一次）
+                try {
+                    recordLoginEvent('success');
+                    // 自动创建账户快照（每日首次进入时创建）
+                    var snapshots = getAccountSnapshots();
+                    var todayStr = new Date().toDateString();
+                    var hasTodaySnapshot = snapshots.some(function (s) {
+                        return new Date(s.time).toDateString() === todayStr;
+                    });
+                    if (!hasTodaySnapshot) {
+                        createAccountSnapshot();
+                    }
+                } catch (e) {
+                    console.warn('记录登录事件失败:', e);
+                }
+            }
+
+            // 监听同步完成事件（从登录页跳转过来时?
+            window.addEventListener('sync:completed', function() {
+                refreshAllData();
+            });
+
+            // 监听 SyncManager 的数据更新事?
+            if (window.SyncManager) {
+                SyncManager.on && SyncManager.on('dataUpdated', function() {
+                    refreshAllData();
+                });
+            }
+
+            // ?URL hash 读取视图
+            const hashMatch = window.location.hash.match(/view=(\w+)/);
+            const initialView = (hashMatch && VIEW_CONFIG[hashMatch[1]]) ? hashMatch[1] : 'home';
+
+            // 初始化侧边栏状态
+            applySidebarState();
+
+            // 显示初始视图
+            showView(initialView);
+
+            // ?30 秒刷新一次积?
+            setInterval(function () {
+                updatePointsDisplay();
+            }, 30000);
+        }
+
+        /**
+         * 刷新所有数据显示
+         */
+        function refreshAllData() {
+            // 重新加载本地数据
+            state.favorites = loadFavorites();
+            state.history = loadHistory();
+            
+            // 更新积分显示
+            updatePointsDisplay();
+            
+            // 更新当前视图
+            const hashMatch = window.location.hash.match(/view=(\w+)/);
+            const currentView = (hashMatch && VIEW_CONFIG[hashMatch[1]]) ? hashMatch[1] : 'home';
+            renderView(currentView);
+            
+            // 显示提示
+            showToast('数据已更新', 'success');
+        }
+
+        // 等待 DOM 和依赖加?
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+
+</html>

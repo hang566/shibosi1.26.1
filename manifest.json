@@ -1,0 +1,22 @@
+{
+    "name": "市舶司",
+    "short_name": "市舶司",
+    "description": "市舶司 - 一站式搜索服务",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#333333",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "64x64 192x192 512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "favicon.ico",
+            "sizes": "16x16 32x32",
+            "type": "image/x-icon"
+        }
+    ]
+}

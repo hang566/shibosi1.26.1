@@ -1,0 +1,627 @@
+{
+    "tabs": {
+        "Clean": "清洗",
+        "Rest": "休息",
+        "Feed": "饮食",
+        "Play": "玩耍",
+        "Games": "游戏"
+    },
+    "clean": {
+        "bath": "正在洗澡...",
+        "wash": "正在洗脸...",
+        "hair": "正在梳毛...",
+        "clothes": "正在换衣..."
+    },
+    "rest": {
+        "nap": "正在小憩...",
+        "sleep": "正在睡觉...",
+        "relax": "正在放松...",
+        "meditate": "正在冥想..."
+    },
+    "feed": {
+        "bread": "正在吃面包...",
+        "apple": "正在吃苹果...",
+        "meat": "正在吃肉...",
+        "water": "正在喝水..."
+    },
+    "play": {
+        "balloon": "正在玩气球...",
+        "game": "正在玩游戏...",
+        "story": "正在听故事...",
+        "dance": "正在跳舞..."
+    },
+    "notification": {
+        "clean": "清洁完成！",
+        "rest": "休息好了！",
+        "feed": "吃饱了！",
+        "play": "玩得开心！",
+        "buySuccess": "购买成功！获得",
+        "buyFail": "积分不足！",
+        "noPointsSystem": "积分系统未加载",
+        "saveSuccess": "配置已保存",
+        "saveFail": "保存失败，存储空间不足",
+        "saveFailImage": "保存失败，存储空间不足，请尝试使用较小的图片",
+        "useItem": "使用了"
+    },
+    "dialogues": [
+        {
+            "id": "greeting_morning",
+            "type": "greeting",
+            "content": "早上好！今天天气真好~ 想做些什么呢？",
+            "trigger": {
+                "time": ["morning"],
+                "interval": 3600000
+            },
+            "options": [
+                {
+                    "text": "一起锻炼身体！",
+                    "effect": {"energy": -15, "mood": 20},
+                    "response": "好呀！一起来做早操~ 一二三四，二二三四！",
+                    "points": 5
+                },
+                {
+                    "text": "先吃点东西吧",
+                    "effect": {"hunger": 15, "mood": 10},
+                    "response": "嗯嗯，早餐最重要了！吃饱了才有力气~",
+                    "points": 3
+                },
+                {
+                    "text": "再睡一会儿",
+                    "effect": {"energy": 20, "mood": -5},
+                    "response": "好吧...但睡太久会变懒哦~",
+                    "points": 0
+                }
+            ]
+        },
+        {
+            "id": "greeting_afternoon",
+            "type": "greeting",
+            "content": "下午好~ 要继续工作还是休息一下？",
+            "trigger": {
+                "time": ["afternoon"],
+                "interval": 3600000
+            },
+            "options": [
+                {
+                    "text": "继续加油！",
+                    "effect": {"energy": -10, "mood": 15},
+                    "response": "你真努力！我相信你一定可以的~",
+                    "points": 8
+                },
+                {
+                    "text": "喝杯咖啡提提神",
+                    "effect": {"energy": 25, "hunger": -5},
+                    "response": "咖啡好喝！一起喝一杯~",
+                    "points": 3
+                },
+                {
+                    "text": "小憩一会儿",
+                    "effect": {"energy": 30, "mood": 5},
+                    "response": "休息是为了更好地出发~",
+                    "points": 2
+                }
+            ]
+        },
+        {
+            "id": "greeting_evening",
+            "type": "greeting",
+            "content": "晚上好~ 今天过得怎么样？",
+            "trigger": {
+                "time": ["evening"],
+                "interval": 3600000
+            },
+            "options": [
+                {
+                    "text": "今天很棒！",
+                    "effect": {"mood": 25, "energy": -5},
+                    "response": "太好了！为你开心~",
+                    "points": 10
+                },
+                {
+                    "text": "有点累...",
+                    "effect": {"energy": 30, "mood": 10},
+                    "response": "辛苦了！好好休息一下吧~",
+                    "points": 5
+                },
+                {
+                    "text": "一般般啦",
+                    "effect": {"mood": 10},
+                    "response": "没关系，明天会更好的！",
+                    "points": 2
+                }
+            ]
+        },
+        {
+            "id": "hungry_hint",
+            "type": "hint",
+            "content": "肚子饿了...咕咕叫~ 想吃点什么？",
+            "trigger": {
+                "status": {"hunger": {"max": 30}},
+                "interval": 1800000
+            },
+            "options": [
+                {
+                    "text": "吃烤肉！",
+                    "effect": {"hunger": 40, "energy": 10, "mood": 15},
+                    "response": "太棒了！烤肉最香了~",
+                    "points": 5
+                },
+                {
+                    "text": "吃水果就好",
+                    "effect": {"hunger": 15, "mood": 10},
+                    "response": "健康又美味~",
+                    "points": 3
+                },
+                {
+                    "text": "喝点水垫垫",
+                    "effect": {"hunger": 5, "energy": 5},
+                    "response": "好吧...但还是要记得吃饭哦~",
+                    "points": 1
+                }
+            ]
+        },
+        {
+            "id": "tired_hint",
+            "type": "hint",
+            "content": "好累啊...眼皮好重~",
+            "trigger": {
+                "status": {"energy": {"max": 30}},
+                "interval": 1800000
+            },
+            "options": [
+                {
+                    "text": "睡一觉",
+                    "effect": {"energy": 60, "hunger": -10},
+                    "response": "晚安~ 做个好梦！",
+                    "points": 5
+                },
+                {
+                    "text": "小憩一会儿",
+                    "effect": {"energy": 25, "mood": 5},
+                    "response": "嗯嗯，闭目养神~",
+                    "points": 3
+                },
+                {
+                    "text": "坚持一下",
+                    "effect": {"energy": -10, "mood": -10},
+                    "response": "别太勉强自己...",
+                    "points": 0
+                }
+            ]
+        },
+        {
+            "id": "lonely_hint",
+            "type": "hint",
+            "content": "有点无聊...来陪我玩吧~",
+            "trigger": {
+                "status": {"mood": {"max": 30}},
+                "interval": 1800000
+            },
+            "options": [
+                {
+                    "text": "玩游戏！",
+                    "effect": {"mood": 35, "energy": -15},
+                    "response": "太好了！一起来玩~",
+                    "points": 10
+                },
+                {
+                    "text": "听故事",
+                    "effect": {"mood": 20, "energy": -5},
+                    "response": "好呀~ 我来讲一个有趣的故事~",
+                    "points": 5
+                },
+                {
+                    "text": "跳个舞",
+                    "effect": {"mood": 30, "energy": -20},
+                    "response": "太棒了！一起来跳舞~",
+                    "points": 8
+                }
+            ]
+        },
+        {
+            "id": "encourage_5",
+            "type": "encourage",
+            "content": "哇！你已经陪我做了好多次互动了~ 谢谢你！",
+            "trigger": {
+                "actionCount": {"min": 5},
+                "interval": 600000
+            },
+            "options": [
+                {
+                    "text": "因为喜欢你呀",
+                    "effect": {"mood": 30, "energy": 10},
+                    "response": "呜呜，好感动！我也喜欢你~",
+                    "points": 15
+                },
+                {
+                    "text": "举手之劳",
+                    "effect": {"mood": 20},
+                    "response": "你真温柔~",
+                    "points": 8
+                },
+                {
+                    "text": "继续加油！",
+                    "effect": {"mood": 15, "energy": 5},
+                    "response": "嗯嗯，一起加油！",
+                    "points": 5
+                }
+            ]
+        },
+        {
+            "id": "encourage_10",
+            "type": "encourage",
+            "content": "我们已经一起度过了好多时光~ 好开心！",
+            "trigger": {
+                "actionCount": {"min": 10},
+                "interval": 7200000
+            },
+            "options": [
+                {
+                    "text": "永远在一起！",
+                    "effect": {"mood": 50, "energy": 20},
+                    "response": "永远在一起！拉钩~",
+                    "points": 20
+                },
+                {
+                    "text": "你是最好的伙伴",
+                    "effect": {"mood": 40, "life": 10},
+                    "response": "你也是我最好的伙伴！",
+                    "points": 15
+                },
+                {
+                    "text": "庆祝一下！",
+                    "effect": {"mood": 35, "energy": 10},
+                    "response": "好耶！庆祝庆祝~ 🎉",
+                    "points": 12
+                }
+            ]
+        },
+        {
+            "id": "chat_weather",
+            "type": "chat",
+            "content": "今天的天气真不错呢~ 你喜欢什么天气？",
+            "trigger": {
+                "interval": 900000
+            },
+            "options": [
+                {
+                    "text": "晴天！阳光明媚",
+                    "effect": {"mood": 20},
+                    "response": "我也喜欢晴天！暖暖的~",
+                    "points": 3
+                },
+                {
+                    "text": "雨天，很浪漫",
+                    "effect": {"mood": 15, "energy": 5},
+                    "response": "雨天确实很浪漫呢~ 听雨的声音很治愈~",
+                    "points": 5
+                },
+                {
+                    "text": "下雪天！",
+                    "effect": {"mood": 25},
+                    "response": "下雪天可以堆雪人！好期待~",
+                    "points": 4
+                }
+            ]
+        },
+        {
+            "id": "chat_dream",
+            "type": "chat",
+            "content": "昨晚我做了一个奇怪的梦...你相信梦有意义吗？",
+            "trigger": {
+                "interval": 900000
+            },
+            "options": [
+                {
+                    "text": "相信！日有所思夜有所梦",
+                    "effect": {"mood": 15, "energy": 5},
+                    "response": "嗯！那我的梦一定是因为想你~",
+                    "points": 5
+                },
+                {
+                    "text": "只是大脑的随机活动而已",
+                    "effect": {"mood": 5},
+                    "response": "这样啊...不过梦还是很有趣的~",
+                    "points": 2
+                },
+                {
+                    "text": "说说看是什么梦？",
+                    "effect": {"mood": 20},
+                    "response": "我梦到我们一起去了一个好美的地方~",
+                    "points": 6
+                }
+            ]
+        },
+        {
+            "id": "chat_color",
+            "type": "chat",
+            "content": "你最喜欢什么颜色呀？",
+            "trigger": {
+                "interval": 900000
+            },
+            "options": [
+                {
+                    "text": "蓝色，像天空一样",
+                    "effect": {"mood": 15},
+                    "response": "蓝色确实很美~ 让人感觉很宁静~",
+                    "points": 3
+                },
+                {
+                    "text": "粉色，很可爱",
+                    "effect": {"mood": 20},
+                    "response": "粉色！我也喜欢~ 很温暖的感觉~",
+                    "points": 4
+                },
+                {
+                    "text": "黑色，很酷",
+                    "effect": {"mood": 10},
+                    "response": "黑色确实很酷呢~",
+                    "points": 2
+                }
+            ]
+        },
+        {
+            "id": "chat_future",
+            "type": "chat",
+            "content": "如果能拥有一种超能力，你想要什么？",
+            "trigger": {
+                "interval": 900000
+            },
+            "options": [
+                {
+                    "text": "瞬间移动！",
+                    "effect": {"mood": 20, "energy": 5},
+                    "response": "好厉害！可以带我去任何地方~",
+                    "points": 5
+                },
+                {
+                    "text": "读心术",
+                    "effect": {"mood": 10},
+                    "response": "那你就能知道我在想什么啦~",
+                    "points": 3
+                },
+                {
+                    "text": "时间暂停",
+                    "effect": {"mood": 15, "energy": 10},
+                    "response": "可以在忙碌的时候休息一下~",
+                    "points": 4
+                }
+            ]
+        },
+        {
+            "id": "care_low_all",
+            "type": "care",
+            "content": "你看起来有点累...要不要好好休息一下？",
+            "trigger": {
+                "status": {
+                    "hunger": {"max": 20},
+                    "energy": {"max": 20},
+                    "mood": {"max": 20}
+                },
+                "interval": 2400000
+            },
+            "options": [
+                {
+                    "text": "好的，听你的",
+                    "effect": {"energy": 40, "hunger": 20, "mood": 25},
+                    "response": "嗯嗯，好好休息~ 我陪着你~",
+                    "points": 10
+                },
+                {
+                    "text": "没关系，还能坚持",
+                    "effect": {"mood": 5, "energy": -10},
+                    "response": "别太勉强自己...",
+                    "points": 0
+                },
+                {
+                    "text": "给我一个抱抱~",
+                    "effect": {"mood": 35, "energy": 15},
+                    "response": "抱抱~ 🤗 好温暖~",
+                    "points": 12
+                }
+            ]
+        },
+        {
+            "id": "chat_request_play",
+            "type": "request",
+            "content": "好无聊呀~ 陪我玩游戏吧！",
+            "trigger": {
+                "interval": 1200000
+            },
+            "options": [
+                {
+                    "text": "好呀！玩什么？",
+                    "effect": {"mood": 30, "energy": -10},
+                    "response": "太好了！我们来玩猜拳~",
+                    "points": 8
+                },
+                {
+                    "text": "等一下，忙完再说",
+                    "effect": {"mood": -5},
+                    "response": "好吧...那我等你~",
+                    "points": 0
+                },
+                {
+                    "text": "讲故事给你听吧",
+                    "effect": {"mood": 25, "energy": -5},
+                    "response": "太棒了！我最喜欢听故事了~",
+                    "points": 6
+                }
+            ]
+        },
+        {
+            "id": "chat_request_opinion",
+            "type": "request",
+            "content": "我今天穿什么衣服好看呢？",
+            "trigger": {
+                "interval": 1800000
+            },
+            "options": [
+                {
+                    "text": "穿粉色的！很可爱",
+                    "effect": {"mood": 25},
+                    "response": "粉色！好耶~ 我也觉得粉色很适合我~",
+                    "points": 5
+                },
+                {
+                    "text": "穿蓝色的！很清爽",
+                    "effect": {"mood": 20},
+                    "response": "蓝色~ 让人感觉很舒服呢~",
+                    "points": 4
+                },
+                {
+                    "text": "穿什么都好看！",
+                    "effect": {"mood": 35},
+                    "response": "嘻嘻，你真会说话~",
+                    "points": 8
+                }
+            ]
+        },
+        {
+            "id": "reaction_surprise",
+            "type": "reaction",
+            "content": "哇！你今天做了好多事情~ 太厉害了！",
+            "trigger": {
+                "actionCount": {"min": 8},
+                "interval": 3600000
+            },
+            "options": [
+                {
+                    "text": "谢谢夸奖！",
+                    "effect": {"mood": 25, "energy": 10},
+                    "response": "不客气~ 你真的很棒！",
+                    "points": 10
+                },
+                {
+                    "text": "一般般啦",
+                    "effect": {"mood": 10},
+                    "response": "谦虚了~ 我都看在眼里呢~",
+                    "points": 5
+                },
+                {
+                    "text": "都是为了你呀",
+                    "effect": {"mood": 40},
+                    "response": "呜呜，好感动~ 我会一直陪着你的！",
+                    "points": 15
+                }
+            ]
+        },
+        {
+            "id": "comfort_sad",
+            "type": "comfort",
+            "content": "你看起来有点不开心...怎么了？",
+            "trigger": {
+                "status": {"mood": {"max": 15}},
+                "interval": 3000000
+            },
+            "options": [
+                {
+                    "text": "工作不顺心...",
+                    "effect": {"mood": 20, "energy": 10},
+                    "response": "别难过~ 一切都会好起来的！我相信你！",
+                    "points": 8
+                },
+                {
+                    "text": "没什么，就是有点累",
+                    "effect": {"mood": 15, "energy": 25},
+                    "response": "累了就好好休息~ 我在这里陪着你~",
+                    "points": 6
+                },
+                {
+                    "text": "想听你唱歌",
+                    "effect": {"mood": 30},
+                    "response": "好~ 我唱一首温柔的歌给你听~",
+                    "points": 10
+                }
+            ]
+        },
+        {
+            "id": "curiosity_new",
+            "type": "curiosity",
+            "content": "你刚才在做什么有趣的事情呀？",
+            "trigger": {
+                "interval": 1500000
+            },
+            "options": [
+                {
+                    "text": "在工作/学习呢",
+                    "effect": {"mood": 10, "energy": 5},
+                    "response": "好努力！加油加油~",
+                    "points": 5
+                },
+                {
+                    "text": "在看有趣的东西",
+                    "effect": {"mood": 20},
+                    "response": "是什么呀？能分享给我吗？",
+                    "points": 6
+                },
+                {
+                    "text": "在想你呀",
+                    "effect": {"mood": 40, "energy": 15},
+                    "response": "真的吗？我也好想你~ ❤️",
+                    "points": 15
+                }
+            ]
+        },
+        {
+            "id": "celebrate_milestone",
+            "type": "celebrate",
+            "content": "哇！我们已经一起度过了这么多美好的时光~ 来庆祝一下吧！",
+            "trigger": {
+                "actionCount": {"min": 15},
+                "interval": 86400000
+            },
+            "options": [
+                {
+                    "text": "太棒了！庆祝！",
+                    "effect": {"mood": 50, "energy": 30},
+                    "response": "庆祝庆祝！🎉 谢谢你一直陪着我~",
+                    "points": 25
+                },
+                {
+                    "text": "送你一个礼物！",
+                    "effect": {"mood": 45, "life": 20},
+                    "response": "哇！好开心~ 谢谢你！",
+                    "points": 20
+                },
+                {
+                    "text": "继续加油！",
+                    "effect": {"mood": 35, "energy": 20},
+                    "response": "嗯嗯！一起创造更多美好回忆~",
+                    "points": 15
+                }
+            ]
+        },
+        {
+            "id": "chat_weekend",
+            "type": "chat",
+            "content": "周末打算做什么呀？",
+            "trigger": {
+                "interval": 7200000
+            },
+            "options": [
+                {
+                    "text": "出门玩！",
+                    "effect": {"mood": 25, "energy": -10},
+                    "response": "好羡慕！玩得开心点~",
+                    "points": 5
+                },
+                {
+                    "text": "在家休息",
+                    "effect": {"mood": 15, "energy": 20},
+                    "response": "好好休息也很重要~",
+                    "points": 3
+                },
+                {
+                    "text": "陪你！",
+                    "effect": {"mood": 45, "energy": 15},
+                    "response": "真的吗？太开心了！❤️",
+                    "points": 20
+                }
+            ]
+        }
+    ],
+    "default": {
+        "welcome": "点击右下角的互动面板与我互动吧~"
+    }
+}

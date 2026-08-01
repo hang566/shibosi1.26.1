@@ -1,0 +1,108 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.col {
+  flex: 1;
+  min-width: 200px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin: 12px 0;
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin: 12px 0;
+  background: var(--card-bg);
+}
+
+.card-header {
+  margin: -20px -20px 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--block-bg);
+  font-weight: 600;
+}
+
+.card-footer {
+  margin: 16px -20px -20px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  background: var(--block-bg);
+}
+
+.panel-header {
+  margin: -20px -20px 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.panel-footer {
+  margin: 16px -20px -20px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.col-1 { flex: 0 0 calc(100% / 12 * 1); }
+.col-2 { flex: 0 0 calc(100% / 12 * 2); }
+.col-3 { flex: 0 0 calc(100% / 12 * 3); }
+.col-4 { flex: 0 0 calc(100% / 12 * 4); }
+.col-5 { flex: 0 0 calc(100% / 12 * 5); }
+.col-6 { flex: 0 0 calc(100% / 12 * 6); }
+.col-7 { flex: 0 0 calc(100% / 12 * 7); }
+.col-8 { flex: 0 0 calc(100% / 12 * 8); }
+.col-9 { flex: 0 0 calc(100% / 12 * 9); }
+.col-10 { flex: 0 0 calc(100% / 12 * 10); }
+.col-11 { flex: 0 0 calc(100% / 12 * 11); }
+.col-12 { flex: 0 0 100%; }
+
+.jumbotron {
+  padding: 60px 20px;
+  background: var(--block-bg);
+  border-radius: var(--radius-lg);
+  margin: 16px 0;
+}
+
+.jumbotron h1,
+.jumbotron h2 {
+  margin-top: 0;
+}
+
+.jumbotron p {
+  font-size: 1.125rem;
+  color: var(--text-sub);
+}
+
+.jumbotron .btn-group {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+  .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+    flex: 0 0 100%;
+    min-width: auto;
+  }
+  
+  .jumbotron {
+    padding: 30px 16px;
+  }
+}

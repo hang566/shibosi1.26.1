@@ -1,0 +1,22 @@
+[
+    {
+        "name": "云枢",
+        "url": "https://yunshu-web.pages.dev/",
+        "icon": "https://yunshu-web.pages.dev/favicon.ico"
+    },
+    {
+        "name": "玄影楼阁",
+        "url": "https://xuanyinglouge.pages.dev/",
+        "icon": "https://xuanyinglouge.pages.dev/favicon.ico"
+    },
+    {
+        "name": "镜序",
+        "url": "https://jingxv.pages.dev/",
+        "icon": "https://jingxv.pages.dev/favicon.ico"
+    },
+    {
+        "name": "典学阁",
+        "url": "https://dianxuege.pages.dev/",
+        "icon": "https://dianxuege.pages.dev/favicon.ico"
+    }
+]

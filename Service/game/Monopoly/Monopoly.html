@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎲 大富翁</title>
+    <style>
+        /* 样式与之前相同，省略 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
+            padding: 16px;
+        }
+        .game-wrapper {
+            background: #2d4059;
+            border-radius: 28px;
+            padding: 24px 28px 28px 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 3px rgba(255, 255, 255, 0.08);
+            max-width: 960px;
+            width: 100%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding: 0 6px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .header h1 {
+            color: #f5e6c8;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .header h1 span {
+            color: #f7d44a;
+        }
+        .turn-indicator {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 18px;
+            border-radius: 40px;
+            color: #eee;
+            font-size: 15px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+        }
+        .board-container {
+            position: relative;
+            background: #1e2f3f;
+            border-radius: 20px;
+            padding: 8px;
+            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            border-radius: 14px;
+            background: #2a3f4f;
+            cursor: default;
+            touch-action: none;
+        }
+        .control-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+            align-items: stretch;
+        }
+        .players-info {
+            display: flex;
+            flex: 2;
+            min-width: 200px;
+            gap: 12px;
+        }
+        .player-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+            min-width: 80px;
+            position: relative;
+        }
+        .player-card.active {
+            border-color: #f7d44a;
+            box-shadow: 0 0 20px rgba(247, 212, 74, 0.15);
+        }
+        .player-card .pname {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ddd;
+        }
+        .player-card .pname .dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .player-card .money {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f5e6c8;
+            margin-top: 2px;
+            transition: color 0.2s;
+        }
+        .player-card .money.danger {
+            color: #ff6b6b;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        .player-card .money small {
+            font-size: 13px;
+            font-weight: 400;
+            color: #aaa;
+            margin-left: 4px;
+        }
+        .player-card .prop-count {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 2px;
+        }
+        .player-card .status {
+            font-size: 12px;
+            color: #f7d44a;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        .player-card .effects {
+            font-size: 11px;
+            color: #8ac;
+            margin-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .player-card .effects .effect-tag {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1px 8px;
+            font-size: 10px;
+            color: #c8d6d6;
+        }
+        .player-card .effects .effect-tag.buff {
+            color: #4ecdc4;
+        }
+        .player-card .effects .effect-tag.debuff {
+            color: #ff6b6b;
+        }
+        .player-card .loan-info {
+            font-size: 11px;
+            color: #f39c12;
+            margin-top: 2px;
+        }
+        .action-area {
+            display: flex;
+            flex: 1;
+            min-width: 150px;
+            gap: 10px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: linear-gradient(145deg, #3a536b, #2a3f52);
+            border: none;
+            border-radius: 14px;
+            padding: 8px 18px;
+            color: #f0e8d8;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #1a2a38, 0 6px 16px rgba(0, 0, 0, 0.3);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            min-width: 60px;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1a2a38, 0 10px 24px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(145deg, #4a6a82, #3a5a72);
+        }
+        .btn:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1a2a38, 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1a2a38;
+        }
+        .btn-primary {
+            background: linear-gradient(145deg, #f7d44a, #e6b83a);
+            color: #1a2a3a;
+            border-color: #f7d44a;
+            box-shadow: 0 4px 0 #b8912a, 0 6px 16px rgba(247, 212, 74, 0.25);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(145deg, #ffe066, #f7d44a);
+            box-shadow: 0 6px 0 #b8912a, 0 10px 24px rgba(247, 212, 74, 0.35);
+        }
+        .btn-primary:active:not(:disabled) {
+            box-shadow: 0 2px 0 #b8912a;
+        }
+        .btn-buy {
+            background: linear-gradient(145deg, #4ecdc4, #3ab0a8);
+            color: #0d1b2a;
+            border-color: #4ecdc4;
+            box-shadow: 0 4px 0 #2a8a82, 0 6px 16px rgba(78, 205, 196, 0.2);
+        }
+        .btn-buy:hover:not(:disabled) {
+            background: linear-gradient(145deg, #5eddd4, #4ecdc4);
+            box-shadow: 0 6px 0 #2a8a82, 0 10px 24px rgba(78, 205, 196, 0.3);
+        }
+        .btn-loan {
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+            color: #1a2a3a;
+            border-color: #f39c12;
+            box-shadow: 0 4px 0 #b86d1a, 0 6px 16px rgba(243, 156, 18, 0.25);
+        }
+        .btn-loan:hover:not(:disabled) {
+            background: linear-gradient(145deg, #f1c40f, #f39c12);
+            box-shadow: 0 6px 0 #b86d1a, 0 10px 24px rgba(243, 156, 18, 0.35);
+        }
+        .btn-mortgage {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            color: #f0e8d8;
+            border-color: #9b59b6;
+            box-shadow: 0 4px 0 #6c3483, 0 6px 16px rgba(155, 89, 182, 0.25);
+        }
+        .btn-mortgage:hover:not(:disabled) {
+            background: linear-gradient(145deg, #af7ac5, #9b59b6);
+            box-shadow: 0 6px 0 #6c3483, 0 10px 24px rgba(155, 89, 182, 0.35);
+        }
+        .event-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+        .event-overlay.show {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .event-card {
+            background: #2d4059;
+            border-radius: 28px;
+            padding: 32px 28px 28px 28px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .event-card .event-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f7d44a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .event-card .event-desc {
+            color: #d0d8d8;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            border-left: 4px solid #f7d44a;
+        }
+        .event-card .event-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .event-card .event-options .opt-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #f0e8d8;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .event-card .event-options .opt-btn:hover {
+            background: rgba(247, 212, 74, 0.15);
+            border-color: #f7d44a;
+            transform: translateX(4px);
+        }
+        .event-card .event-options .opt-btn .opt-tag {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 2px 12px;
+            font-size: 12px;
+            color: #aaa;
+            flex-shrink: 0;
+        }
+        .event-card .event-options .opt-btn .opt-result {
+            font-size: 13px;
+            color: #8ac;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+        .log-area {
+            width: 100%;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 12px;
+            padding: 8px 14px;
+            max-height: 60px;
+            overflow-y: auto;
+            font-size: 13px;
+            color: #c8d6d6;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            scrollbar-width: thin;
+            scrollbar-color: #3a536b transparent;
+        }
+        .log-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .log-area::-webkit-scrollbar-thumb {
+            background: #3a536b;
+            border-radius: 10px;
+        }
+        .log-area .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            line-height: 1.4;
+        }
+        .log-area .log-entry:last-child {
+            border-bottom: none;
+        }
+        @media (max-width: 600px) {
+            .game-wrapper {
+                padding: 12px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .turn-indicator {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+            .control-panel {
+                flex-direction: column;
+            }
+            .players-info {
+                flex-wrap: wrap;
+            }
+            .player-card {
+                min-width: 60px;
+                padding: 8px 10px;
+            }
+            .player-card .money {
+                font-size: 16px;
+            }
+            .btn {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+            .log-area {
+                max-height: 44px;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            .event-card {
+                padding: 20px 16px;
+            }
+            .event-card .event-title {
+                font-size: 17px;
+            }
+        }
+        @media (max-width: 420px) {
+            .header h1 {
+                font-size: 16px;
+            }
+            .turn-indicator {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .player-card .money {
+                font-size: 14px;
+            }
+            .btn {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="header">
+            <h1>🎲 <span>大富翁 · 硬核</span></h1>
+            <div class="turn-indicator" id="turnIndicator">
+                <span id="turnText">🎯 准备开始</span>
+            </div>
+        </div>
+
+        <div class="board-container">
+            <canvas id="gameCanvas" width="720" height="720"></canvas>
+        </div>
+
+        <div class="control-panel">
+            <div class="players-info">
+                <div class="player-card active" id="p1card">
+                    <div class="pname"><span class="dot" style="background:#ff6b6b;"></span> 玩家</div>
+                    <div class="money" id="p1money">15000 <small>💰</small></div>
+                    <div class="prop-count" id="p1props">🏠 0 处</div>
+                    <div class="status" id="p1status">▶ 你的回合</div>
+                    <div class="effects" id="p1effects"></div>
+                    <div class="loan-info" id="p1loan"></div>
+                </div>
+                <div class="player-card" id="p2card">
+                    <div class="pname"><span class="dot" style="background:#4ecdc4;"></span> 电脑</div>
+                    <div class="money" id="p2money">15000 <small>💰</small></div>
+                    <div class="prop-count" id="p2props">🏠 0 处</div>
+                    <div class="status" id="p2status">⏳ 等待中</div>
+                    <div class="effects" id="p2effects"></div>
+                    <div class="loan-info" id="p2loan"></div>
+                </div>
+            </div>
+            <div class="action-area">
+                <button class="btn btn-primary" id="rollBtn">🎲 掷骰子</button>
+                <button class="btn btn-buy" id="buyBtn" disabled>🏠 购买</button>
+                <button class="btn btn-loan" id="loanBtn" disabled>🏦 贷款</button>
+                <button class="btn btn-mortgage" id="mortgageBtn" disabled>🏚️ 抵押</button>
+            </div>
+        </div>
+
+        <div class="log-area" id="logArea">
+            <div class="log-entry">🎮 硬核稳定版 — 已修复连点升级bug，防抖保护！</div>
+        </div>
+    </div>
+
+    <!-- 事件弹窗 -->
+    <div class="event-overlay" id="eventOverlay">
+        <div class="event-card">
+            <div class="event-title" id="eventTitle">❓ 抉择</div>
+            <div class="event-desc" id="eventDesc">描述</div>
+            <div class="event-options" id="eventOptions"></div>
+        </div>
+    </div>
+
+    <script src="../../../js/pointsSystem.js"></script>
+    <script>
+        // ============================================================
+        //  大富翁 · 硬核稳定版  — 防连点保护
+        // ============================================================
+
+        // ---------- 画布 ----------
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const W = 720,
+            H = 720;
+
+        // ---------- DOM ----------
+        const rollBtn = document.getElementById('rollBtn');
+        const buyBtn = document.getElementById('buyBtn');
+        const loanBtn = document.getElementById('loanBtn');
+        const mortgageBtn = document.getElementById('mortgageBtn');
+        const logArea = document.getElementById('logArea');
+        const turnText = document.getElementById('turnText');
+        const p1money = document.getElementById('p1money');
+        const p2money = document.getElementById('p2money');
+        const p1props = document.getElementById('p1props');
+        const p2props = document.getElementById('p2props');
+        const p1status = document.getElementById('p1status');
+        const p2status = document.getElementById('p2status');
+        const p1card = document.getElementById('p1card');
+        const p2card = document.getElementById('p2card');
+        const p1effects = document.getElementById('p1effects');
+        const p2effects = document.getElementById('p2effects');
+        const p1loan = document.getElementById('p1loan');
+        const p2loan = document.getElementById('p2loan');
+        const eventOverlay = document.getElementById('eventOverlay');
+        const eventTitle = document.getElementById('eventTitle');
+        const eventDesc = document.getElementById('eventDesc');
+        const eventOptions = document.getElementById('eventOptions');
+
+        // ---------- 常量 ----------
+        const CELL = 68;
+        const GAP = 4;
+        const STEP = CELL + GAP;
+        const OFFSET = 16;
+        const PLAYER_RADIUS = 16;
+        const START_MONEY = 15000;
+        const PASS_GO_BONUS = 2000;
+        const LOAN_AMOUNT = 3000;
+        const LOAN_INTEREST = 400;
+        const MORTGAGE_RATE = 0.4;
+        const MORTGAGE_INTEREST = 0.06;
+
+        // ---------- 棋盘数据 ----------
+        const BOARD = [];
+        const ESTATES = [
+            ['北京路', 3000, 500, '#e74c3c', 0],
+            ['上海路', 2800, 450, '#e67e22', 1],
+            ['广州路', 2600, 400, '#f1c40f', 2],
+            ['深圳路', 2400, 370, '#2ecc71', 3],
+            ['杭州路', 2200, 340, '#1abc9c', 4],
+            ['成都路', 2000, 310, '#3498db', 5],
+            ['武汉路', 1800, 280, '#9b59b6', 6],
+            ['南京路', 1600, 250, '#e74c3c', 7],
+            ['西安路', 1500, 230, '#e67e22', 8],
+            ['重庆路', 1400, 210, '#f1c40f', 9],
+            ['长沙路', 1300, 190, '#2ecc71', 10],
+            ['郑州路', 1200, 170, '#1abc9c', 11],
+            ['沈阳路', 1100, 150, '#3498db', 12],
+            ['青岛路', 1000, 130, '#9b59b6', 13],
+            ['大连路', 900, 110, '#e74c3c', 14],
+            ['厦门路', 800, 90, '#e67e22', 15],
+            ['宁波路', 700, 80, '#f1c40f', 16],
+            ['苏州路', 600, 70, '#2ecc71', 17],
+            ['无锡路', 500, 60, '#1abc9c', 18],
+            ['常州路', 400, 50, '#3498db', 19],
+        ];
+        let estateIdx = 0;
+
+        const TEMPLATE = [
+            { type: 'go', label: '起点' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'event', label: '命运' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'tax', label: '所得税', amount: 0 },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'event', label: '机会' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'parking', label: '免费停车' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'event', label: '命运' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'jail', label: '监狱' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'tax', label: '所得税', amount: 0 },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'event', label: '机会' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'event', label: '命运' },
+            { type: 'estate', label: '' },
+            { type: 'estate', label: '' },
+            { type: 'event', label: '机会' },
+            { type: 'event', label: '命运' },
+        ];
+
+        TEMPLATE.forEach((t, i) => {
+            const cell = { ...t, index: i, owner: null, level: 0, mortgaged: false, mortgageDebt: 0 };
+            if (t.type === 'estate') {
+                const e = ESTATES[estateIdx % ESTATES.length];
+                estateIdx++;
+                cell.name = e[0];
+                cell.price = e[1];
+                cell.rent = e[2];
+                cell.color = e[3];
+                cell.colorGroup = e[4];
+                cell.level = 0;
+                cell.owner = null;
+                cell.buildCost = 0;
+            }
+            BOARD.push(cell);
+        });
+
+        // ---------- 全局状态 ----------
+        let economicCycle = 'normal';
+        let players = [];
+        let currentPlayerIndex = 0;
+        let gameOver = false;
+        let rolling = false;
+        let turnPhase = 'roll';
+        let diceValue = 0;
+        let isEventActive = false;
+        let pointsAwarded = false; // 防止重复发放积分
+
+        // ---------- 玩家类 ----------
+        class Player {
+            constructor(id, name, color, isHuman) {
+                this.id = id;
+                this.name = name;
+                this.color = color;
+                this.isHuman = isHuman;
+                this.money = START_MONEY;
+                this.position = 0;
+                this.alive = true;
+                this.properties = [];
+                this.effects = [];
+                this.loanActive = false;
+                this.loanAmount = 0;
+                this.inJail = false;
+                this.jailTurns = 0;
+                this.jailCard = false;
+                this.passGoCount = 0;
+            }
+            get totalProps() { return this.properties.length; }
+            get totalBuildCost() {
+                let sum = 0;
+                this.properties.forEach(idx => {
+                    const cell = BOARD[idx];
+                    sum += cell.buildCost;
+                });
+                return sum;
+            }
+            get totalAssetValue() {
+                let sum = this.money;
+                this.properties.forEach(idx => {
+                    const cell = BOARD[idx];
+                    sum += cell.price + cell.buildCost;
+                });
+                return sum;
+            }
+
+            addMoney(amount) {
+                this.money += amount;
+                if (this.money < 0) this.money = 0;
+                updateUI();
+            }
+
+            pay(amount, toPlayer, ignoreClear = false) {
+                if (amount <= 0) return true;
+                if (this.money >= amount) {
+                    this.money -= amount;
+                    if (toPlayer) toPlayer.money += amount;
+                    updateUI();
+                    return true;
+                }
+                if (!ignoreClear) {
+                    let need = amount - this.money;
+                    for (let i = this.properties.length - 1; i >= 0 && need > 0; i--) {
+                        const idx = this.properties[i];
+                        const cell = BOARD[idx];
+                        if (cell.level > 0 && cell.owner === this.id) {
+                            const refund = Math.floor(cell.price * 0.5 * cell.level);
+                            this.money += refund;
+                            cell.buildCost = Math.max(0, cell.buildCost - cell.price * 0.5 * cell.level);
+                            cell.level = 0;
+                            addLog(`🏚️ ${this.name} 变卖了 ${cell.name} 的房屋，获得 💰${refund}`);
+                            need = amount - this.money;
+                        }
+                    }
+                    if (need > 0) {
+                        for (let i = this.properties.length - 1; i >= 0 && need > 0; i--) {
+                            const idx = this.properties[i];
+                            const cell = BOARD[idx];
+                            if (!cell.mortgaged && cell.owner === this.id) {
+                                const cash = Math.floor(cell.price * MORTGAGE_RATE);
+                                this.money += cash;
+                                cell.mortgaged = true;
+                                cell.mortgageDebt = Math.floor(cell.price * 0.6);
+                                addLog(`🏚️ ${this.name} 抵押了 ${cell.name}，获得 💰${cash}`);
+                                need = amount - this.money;
+                            }
+                        }
+                    }
+                    if (this.money < amount) {
+                        addLog(`💔 ${this.name} 无法支付 💰${amount}，宣告破产！`);
+                        this.alive = false;
+                        if (toPlayer) {
+                            let totalValue = 0;
+                            this.properties.forEach(idx => {
+                                const cell = BOARD[idx];
+                                const val = Math.floor((cell.price + cell.buildCost) * 0.5);
+                                totalValue += val;
+                                toPlayer.money += val;
+                                cell.owner = null;
+                                cell.level = 0;
+                                cell.mortgaged = false;
+                                cell.mortgageDebt = 0;
+                            });
+                            toPlayer.money += this.money;
+                            this.money = 0;
+                            addLog(`📦 ${toPlayer.name} 接收了 ${this.name} 的资产，估值 💰${totalValue}`);
+                        } else {
+                            this.properties.forEach(idx => {
+                                const cell = BOARD[idx];
+                                cell.owner = null;
+                                cell.level = 0;
+                                cell.mortgaged = false;
+                                cell.mortgageDebt = 0;
+                            });
+                            this.money = 0;
+                            addLog(`🏦 银行没收了 ${this.name} 的全部地产并公开拍卖`);
+                        }
+                        this.properties = [];
+                        updateUI();
+                        return false;
+                    }
+                    this.money -= amount;
+                    if (toPlayer) toPlayer.money += amount;
+                    updateUI();
+                    return true;
+                } else {
+                    if (this.money >= amount) {
+                        this.money -= amount;
+                        if (toPlayer) toPlayer.money += amount;
+                        updateUI();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+
+            takeLoan() {
+                if (this.loanActive) return;
+                this.loanActive = true;
+                this.loanAmount = LOAN_AMOUNT;
+                this.money += LOAN_AMOUNT;
+                addLog(`🏦 ${this.name} 贷款 ${LOAN_AMOUNT}，每回合利息 ${getLoanInterest()}`);
+                updateUI();
+            }
+
+            payLoanInterest() {
+                if (!this.loanActive) return true;
+                const interest = getLoanInterest();
+                if (this.money < interest) {
+                    if (!this.pay(interest, null, false)) {
+                        return false;
+                    }
+                } else {
+                    this.money -= interest;
+                    addLog(`💸 ${this.name} 支付贷款利息 ${interest}`);
+                    updateUI();
+                }
+                return true;
+            }
+
+            move(steps) {
+                let oldPos = this.position;
+                let newPos = (this.position + steps) % 32;
+                if (newPos < oldPos || (this.position + steps) >= 32) {
+                    this.passGoCount++;
+                    this.addMoney(PASS_GO_BONUS);
+                    addLog(`🏁 ${this.name} 经过起点，获得 💰${PASS_GO_BONUS}`);
+                    this.payAnnualCosts();
+                    if (this.passGoCount % 3 === 0) {
+                        triggerEconomicCycle();
+                    }
+                }
+                this.position = newPos;
+                return newPos;
+            }
+
+            payAnnualCosts() {
+                let totalCost = 0;
+                this.properties.forEach(idx => {
+                    const cell = BOARD[idx];
+                    if (cell.mortgaged) return;
+                    if (cell.level === 0) {
+                        totalCost += Math.floor(cell.price * 0.08);
+                    } else if (cell.level < 3) {
+                        totalCost += Math.floor(cell.buildCost * 0.12);
+                    } else {
+                        totalCost += Math.floor(cell.buildCost * 0.15);
+                    }
+                });
+                if (totalCost > 0) {
+                    addLog(`💰 ${this.name} 需支付年度持有成本 💰${totalCost}`);
+                    this.pay(totalCost, null, false);
+                }
+                // 闲置税
+                let colorGroups = {};
+                this.properties.forEach(idx => {
+                    const cell = BOARD[idx];
+                    const g = cell.colorGroup;
+                    if (!colorGroups[g]) colorGroups[g] = [];
+                    colorGroups[g].push(cell);
+                });
+                for (let g in colorGroups) {
+                    const group = colorGroups[g];
+                    if (group.length >= 2) {
+                        let hasHouse = group.some(c => c.level > 0);
+                        if (!hasHouse) {
+                            let tax = group.reduce((sum, c) => sum + Math.floor(c.price * 0.05), 0);
+                            addLog(`⚠️ ${this.name} 持有同色地块未开发，缴纳闲置税 💰${tax}`);
+                            this.pay(tax, null, false);
+                        }
+                    }
+                }
+            }
+
+            mortgageProperty(index) {
+                const cell = BOARD[index];
+                if (cell.owner !== this.id || cell.mortgaged) return false;
+                const cash = Math.floor(cell.price * MORTGAGE_RATE);
+                this.money += cash;
+                cell.mortgaged = true;
+                cell.mortgageDebt = Math.floor(cell.price * 0.6);
+                addLog(`🏚️ ${this.name} 抵押了 ${cell.name}，获得 💰${cash}`);
+                updateUI();
+                return true;
+            }
+
+            unmortgageProperty(index) {
+                const cell = BOARD[index];
+                if (cell.owner !== this.id || !cell.mortgaged) return false;
+                const cost = cell.mortgageDebt + Math.floor(cell.mortgageDebt * 0.1);
+                if (this.money < cost) {
+                    addLog(`💰 资金不足赎回 ${cell.name}，需要 💰${cost}`);
+                    return false;
+                }
+                this.money -= cost;
+                cell.mortgaged = false;
+                cell.mortgageDebt = 0;
+                addLog(`🔓 ${this.name} 赎回了 ${cell.name}，花费 💰${cost}`);
+                updateUI();
+                return true;
+            }
+
+            buyProperty(index) {
+                const cell = BOARD[index];
+                if (cell.owner !== null || cell.mortgaged) return false;
+                if (this.money < cell.price) {
+                    addLog(`💰 资金不足，无法购买 ${cell.name}`);
+                    return false;
+                }
+                this.money -= cell.price;
+                cell.owner = this.id;
+                cell.level = 0;
+                cell.buildCost = 0;
+                this.properties.push(index);
+                addLog(`🏠 ${this.name} 购买了 ${cell.name} (💰${cell.price})`);
+                updateUI();
+                return true;
+            }
+
+            upgradeProperty(index) {
+                const cell = BOARD[index];
+                if (cell.owner !== this.id || cell.mortgaged) return false;
+                if (cell.level >= 3) {
+                    addLog(`🏠 ${cell.name} 已满级！`);
+                    return false;
+                }
+                let cost = Math.floor(cell.price * 0.5);
+                if (this.money < cost) {
+                    addLog(`💰 资金不足，升级 ${cell.name} 需要 💰${cost}`);
+                    return false;
+                }
+                this.money -= cost;
+                cell.level++;
+                cell.buildCost += cost;
+                addLog(`⬆️ ${this.name} 将 ${cell.name} 升级到 Lv.${cell.level}`);
+                updateUI();
+                return true;
+            }
+
+            payRent(index) {
+                const cell = BOARD[index];
+                if (cell.owner === null || cell.owner === this.id || cell.mortgaged) return 0;
+                const owner = players[cell.owner];
+                if (!owner || !owner.alive) return 0;
+                let rent = Math.floor(cell.rent * (1 + cell.level * 0.5));
+                if (economicCycle === 'boom') rent = Math.floor(rent * 1.2);
+                if (economicCycle === 'recession') rent = Math.floor(rent * 0.5);
+                this.effects.forEach(e => {
+                    if (e.propIdx === index && e.name === '改造') rent = 0;
+                    if (e.propIdx === index && e.name === '施工') rent = Math.floor(rent * 0.5);
+                });
+                const paid = this.pay(rent, owner, false);
+                if (paid) {
+                    addLog(`💸 ${this.name} 向 ${owner.name} 支付租金 💰${rent} (${cell.name})`);
+                } else {
+                    addLog(`💔 ${this.name} 无法支付租金 ${cell.name}，已破产！`);
+                    this.properties.forEach(idx => {
+                        BOARD[idx].owner = null;
+                        BOARD[idx].level = 0;
+                        BOARD[idx].mortgaged = false;
+                        BOARD[idx].mortgageDebt = 0;
+                    });
+                    this.properties = [];
+                }
+                updateUI();
+                return paid ? rent : 0;
+            }
+        }
+
+        // ---------- 经济周期 ----------
+        function triggerEconomicCycle() {
+            const cycle = Math.random() < 0.5 ? 'boom' : 'recession';
+            economicCycle = cycle;
+            if (cycle === 'boom') {
+                addLog('📈 经济繁荣！租金上涨 20%！');
+            } else {
+                addLog('📉 经济衰退！租金减半，贷款利息翻倍！');
+            }
+            updateUI();
+        }
+
+        function getLoanInterest() {
+            let base = LOAN_INTEREST;
+            if (economicCycle === 'recession') base = Math.floor(base * 2);
+            return base;
+        }
+
+        // ---------- 事件池 ----------
+        const EVENT_POOL = [{
+                title: '🌧️ 市场萧条',
+                desc: '经济低迷，你的资产受损。你决定：',
+                options: [
+                    { label: '支付总资产 5% 维修费', result: '💸 资产缩水', action: p => { const fee = Math.floor(p
+                                .totalAssetValue * 0.05);
+                            p.pay(fee, null, false); } },
+                    { label: '出售部分资产', result: '🏚️ 被迫低价卖出', action: p => { if (p.properties.length > 0) { const idx =
+                                p.properties[0];
+                            const cell = BOARD[idx];
+                            const refund = Math.floor((cell.price + cell.buildCost) * 0.4);
+                            p.money += refund;
+                            cell.owner = null;
+                            cell.level = 0;
+                            cell.mortgaged = false;
+                            cell.mortgageDebt = 0;
+                            p.properties = p.properties.filter(i => i !== idx);
+                            addLog(`🏚️ ${p.name} 低价出售了 ${cell.name}，获得 💰${refund}`); } } },
+                    { label: '观望', result: '😐 什么都发生', action: p => {} },
+                ]
+            },
+            {
+                title: '⚖️ 诉讼罚款',
+                desc: '你被卷入法律纠纷，必须支付罚款。你：',
+                options: [
+                    { label: '支付总资产 5% 罚金', result: '💸 资产受损', action: p => { const fee = Math.floor(p
+                                .totalAssetValue * 0.05);
+                            p.pay(fee, null, false); } },
+                    { label: '聘请律师 (花费 800)', result: '⚖️ 罚款减半', action: p => { p.pay(800, null, false);
+                            const fee = Math.floor(p.totalAssetValue * 0.025);
+                            p.pay(fee, null, false); } },
+                    { label: '拖延', result: '⏳ 利息累积，支付 1200', action: p => { p.pay(1200, null, false); } },
+                ]
+            },
+            {
+                title: '🏦 信贷收紧',
+                desc: '银行提高抵押贷款利率。你：',
+                options: [
+                    { label: '提前还款', result: '💸 支付 1500 免除额外费用', action: p => { p.pay(1500, null, false); } },
+                    { label: '接受高利率', result: '📈 下次抵押利息翻倍', action: p => { addEffect(p, '信贷紧缩', 3, 'debuff',
+                                '抵押利息翻倍'); } },
+                    { label: '不借贷', result: '😌 没影响', action: p => {} },
+                ]
+            },
+            {
+                title: '🔧 基建改造',
+                desc: '政府要求改造你的地块，需停工。你：',
+                options: [
+                    { label: '选择一块空地', result: '🏚️ 该地块未来两轮无租金', action: p => { if (p.properties.length > 0) { const
+                                idx = p.properties[0];
+                            addEffectOnProperty(p, idx, '改造', 2, 'debuff', '无租金'); } } },
+                    { label: '支付 1000 豁免', result: '💸 花钱消灾', action: p => { p.pay(1000, null, false); } },
+                    { label: '无视', result: '⚠️ 被罚款 500', action: p => { p.pay(500, null, false); } },
+                ]
+            },
+            {
+                title: '📉 股市崩盘',
+                desc: '股市大跌，你的投资受损。你：',
+                options: [
+                    { label: '割肉离场', result: '💸 亏损 1500', action: p => { p.pay(1500, null, false); } },
+                    { label: '加仓抄底', result: '📈 未来获益 2000', action: p => { addEffect(p, '抄底', 3, 'buff',
+                                '每回合+300'); } },
+                    { label: '不动', result: '📉 小亏 500', action: p => { p.pay(500, null, false); } },
+                ]
+            },
+            {
+                title: '🏥 突发疾病',
+                desc: '你生病住院，需要医疗费。你：',
+                options: [
+                    { label: '支付 2000 医疗费', result: '💸 破财消灾', action: p => { p.pay(2000, null, false); } },
+                    { label: '使用保险', result: '📄 自付 500', action: p => { p.pay(500, null, false); } },
+                    { label: '拖延', result: '💊 病情加重，下回合不能行动', action: p => { addEffect(p, '生病', 1, 'debuff',
+                                '跳过回合'); } },
+                ]
+            },
+            {
+                title: '🎭 商业机遇',
+                desc: '一个难得的商业机会出现。你：',
+                options: [
+                    { label: '投资 2000', result: '📈 获利 4000', action: p => { p.pay(2000, null, false);
+                            p.addMoney(4000); } },
+                    { label: '借贷投资', result: '🏦 借 2000，获利 5000，但需还 3000', action: p => { p.pay(2000, null,
+                                false);
+                            p.addMoney(5000);
+                            p.pay(3000, null, false); } },
+                    { label: '放弃', result: '😅 错过机会', action: p => {} },
+                ]
+            },
+            {
+                title: '🔥 火灾',
+                desc: '你的地产发生火灾，损失惨重。你：',
+                options: [
+                    { label: '修缮', result: '💸 花费 3000 修复', action: p => { p.pay(3000, null, false); } },
+                    { label: '保险理赔', result: '📄 获得 2500 赔偿', action: p => { p.addMoney(2500); } },
+                    { label: '放弃地块', result: '🏚️ 失去该地块', action: p => { if (p.properties.length > 0) { const idx =
+                                p.properties[0];
+                            const cell = BOARD[idx];
+                            cell.owner = null;
+                            cell.level = 0;
+                            cell.mortgaged = false;
+                            cell.mortgageDebt = 0;
+                            p.properties = p.properties.filter(i => i !== idx);
+                            addLog(`🔥 ${p.name} 放弃了被烧毁的 ${cell.name}`); } } },
+                ]
+            },
+            {
+                title: '📦 神秘包裹',
+                desc: '你收到一个神秘包裹，里面可能是：',
+                options: [
+                    { label: '打开', result: '💥 爆炸！损失1000并获惊吓', action: p => { p.pay(1000, null, false);
+                            addEffect(p, '惊吓', 1, 'debuff', '跳过回合'); } },
+                    { label: '转交警察', result: '👮 获得 800 赏金', action: p => { p.addMoney(800); } },
+                    { label: '扔掉', result: '🗑️ 没事发生', action: p => {} },
+                ]
+            },
+            {
+                title: '🚧 道路施工',
+                desc: '你的地产附近施工，影响客流量。你：',
+                options: [
+                    { label: '支付 500 加速', result: '🔧 施工提前结束', action: p => { p.pay(500, null, false); } },
+                    { label: '忍受', result: '📉 下回合租金减半', action: p => { addEffect(p, '施工', 1, 'debuff',
+                                '租金-50%'); } },
+                    { label: '抗议', result: '⚖️ 获得 300 赔偿', action: p => { p.addMoney(300); } },
+                ]
+            },
+        ];
+
+        // ---------- 效果系统 ----------
+        function addEffectOnProperty(player, propIdx, name, duration, type, desc) {
+            const effect = { name, duration, type, desc, propIdx };
+            player.effects.push(effect);
+            updateUI();
+        }
+
+        function addEffect(player, name, duration, type, desc) {
+            const existing = player.effects.find(e => e.name === name && !e.propIdx);
+            if (existing) { existing.duration = duration; return; }
+            player.effects.push({ name, duration, type, desc });
+            updateUI();
+        }
+
+        function applyEffects(player) {
+            const toRemove = [];
+            player.effects.forEach((effect, idx) => {
+                if (effect.propIdx !== undefined) {}
+                effect.duration--;
+                if (effect.duration <= 0) {
+                    toRemove.push(idx);
+                }
+            });
+            for (let i = toRemove.length - 1; i >= 0; i--) {
+                const idx = toRemove[i];
+                const name = player.effects[idx].name;
+                player.effects.splice(idx, 1);
+                addLog(`⏳ ${player.name} 的「${name}」效果消失了`);
+            }
+            updateUI();
+        }
+
+        function hasSkipEffect(player) {
+            return player.effects.some(e => e.name === '惊吓' || e.name === '生病');
+        }
+
+        // ---------- 日志 ----------
+        function addLog(msg) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = msg;
+            logArea.appendChild(entry);
+            logArea.scrollTop = logArea.scrollHeight;
+            if (logArea.children.length > 50) logArea.removeChild(logArea.firstChild);
+        }
+
+        // ---------- UI ----------
+        function updateUI() {
+            const p1 = players[0],
+                p2 = players[1];
+            p1money.textContent = p1.money;
+            p2money.textContent = p2.money;
+            p1props.textContent = `🏠 ${p1.totalProps} 处`;
+            p2props.textContent = `🏠 ${p2.totalProps} 处`;
+            p1card.classList.toggle('active', currentPlayerIndex === 0 && p1.alive);
+            p2card.classList.toggle('active', currentPlayerIndex === 1 && p2.alive);
+
+            p1money.classList.toggle('danger', p1.money < 2000 && p1.alive);
+            p2money.classList.toggle('danger', p2.money < 2000 && p2.alive);
+
+            const cur = players[currentPlayerIndex];
+            if (cur) {
+                if (gameOver) {
+                    p1status.textContent = p1.alive ? '🏆 获胜！' : '💔 已破产';
+                    p2status.textContent = p2.alive ? '🏆 获胜！' : '💔 已破产';
+                    turnText.textContent = '🏁 游戏结束';
+                } else if (cur.isHuman) {
+                    p1status.textContent = '🎯 你的回合';
+                    p2status.textContent = '⏳ 等待中';
+                    turnText.textContent = `🎯 你的回合`;
+                } else {
+                    p1status.textContent = '⏳ 等待中';
+                    p2status.textContent = '🤖 电脑思考中...';
+                    turnText.textContent = `🤖 电脑回合`;
+                }
+            }
+
+            renderEffects(p1, p1effects);
+            renderEffects(p2, p2effects);
+            p1loan.textContent = p1.loanActive ? `🏦 贷款 ${p1.loanAmount} (利息 ${getLoanInterest()}/回合)` : '';
+            p2loan.textContent = p2.loanActive ? `🏦 贷款 ${p2.loanAmount} (利息 ${getLoanInterest()}/回合)` : '';
+
+            const curP = players[currentPlayerIndex];
+            if (curP && curP.isHuman && !gameOver && !rolling && turnPhase === 'action' && !isEventActive) {
+                const cell = BOARD[curP.position];
+                if (cell.type === 'estate') {
+                    if (cell.owner === null && curP.money >= cell.price && !cell.mortgaged) {
+                        buyBtn.disabled = false;
+                        buyBtn.textContent = '🏠 购买';
+                    } else if (cell.owner === curP.id && cell.level < 3 && !cell.mortgaged) {
+                        buyBtn.disabled = false;
+                        buyBtn.textContent = `⬆️ 升级 (${Math.floor(cell.price * 0.5)}💰)`;
+                    } else if (cell.owner === curP.id && cell.mortgaged) {
+                        buyBtn.disabled = false;
+                        buyBtn.textContent = `🔓 赎回 (${cell.mortgageDebt + Math.floor(cell.mortgageDebt * 0.1)}💰)`;
+                    } else {
+                        buyBtn.disabled = true;
+                        buyBtn.textContent = '🏠 购买';
+                    }
+                } else {
+                    buyBtn.disabled = true;
+                    buyBtn.textContent = '🏠 购买';
+                }
+                loanBtn.disabled = curP.loanActive || curP.money >= 5000 || !curP.alive;
+                let hasUnmortgaged = curP.properties.some(idx => !BOARD[idx].mortgaged);
+                mortgageBtn.disabled = !hasUnmortgaged || !curP.alive;
+            } else {
+                buyBtn.disabled = true;
+                buyBtn.textContent = '🏠 购买';
+                loanBtn.disabled = true;
+                mortgageBtn.disabled = true;
+            }
+
+            if (!gameOver && !rolling && turnPhase === 'roll' && players[currentPlayerIndex]?.isHuman && !isEventActive) {
+                rollBtn.disabled = false;
+            } else {
+                rollBtn.disabled = true;
+            }
+
+            if (players[0] && players[0].loanActive) {
+                loanBtn.textContent = `💸 已贷款 (利息${getLoanInterest()})`;
+            } else {
+                loanBtn.textContent = `🏦 贷款 ${LOAN_AMOUNT}`;
+            }
+            mortgageBtn.textContent = '🏚️ 抵押';
+        }
+
+        function renderEffects(player, container) {
+            container.innerHTML = '';
+            player.effects.forEach(e => {
+                const tag = document.createElement('span');
+                tag.className = `effect-tag ${e.type === 'buff' ? 'buff' : 'debuff'}`;
+                tag.textContent = `${e.name} ${e.duration}回合`;
+                container.appendChild(tag);
+            });
+        }
+
+        // ---------- 绘制棋盘 ----------
+        function drawBoard() {
+            ctx.clearRect(0, 0, W, H);
+            const grad = ctx.createRadialGradient(360, 360, 50, 360, 360, 400);
+            grad.addColorStop(0, '#3a5a72');
+            grad.addColorStop(1, '#1a2a3a');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            for (let i = 0; i < 32; i++) {
+                const pos = getGridPos(i);
+                const x = OFFSET + pos.col * STEP;
+                const y = OFFSET + pos.row * STEP;
+                const cell = BOARD[i];
+
+                let bg = '#2d4059',
+                    borderColor = '#4a6a82';
+                if (cell.type === 'go') bg = '#f7d44a';
+                else if (cell.type === 'estate') {
+                    bg = cell.color || '#3a5a72';
+                    if (cell.owner !== null) {
+                        const owner = players[cell.owner];
+                        bg = owner ? owner.color : bg;
+                        borderColor = '#fff';
+                    }
+                    if (cell.mortgaged) bg = '#7f8c8d';
+                } else if (cell.type === 'event') bg = '#8e44ad';
+                else if (cell.type === 'tax') bg = '#c0392b';
+                else if (cell.type === 'parking') bg = '#27ae60';
+                else if (cell.type === 'jail') bg = '#d35400';
+
+                ctx.fillStyle = bg;
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 6;
+                ctx.fillRect(x, y, CELL, CELL);
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = borderColor;
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(x, y, CELL, CELL);
+                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x + 2, y + 2, CELL - 4, CELL - 4);
+
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = 'bold 11px "Segoe UI", sans-serif';
+
+                let label = cell.label || '';
+                if (cell.type === 'estate' && cell.name) {
+                    label = cell.name;
+                    ctx.font = 'bold 10px "Segoe UI", sans-serif';
+                    if (cell.owner !== null) {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = 'bold 9px "Segoe UI", sans-serif';
+                        ctx.fillText(`🏠 Lv${cell.level}`, x + CELL / 2, y + CELL / 2 + 14);
+                        ctx.fillStyle = '#f5e6c8';
+                        ctx.font = 'bold 9px "Segoe UI", sans-serif';
+                        ctx.fillText(label.substring(0, 4), x + CELL / 2, y + CELL / 2 - 6);
+                        if (cell.mortgaged) {
+                            ctx.fillStyle = '#ff6b6b';
+                            ctx.font = 'bold 8px sans-serif';
+                            ctx.fillText('抵押', x + CELL / 2, y + CELL / 2 + 26);
+                        }
+                    } else {
+                        ctx.fillStyle = '#f5e6c8';
+                        ctx.fillText(label.substring(0, 4), x + CELL / 2, y + CELL / 2 - 4);
+                        ctx.fillStyle = '#ddd';
+                        ctx.font = '8px "Segoe UI", sans-serif';
+                        ctx.fillText(`💰${cell.price}`, x + CELL / 2, y + CELL / 2 + 14);
+                    }
+                } else if (cell.type === 'go') {
+                    ctx.fillStyle = '#1a2a3a';
+                    ctx.font = 'bold 12px "Segoe UI", sans-serif';
+                    ctx.fillText('🚀', x + CELL / 2, y + CELL / 2 - 6);
+                    ctx.font = '8px "Segoe UI", sans-serif';
+                    ctx.fillText('起点', x + CELL / 2, y + CELL / 2 + 14);
+                } else if (cell.type === 'event') {
+                    ctx.font = '20px sans-serif';
+                    ctx.fillText('❓', x + CELL / 2, y + CELL / 2 - 2);
+                    ctx.font = '8px "Segoe UI", sans-serif';
+                    ctx.fillStyle = '#ddd';
+                    ctx.fillText('命运/机会', x + CELL / 2, y + CELL / 2 + 18);
+                } else if (cell.type === 'tax') {
+                    ctx.font = '18px sans-serif';
+                    ctx.fillText('💰', x + CELL / 2, y + CELL / 2 - 4);
+                    ctx.font = '8px "Segoe UI", sans-serif';
+                    ctx.fillStyle = '#ddd';
+                    ctx.fillText('所得税', x + CELL / 2, y + CELL / 2 + 18);
+                } else if (cell.type === 'parking') {
+                    ctx.font = '18px sans-serif';
+                    ctx.fillText('🅿️', x + CELL / 2, y + CELL / 2 - 4);
+                    ctx.font = '8px "Segoe UI", sans-serif';
+                    ctx.fillStyle = '#ddd';
+                    ctx.fillText('免费停车', x + CELL / 2, y + CELL / 2 + 18);
+                } else if (cell.type === 'jail') {
+                    ctx.font = '18px sans-serif';
+                    ctx.fillText('⛓️', x + CELL / 2, y + CELL / 2 - 4);
+                    ctx.font = '8px "Segoe UI", sans-serif';
+                    ctx.fillStyle = '#ddd';
+                    ctx.fillText('监狱', x + CELL / 2, y + CELL / 2 + 18);
+                }
+
+                if (cell.type === 'estate' && cell.owner !== null) {
+                    const owner = players[cell.owner];
+                    if (owner) {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = 'bold 10px sans-serif';
+                        ctx.fillText('●', x + CELL - 12, y + 12);
+                    }
+                }
+            }
+
+            const cx = OFFSET + 4 * STEP + CELL / 2;
+            const cy = OFFSET + 4 * STEP + CELL / 2;
+            ctx.fillStyle = 'rgba(255,255,255,0.04)';
+            ctx.beginPath();
+            ctx.arc(cx, cy, 120, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(247,212,74,0.08)';
+            ctx.font = 'bold 18px "Segoe UI", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🎲', cx, cy - 10);
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.font = '12px "Segoe UI", sans-serif';
+            ctx.fillText('硬核版', cx, cy + 24);
+
+            let cycleText = '📊 经济：正常';
+            if (economicCycle === 'boom') cycleText = '📈 繁荣';
+            if (economicCycle === 'recession') cycleText = '📉 衰退';
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(cycleText, 16, 12);
+
+            players.forEach((p, idx) => {
+                if (!p.alive) return;
+                const pos = getCellCenter(p.position);
+                const angle = (idx / players.length) * Math.PI * 2 + Date.now() / 2000;
+                const offset = 12;
+                const dx = Math.cos(angle) * offset;
+                const dy = Math.sin(angle) * offset;
+                const px = pos.x + dx;
+                const py = pos.y + dy;
+
+                const glow = ctx.createRadialGradient(px, py, 2, px, py, 22);
+                glow.addColorStop(0, p.color + '80');
+                glow.addColorStop(1, p.color + '00');
+                ctx.fillStyle = glow;
+                ctx.beginPath();
+                ctx.arc(px, py, 22, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(px, py, PLAYER_RADIUS, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.arc(px, py, PLAYER_RADIUS, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(p.isHuman ? '😊' : '🤖', px, py + 1);
+
+                ctx.fillStyle = '#f5e6c8';
+                ctx.font = 'bold 9px "Segoe UI", sans-serif';
+                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                ctx.shadowBlur = 6;
+                ctx.fillText(p.name, px, py + PLAYER_RADIUS + 14);
+                ctx.shadowBlur = 0;
+
+                if (p.inJail) {
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.font = 'bold 10px sans-serif';
+                    ctx.fillText('⛓️', px, py - PLAYER_RADIUS - 10);
+                }
+            });
+
+            if (diceValue > 0) {
+                ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.beginPath();
+                ctx.roundRect(W - 80, 12, 64, 64, 12);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#f5e6c8';
+                ctx.font = 'bold 32px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('⚀⚁⚂⚃⚄⚅' [diceValue - 1] || '🎲', W - 48, 44);
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.font = '9px sans-serif';
+                ctx.fillText('骰子', W - 48, 74);
+            }
+        }
+
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (r > w / 2) r = w / 2;
+                if (r > h / 2) r = h / 2;
+                this.moveTo(x + r, y);
+                this.lineTo(x + w - r, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r);
+                this.lineTo(x + w, y + h - r);
+                this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                this.lineTo(x + r, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r);
+                this.lineTo(x, y + r);
+                this.quadraticCurveTo(x, y, x + r, y);
+                this.closePath();
+                return this;
+            };
+        }
+
+        function getGridPos(index) {
+            if (index <= 8) return { row: 0, col: index };
+            if (index <= 16) return { row: index - 8, col: 8 };
+            if (index <= 24) return { row: 8, col: 24 - index };
+            return { row: 32 - index, col: 0 };
+        }
+
+        function getCellCenter(index) {
+            const pos = getGridPos(index);
+            const x = OFFSET + pos.col * STEP + CELL / 2;
+            const y = OFFSET + pos.row * STEP + CELL / 2;
+            return { x, y };
+        }
+
+        // ---------- 事件系统 ----------
+        function getRandomEvent() {
+            return EVENT_POOL[Math.floor(Math.random() * EVENT_POOL.length)];
+        }
+
+        function showEventForPlayer(player, eventData, callback) {
+            isEventActive = true;
+            rollBtn.disabled = true;
+            buyBtn.disabled = true;
+            loanBtn.disabled = true;
+            mortgageBtn.disabled = true;
+
+            eventTitle.textContent = `❓ ${eventData.title}`;
+            eventDesc.textContent = eventData.desc;
+            eventOptions.innerHTML = '';
+
+            eventData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerHTML = `
+                    <span class="opt-tag">选项 ${String.fromCharCode(65 + idx)}</span>
+                    <span>${opt.label}</span>
+                    <span class="opt-result">${opt.result}</span>
+                `;
+                btn.addEventListener('click', () => {
+                    opt.action(player);
+                    addLog(`⚡ ${player.name} 选择了「${opt.label}」→ ${opt.result}`);
+                    eventOverlay.classList.remove('show');
+                    isEventActive = false;
+                    if (!player.alive) {
+                        checkGameOver();
+                        drawBoard();
+                        if (callback) callback();
+                        return;
+                    }
+                    updateUI();
+                    drawBoard();
+                    if (callback) callback();
+                });
+                eventOptions.appendChild(btn);
+            });
+
+            eventOverlay.classList.add('show');
+        }
+
+        // ---------- 核心逻辑 ----------
+        function nextTurn() {
+            if (gameOver) return;
+            if (isEventActive) return;
+
+            const cur = players[currentPlayerIndex];
+            if (cur && cur.alive && cur.loanActive) {
+                if (!cur.payLoanInterest()) {
+                    checkGameOver();
+                    drawBoard();
+                    return;
+                }
+            }
+            if (cur) {
+                applyEffects(cur);
+                if (hasSkipEffect(cur)) {
+                    addLog(`😱 ${cur.name} 被效果影响，跳过本回合`);
+                    updateUI();
+                    drawBoard();
+                    if (checkGameOver()) return;
+                    finishTurn(cur);
+                    return;
+                }
+                if (cur.inJail) {
+                    cur.jailTurns++;
+                    if (cur.jailTurns >= 3) {
+                        if (cur.money >= 1000) {
+                            cur.money -= 1000;
+                            cur.inJail = false;
+                            cur.jailTurns = 0;
+                            addLog(`⛓️ ${cur.name} 支付保释金 1000 出狱`);
+                        } else {
+                            addLog(`💔 ${cur.name} 无法支付保释金，破产`);
+                            cur.alive = false;
+                            checkGameOver();
+                            drawBoard();
+                            return;
+                        }
+                    } else {
+                        addLog(`⛓️ ${cur.name} 仍在监狱中 (第${cur.jailTurns}回合)`);
+                        updateUI();
+                        drawBoard();
+                        finishTurn(cur);
+                        return;
+                    }
+                }
+            }
+
+            let next = (currentPlayerIndex + 1) % players.length;
+            let tries = 0;
+            while (!players[next].alive && tries < players.length) {
+                next = (next + 1) % players.length;
+                tries++;
+            }
+            if (tries >= players.length) {
+                gameOver = true;
+                addLog('🏆 游戏结束！所有玩家已破产。');
+                updateUI();
+                drawBoard();
+                return;
+            }
+            currentPlayerIndex = next;
+            turnPhase = 'roll';
+            rolling = false;
+            diceValue = 0;
+            buyBtn.disabled = true;
+            buyBtn.textContent = '🏠 购买';
+            updateUI();
+            drawBoard();
+
+            const curP = players[currentPlayerIndex];
+            if (!curP.isHuman) {
+                setTimeout(() => computerTurn(), 200);
+            } else {
+                addLog(`🎯 轮到你了！`);
+                rollBtn.disabled = false;
+            }
+        }
+
+        function rollDice() {
+            if (rolling || gameOver || isEventActive) return;
+            const cur = players[currentPlayerIndex];
+            if (!cur || !cur.isHuman || turnPhase !== 'roll') return;
+
+            rolling = true;
+            rollBtn.disabled = true;
+            buyBtn.disabled = true;
+            loanBtn.disabled = true;
+            mortgageBtn.disabled = true;
+
+            let count = 0;
+            const interval = setInterval(() => {
+                diceValue = Math.floor(Math.random() * 6) + 1;
+                drawBoard();
+                count++;
+                if (count > 12) {
+                    clearInterval(interval);
+                    diceValue = Math.floor(Math.random() * 6) + 1;
+                    addLog(`🎲 ${cur.name} 掷出了 ${diceValue}`);
+                    rolling = false;
+                    afterRoll(diceValue);
+                }
+            }, 80);
+        }
+
+        function afterRoll(steps) {
+            const cur = players[currentPlayerIndex];
+            if (!cur) return;
+
+            cur.move(steps);
+            const newPos = cur.position;
+            drawBoard();
+
+            const cell = BOARD[newPos];
+            addLog(`🚶 ${cur.name} 走到 ${cell.label || cell.name || '格' + newPos}`);
+
+            turnPhase = 'action';
+
+            if (cell.type === 'estate') {
+                if (cell.owner === null && !cell.mortgaged) {
+                    if (cur.isHuman) {
+                        addLog(`🏠 ${cell.name} 无人拥有，价格 💰${cell.price}`);
+                        updateUI();
+                        drawBoard();
+                        rollBtn.disabled = true;
+                        return;
+                    } else {
+                        if (cur.money >= cell.price && Math.random() < 0.6) {
+                            cur.buyProperty(newPos);
+                        } else {
+                            addLog(`💰 ${cur.name} 放弃了购买 ${cell.name}`);
+                        }
+                        finishTurn(cur);
+                    }
+                } else if (cell.owner === cur.id) {
+                    if (cur.isHuman) {
+                        if (cell.mortgaged) {
+                            addLog(`🔒 ${cell.name} 已抵押，可以赎回`);
+                            updateUI();
+                            drawBoard();
+                            rollBtn.disabled = true;
+                            return;
+                        } else {
+                            addLog(`🏠 这是你的地产 (Lv.${cell.level})，可升级`);
+                            updateUI();
+                            drawBoard();
+                            rollBtn.disabled = true;
+                            return;
+                        }
+                    } else {
+                        if (cell.mortgaged) {
+                            const cost = cell.mortgageDebt + Math.floor(cell.mortgageDebt * 0.1);
+                            if (cur.money >= cost && Math.random() < 0.3) {
+                                cur.unmortgageProperty(newPos);
+                            }
+                        } else if (cell.level < 3 && cur.money >= Math.floor(cell.price * 0.5) && Math.random() < 0.4) {
+                            cur.upgradeProperty(newPos);
+                        }
+                        finishTurn(cur);
+                    }
+                } else {
+                    if (!cell.mortgaged) {
+                        cur.payRent(newPos);
+                    } else {
+                        addLog(`🏚️ ${cell.name} 已抵押，无需支付租金`);
+                    }
+                    if (!cur.alive) { checkGameOver();
+                        drawBoard(); return; }
+                    finishTurn(cur);
+                }
+            } else if (cell.type === 'event') {
+                const eventData = getRandomEvent();
+                addLog(`❓ 触发事件：${eventData.title}`);
+                if (cur.isHuman) {
+                    showEventForPlayer(cur, eventData, () => {
+                        if (!cur.alive) { checkGameOver();
+                            drawBoard(); return; }
+                        finishTurn(cur);
+                    });
+                    return;
+                } else {
+                    const idx = Math.floor(Math.random() * eventData.options.length);
+                    const chosen = eventData.options[idx];
+                    chosen.action(cur);
+                    addLog(`🤖 ${cur.name} 随机选择了「${chosen.label}」→ ${chosen.result}`);
+                    updateUI();
+                    drawBoard();
+                    if (!cur.alive) { checkGameOver();
+                        drawBoard(); return; }
+                    finishTurn(cur);
+                    return;
+                }
+            } else if (cell.type === 'tax') {
+                const tax1 = Math.floor(cur.totalAssetValue * 0.12);
+                const tax2 = 2000;
+                addLog(`💰 所得税：需支付 ${tax1} (总资产12%) 或 ${tax2} (固定)`);
+                if (cur.isHuman) {
+                    const eventData = {
+                        title: '💰 所得税',
+                        desc: `请选择缴税方式：总资产12% (${tax1}) 或 固定税额 (${tax2})`,
+                        options: [
+                            { label: `支付 ${tax1}`, result: `💸 支付 ${tax1}`, action: p => { p.pay(tax1, null,
+                                    false); } },
+                            { label: `支付 ${tax2}`, result: `💸 支付 ${tax2}`, action: p => { p.pay(tax2, null,
+                                    false); } },
+                        ]
+                    };
+                    showEventForPlayer(cur, eventData, () => {
+                        if (!cur.alive) { checkGameOver();
+                            drawBoard(); return; }
+                        finishTurn(cur);
+                    });
+                    return;
+                } else {
+                    if (tax1 < tax2) {
+                        cur.pay(tax1, null, false);
+                    } else {
+                        cur.pay(tax2, null, false);
+                    }
+                    finishTurn(cur);
+                }
+            } else if (cell.type === 'jail') {
+                addLog(`⛓️ ${cur.name} 被关进监狱！`);
+                cur.inJail = true;
+                cur.jailTurns = 0;
+                finishTurn(cur);
+            } else if (cell.type === 'parking') {
+                addLog(`🅿️ ${cur.name} 免费停车，休息一下`);
+                finishTurn(cur);
+            } else {
+                finishTurn(cur);
+            }
+        }
+
+        function finishTurn(cur) {
+            updateUI();
+            drawBoard();
+            if (checkGameOver()) return;
+            if (cur.isHuman) {
+                turnPhase = 'end';
+                setTimeout(() => { nextTurn(); }, 200);
+            } else {
+                turnPhase = 'end';
+                setTimeout(() => { nextTurn(); }, 200);
+            }
+        }
+
+        function checkGameOver() {
+            const alive = players.filter(p => p.alive);
+            if (alive.length <= 1) {
+                gameOver = true;
+                const winner = alive[0];
+                addLog(`🏆 ${winner ? winner.name : '无'} 获胜！🎉`);
+                // ===== 玩家胜利时发放积分 =====
+                if (winner && winner.isHuman && window.PointsSystem && !pointsAwarded) {
+                    const basePoints = 200;
+                    const assetBonus = Math.floor(winner.totalAssetValue / 100);
+                    const propBonus = winner.totalProps * 20;
+                    const totalPoints = basePoints + assetBonus + propBonus;
+                    PointsSystem.addPoints(PointsSystem.GAME_KEYS.MONOPOLY, totalPoints);
+                    PointsSystem.addWin(PointsSystem.GAME_KEYS.MONOPOLY);
+                    pointsAwarded = true;
+                    addLog(`💎 获得 ${totalPoints} 积分！基础 ${basePoints} + 资产 ${assetBonus} + 地产 ${propBonus}`);
+                }
+                updateUI();
+                drawBoard();
+                rollBtn.disabled = true;
+                buyBtn.disabled = true;
+                loanBtn.disabled = true;
+                mortgageBtn.disabled = true;
+                return true;
+            }
+            return false;
+        }
+
+        // ---------- 电脑回合 ----------
+        function computerTurn() {
+            if (gameOver || isEventActive) return;
+            const cur = players[currentPlayerIndex];
+            if (!cur || cur.isHuman) return;
+
+            rollBtn.disabled = true;
+            buyBtn.disabled = true;
+            loanBtn.disabled = true;
+            mortgageBtn.disabled = true;
+
+            diceValue = Math.floor(Math.random() * 6) + 1;
+            addLog(`🎲 ${cur.name} 掷出了 ${diceValue}`);
+
+            cur.move(diceValue);
+            const newPos = cur.position;
+            drawBoard();
+
+            const cell = BOARD[newPos];
+            addLog(`🚶 ${cur.name} 走到 ${cell.label || cell.name || '格' + newPos}`);
+
+            if (cell.type === 'estate') {
+                if (cell.owner === null && !cell.mortgaged) {
+                    if (cur.money >= cell.price && Math.random() < 0.6) {
+                        cur.buyProperty(newPos);
+                    } else {
+                        addLog(`💰 ${cur.name} 放弃了购买 ${cell.name}`);
+                    }
+                } else if (cell.owner === cur.id) {
+                    if (cell.mortgaged) {
+                        const cost = cell.mortgageDebt + Math.floor(cell.mortgageDebt * 0.1);
+                        if (cur.money >= cost && Math.random() < 0.3) {
+                            cur.unmortgageProperty(newPos);
+                        }
+                    } else if (cell.level < 3 && cur.money >= Math.floor(cell.price * 0.5) && Math.random() < 0.4) {
+                        cur.upgradeProperty(newPos);
+                    }
+                } else {
+                    if (!cell.mortgaged) {
+                        cur.payRent(newPos);
+                    }
+                }
+                finishTurn(cur);
+            } else if (cell.type === 'event') {
+                const eventData = getRandomEvent();
+                addLog(`❓ 触发事件：${eventData.title}`);
+                const idx = Math.floor(Math.random() * eventData.options.length);
+                const chosen = eventData.options[idx];
+                chosen.action(cur);
+                addLog(`🤖 ${cur.name} 随机选择了「${chosen.label}」→ ${chosen.result}`);
+                updateUI();
+                drawBoard();
+                if (!cur.alive) { checkGameOver();
+                    drawBoard(); return; }
+                finishTurn(cur);
+                return;
+            } else if (cell.type === 'tax') {
+                const tax1 = Math.floor(cur.totalAssetValue * 0.12);
+                const tax2 = 2000;
+                if (tax1 < tax2) {
+                    cur.pay(tax1, null, false);
+                } else {
+                    cur.pay(tax2, null, false);
+                }
+                finishTurn(cur);
+            } else if (cell.type === 'jail') {
+                addLog(`⛓️ ${cur.name} 被关进监狱！`);
+                cur.inJail = true;
+                cur.jailTurns = 0;
+                finishTurn(cur);
+            } else if (cell.type === 'parking') {
+                addLog(`🅿️ ${cur.name} 免费停车`);
+                finishTurn(cur);
+            } else {
+                finishTurn(cur);
+            }
+        }
+
+        // ---------- 按钮事件 (增加防连点) ----------
+        function handleBuy() {
+            // 立即禁用自身，防止连点
+            buyBtn.disabled = true;
+            if (gameOver || rolling || isEventActive) {
+                updateUI();
+                return;
+            }
+            const cur = players[currentPlayerIndex];
+            if (!cur || !cur.isHuman || turnPhase !== 'action') {
+                updateUI();
+                return;
+            }
+            const pos = cur.position;
+            const cell = BOARD[pos];
+            if (cell.type !== 'estate') {
+                updateUI();
+                return;
+            }
+            if (cell.owner === null && !cell.mortgaged) {
+                if (cur.buyProperty(pos)) {
+                    finishTurn(cur);
+                } else {
+                    updateUI(); // 失败时恢复按钮状态
+                }
+            } else if (cell.owner === cur.id) {
+                if (cell.mortgaged) {
+                    if (cur.unmortgageProperty(pos)) {
+                        finishTurn(cur);
+                    } else {
+                        updateUI();
+                    }
+                } else if (cell.level < 3) {
+                    if (cur.upgradeProperty(pos)) {
+                        finishTurn(cur);
+                    } else {
+                        updateUI();
+                    }
+                } else {
+                    updateUI();
+                }
+            } else {
+                updateUI();
+            }
+        }
+
+        function handleLoan() {
+            loanBtn.disabled = true;
+            if (gameOver || rolling || isEventActive) {
+                updateUI();
+                return;
+            }
+            const cur = players[currentPlayerIndex];
+            if (!cur || !cur.isHuman || turnPhase !== 'action') {
+                updateUI();
+                return;
+            }
+            if (cur.loanActive) {
+                addLog(`🏦 已贷款`);
+                updateUI();
+                return;
+            }
+            if (cur.money >= 5000) {
+                addLog(`💰 资金充足，不需要贷款`);
+                updateUI();
+                return;
+            }
+            cur.takeLoan();
+            updateUI();
+            drawBoard();
+            // 贷款后不自动结束回合，让玩家继续操作
+        }
+
+        function handleMortgage() {
+            mortgageBtn.disabled = true;
+            if (gameOver || rolling || isEventActive) {
+                updateUI();
+                return;
+            }
+            const cur = players[currentPlayerIndex];
+            if (!cur || !cur.isHuman || turnPhase !== 'action') {
+                updateUI();
+                return;
+            }
+            for (let idx of cur.properties) {
+                if (!BOARD[idx].mortgaged) {
+                    cur.mortgageProperty(idx);
+                    updateUI();
+                    drawBoard();
+                    return;
+                }
+            }
+            addLog(`🏚️ 没有可抵押的地产`);
+            updateUI();
+        }
+
+        buyBtn.addEventListener('click', handleBuy);
+        loanBtn.addEventListener('click', handleLoan);
+        mortgageBtn.addEventListener('click', handleMortgage);
+        rollBtn.addEventListener('click', rollDice);
+
+        // ---------- 初始化 ----------
+        function initGame() {
+            players = [
+                new Player(0, '玩家', '#ff6b6b', true),
+                new Player(1, '电脑', '#4ecdc4', false),
+            ];
+            currentPlayerIndex = 0;
+            gameOver = false;
+            rolling = false;
+            turnPhase = 'roll';
+            diceValue = 0;
+            isEventActive = false;
+            economicCycle = 'normal';
+            pointsAwarded = false;
+
+            BOARD.forEach(cell => {
+                if (cell.type === 'estate') {
+                    cell.owner = null;
+                    cell.level = 0;
+                    cell.mortgaged = false;
+                    cell.mortgageDebt = 0;
+                    cell.buildCost = 0;
+                }
+            });
+
+            logArea.innerHTML = '';
+            addLog('🎮 硬核稳定版启动！防连点保护已开启。');
+            addLog('💡 年度持有成本、抵押、破产清算、经济周期 — 步步惊心！');
+
+            updateUI();
+            drawBoard();
+            rollBtn.disabled = false;
+            buyBtn.disabled = true;
+            loanBtn.disabled = true;
+            mortgageBtn.disabled = true;
+        }
+
+        function gameLoop() {
+            drawBoard();
+            requestAnimationFrame(gameLoop);
+        }
+
+        initGame();
+        gameLoop();
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const size = rect.width - 16;
+            canvas.style.width = size + 'px';
+            canvas.style.height = size + 'px';
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { if (!rollBtn.disabled) rollBtn.click();
+                e.preventDefault(); }
+            if (e.key === 'b' || e.key === 'B') { if (!buyBtn.disabled) buyBtn.click();
+                e.preventDefault(); }
+            if (e.key === 'l' || e.key === 'L') { if (!loanBtn.disabled) loanBtn.click();
+                e.preventDefault(); }
+            if (e.key === 'm' || e.key === 'M') { if (!mortgageBtn.disabled) mortgageBtn.click();
+                e.preventDefault(); }
+        });
+
+        addLog('💡 快捷键: 空格/回车=掷骰, B=购买/升级/赎回, L=贷款, M=抵押');
+        console.log('🎲 大富翁 · 硬核稳定版 已启动！');
+    </script>
+</body>
+</html>

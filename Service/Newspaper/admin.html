@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>市舶司运维面板</title>
+    <link href="newspaper.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .admin-header .subtitle {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-nav a, .admin-nav button {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .admin-nav a:hover, .admin-nav button:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .stat-card .unit {
+            font-size: 14px;
+            color: #888;
+            margin-left: 4px;
+        }
+
+        .stat-card.info .value { color: #1976d2; }
+        .stat-card.success .value { color: #2e7d32; }
+        .stat-card.warning .value { color: #f57c00; }
+        .stat-card.danger .value { color: #d32f2f; }
+
+        .panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #1976d2;
+        }
+
+        .tab.active {
+            color: #1976d2;
+            border-bottom-color: #1976d2;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #1976d2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1565c0;
+        }
+
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .btn-warning {
+            background: #f57c00;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #ef6c00;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c62828;
+        }
+
+        .btn-secondary {
+            background: #757575;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #616161;
+        }
+
+        .btn-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-row label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .filter-row select, .filter-row input {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+
+        .data-table tr:hover {
+            background: #fafafa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-info { background: #e3f2fd; color: #1565c0; }
+        .badge-success { background: #e8f5e9; color: #2e7d32; }
+        .badge-warning { background: #fff3e0; color: #e65100; }
+        .badge-danger { background: #ffebee; color: #c62828; }
+        .badge-debug { background: #eceff1; color: #546e7a; }
+
+        .log-message {
+            max-width: 500px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chart-container {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .chart-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .chart-box h4 {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chart-bar-label {
+            width: 80px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .chart-bar-track {
+            flex: 1;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 8px;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .chart-bar-value {
+            width: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .color-blue { background: #1976d2; }
+        .color-green { background: #2e7d32; }
+        .color-orange { background: #f57c00; }
+        .color-red { background: #d32f2f; }
+        .color-purple { background: #7b1fa2; }
+        .color-teal { background: #00796b; }
+
+        .pagination {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .pagination button.active {
+            background: #1976d2;
+            color: white;
+            border-color: #1976d2;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .info-box {
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #d48806;
+        }
+
+        .system-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-item .key {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .info-item .val {
+            color: #333;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .log-entry {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+        }
+
+        .log-debug { color: #78909c; }
+        .log-info { color: #1976d2; }
+        .log-warning { color: #f57c00; }
+        .log-error { color: #d32f2f; }
+        .log-fatal { color: #7b1fa2; }
+
+        .refresh-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-success { background: #2e7d32; }
+        .toast-error { background: #d32f2f; }
+        .toast-info { background: #1976d2; }
+        .toast-warning { background: #f57c00; }
+        /* Token 认证弹窗 */
+        .token-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .token-modal.show { display: flex; }
+        .token-modal-box {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            width: 380px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: tokenIn 0.25s ease-out;
+        }
+        @keyframes tokenIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .token-modal-box h2 {
+            font-size: 18px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .token-modal-box p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .token-modal-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .token-modal-box input:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+        .token-modal-box .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            justify-content: flex-end;
+        }
+        .token-lock-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .token-lock-screen .lock-box {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .token-lock-screen .lock-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .token-lock-screen input {
+            display: block;
+            width: 280px;
+            margin: 16px auto;
+            padding: 12px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            box-sizing: border-box;
+        }
+        .token-lock-screen input::placeholder { color: rgba(255,255,255,0.6); }
+        .token-lock-screen input:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.8);
+        }
+        .token-lock-screen button {
+            padding: 10px 28px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .token-lock-screen button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .token-lock-screen .hint {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 12px;
+        }
+        .token-lock-screen .error-msg {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Token 锁屏：未验证前遮住所有内容 -->
+    <div id="tokenLockScreen" class="token-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔐</div>
+            <h2 style="font-size:20px;margin-bottom:8px;">Newspaper 运维面板</h2>
+            <p style="font-size:13px;opacity:0.7;margin-bottom:8px;">独立端口访问 · 需要 Token 认证</p>
+            <input type="password" id="lockTokenInput" placeholder="请输入运维 Token" autocomplete="off">
+            <div class="error-msg" id="lockErrorMsg"></div>
+            <button onclick="submitLockToken()">进入面板</button>
+            <div class="hint">Token 保存在本机 localStorage，关闭浏览器后需重新输入</div>
+        </div>
+    </div>
+
+    <div class="admin-header">
+        <div>
+            <h1>📊 市舶司运维面板</h1>
+            <div class="subtitle">系统管理 · 日志监控 · 数据分析</div>
+        </div>
+        <div class="admin-nav">
+            <button onclick="refreshAll()">🔄 刷新</button>
+            <a href="/" target="_blank">📰 前往晚报</a>
+            <button id="tokenStatusBtn" onclick="showTokenModal()" title="点击更换 Token">🔒 Token: 已设置</button>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <div class="stats-grid" id="overviewCards">
+            <div class="stat-card info">
+                <div class="label">新闻总数</div>
+                <div class="value" id="totalNews">0</div>
+            </div>
+            <div class="stat-card success">
+                <div class="label">今日新增</div>
+                <div class="value" id="todayNews">0</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="label">新闻源</div>
+                <div class="value" id="totalSources">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">已分析</div>
+                <div class="value" id="analyzedCount">0</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="label">内存使用</div>
+                <div class="value" id="memoryUsage">0<span class="unit">MB</span></div>
+            </div>
+            <div class="stat-card info">
+                <div class="label">运行时间</div>
+                <div class="value" id="uptime">0<span class="unit">秒</span></div>
+            </div>
+            <div class="stat-card success">
+                <div class="label">永久保存</div>
+                <div class="value" id="permanentNews">0</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>📋 功能管理</h2>
+            </div>
+            <div class="panel-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('analysis')">📊 新闻分析</button>
+                    <button class="tab" onclick="switchTab('logs')">📝 系统日志</button>
+                    <button class="tab" onclick="switchTab('sources')">📡 新闻源</button>
+                    <button class="tab" onclick="switchTab('database')">💾 数据库</button>
+                    <button class="tab" onclick="switchTab('system')">⚙️ 系统设置</button>
+                </div>
+
+                <div class="tab-content active" id="tab-analysis">
+                    <div class="action-row">
+                        <button class="btn btn-primary" onclick="runAnalysis(100)">🔍 分析最新100条</button>
+                        <button class="btn btn-success" onclick="runAnalysis(500)">🔍 分析最新500条</button>
+                        <button class="btn btn-warning" onclick="runAnalysis(1000)">🔍 分析最新1000条</button>
+                        <button class="btn btn-danger" onclick="clearAllAnalysis()">🗑️ 清除所有分析</button>
+                    </div>
+
+                    <div id="analysisStats" class="chart-container">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+
+                    <h3 style="margin: 20px 0 12px; font-size: 14px;">分析结果分布</h3>
+                    <div id="analysisSummary" class="chart-container">
+                        <div class="empty-state">暂无数据</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-logs">
+                    <div class="filter-row">
+                        <label>级别：</label>
+                        <select id="logLevelFilter" onchange="loadLogs(1)">
+                            <option value="all">全部</option>
+                            <option value="DEBUG">DEBUG</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="FATAL">FATAL</option>
+                        </select>
+                        <label>模块：</label>
+                        <select id="logModuleFilter" onchange="loadLogs(1)">
+                            <option value="">全部</option>
+                        </select>
+                        <button class="btn btn-sm btn-secondary" onclick="refreshLogModules()">🔄 刷新模块</button>
+                        <div style="flex: 1;"></div>
+                        <button class="btn btn-sm btn-danger" onclick="cleanLogs(7)">🗑️ 清理7天前</button>
+                        <button class="btn btn-sm btn-danger" onclick="cleanLogs(30)">🗑️ 清理30天前</button>
+                    </div>
+
+                    <div id="logList">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;">ID</th>
+                                    <th style="width:80px;">级别</th>
+                                    <th style="width:100px;">模块</th>
+                                    <th>消息</th>
+                                    <th style="width:160px;">时间</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logTableBody">
+                                <tr><td colspan="5" class="loading">加载中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="logPagination" class="pagination"></div>
+                </div>
+
+                <div class="tab-content" id="tab-sources">
+                    <div class="action-row">
+                        <button class="btn btn-primary" onclick="fetchAllSources()">📥 抓取所有源</button>
+                        <button class="btn btn-success" onclick="showAddSourceForm()">➕ 添加新闻源</button>
+                    </div>
+
+                    <div id="addSourceForm" style="display:none; margin-bottom: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px;">
+                        <h4 style="margin-bottom: 12px;">添加新闻源</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>名称</label>
+                                <input type="text" id="sourceName" placeholder="如：人民网">
+                            </div>
+                            <div class="form-group">
+                                <label>URL</label>
+                                <input type="text" id="sourceUrl" placeholder="RSS URL">
+                            </div>
+                            <div class="form-group">
+                                <label>类型</label>
+                                <select id="sourceType">
+                                    <option value="rss">RSS</option>
+                                    <option value="atom">ATOM</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>分类</label>
+                                <select id="sourceCategory">
+                                    <option value="时政">时政</option>
+                                    <option value="财经">财经</option>
+                                    <option value="科技">科技</option>
+                                    <option value="体育">体育</option>
+                                    <option value="综合">综合</option>
+                                    <option value="娱乐">娱乐</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="addSource()">添加</button>
+                            <button class="btn btn-secondary" onclick="hideAddSourceForm()">取消</button>
+                        </div>
+                    </div>
+
+                    <div id="sourcesList">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;">ID</th>
+                                    <th>名称</th>
+                                    <th>URL</th>
+                                    <th style="width:80px;">类型</th>
+                                    <th style="width:80px;">分类</th>
+                                    <th style="width:80px;">状态</th>
+                                    <th style="width:100px;">最后抓取</th>
+                                    <th style="width:160px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sourcesTableBody">
+                                <tr><td colspan="8" class="loading">加载中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-database">
+                    <div class="action-row">
+                        <button class="btn btn-success" onclick="createBackup()">💾 创建备份</button>
+                        <button class="btn btn-warning" onclick="cleanOldNews(7)">🗑️ 清理7天前新闻</button>
+                        <button class="btn btn-warning" onclick="cleanOldNews(30)">🗑️ 清理30天前新闻</button>
+                        <button class="btn btn-warning" onclick="cleanOldFetchLogs(7)">🗑️ 清理7天前抓取日志</button>
+                        <button class="btn btn-danger" onclick="cleanOldLogs(30)">🗑️ 清理30天前日志</button>
+                        <button class="btn btn-primary" onclick="vacuumDB()">📦 VACUUM 回收空间</button>
+                    </div>
+
+                    <div class="action-row" style="margin-top:10px;">
+                        <span style="font-size:13px;color:var(--gs-text-sub);margin-right:12px;">永久保存操作：</span>
+                        <button class="btn btn-success" onclick="permanentAll()">⭐ 全部永久保存</button>
+                        <button class="btn btn-success" onclick="permanentOld(30)">⭐ 永久保存30天前</button>
+                        <button class="btn btn-warning" onclick="unpermanentAll()">☆ 取消全部永久</button>
+                        <button class="btn btn-danger" onclick="cleanAllData()">⚠️ 清空所有数据</button>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>💡 存储优化建议：</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                            <li>每条新闻内容限制在 <strong>10KB</strong> 以内，摘要限制在 <strong>2000字</strong> 以内</li>
+                            <li>系统每 <strong>6小时</strong> 自动清理一次旧数据和日志</li>
+                            <li>建议保留最近 <strong>30天</strong> 的新闻，超过此期限会自动清理</li>
+                            <li>标记为 <strong>永久保存</strong> 的新闻不会被自动清理，可长期保存</li>
+                            <li>点击 <strong>VACUUM</strong> 可回收已删除数据占用的磁盘空间</li>
+                        </ul>
+                    </div>
+
+                    <div id="dbStats" class="system-info-grid">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-system">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>日志级别</label>
+                            <select id="logLevelSelect" onchange="setLogLevel()">
+                                <option value="DEBUG">DEBUG - 调试</option>
+                                <option value="INFO">INFO - 信息</option>
+                                <option value="WARNING">WARNING - 警告</option>
+                                <option value="ERROR">ERROR - 错误</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 20px 0 12px; font-size: 14px;">系统信息</h3>
+                    <div id="systemInfo" class="system-info-grid">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Token 更换弹窗 -->
+    <div id="tokenModal" class="token-modal">
+        <div class="token-modal-box">
+            <h2>🔒 更换运维 Token</h2>
+            <p>当前 Token 已保存。输入新 Token 后点击保存，下次请求生效。Token 错误将无法调用运维 API。</p>
+            <input type="password" id="modalTokenInput" placeholder="新 Token" autocomplete="off">
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="hideTokenModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveTokenFromModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        let currentLogPage = 1;
+        let logTotalPages = 1;
+
+        // ===== Token 管理 =====
+        const TOKEN_KEY = 'newspaper_admin_token';
+
+        function getStoredToken() {
+            // 优先 localStorage，其次 URL ?token=xxx
+            const fromUrl = new URLSearchParams(location.search).get('token');
+            if (fromUrl) {
+                localStorage.setItem(TOKEN_KEY, fromUrl);
+                history.replaceState(null, '', location.pathname);
+                return fromUrl;
+            }
+            return localStorage.getItem(TOKEN_KEY) || '';
+        }
+
+        function setStoredToken(token) {
+            localStorage.setItem(TOKEN_KEY, token);
+        }
+
+        function clearStoredToken() {
+            localStorage.removeItem(TOKEN_KEY);
+        }
+
+        function updateTokenStatusBtn() {
+            const btn = document.getElementById('tokenStatusBtn');
+            const token = getStoredToken();
+            if (token) {
+                const preview = token.slice(0, 4) + '****' + token.slice(-2);
+                btn.textContent = '🔒 Token: ' + preview;
+                btn.style.background = 'rgba(46,125,50,0.5)';
+            } else {
+                btn.textContent = '🔓 Token: 未设置';
+                btn.style.background = 'rgba(211,47,47,0.5)';
+            }
+        }
+
+        function showTokenModal() {
+            document.getElementById('modalTokenInput').value = '';
+            document.getElementById('tokenModal').classList.add('show');
+            setTimeout(() => document.getElementById('modalTokenInput').focus(), 100);
+        }
+
+        function hideTokenModal() {
+            document.getElementById('tokenModal').classList.remove('show');
+        }
+
+        function saveTokenFromModal() {
+            const token = document.getElementById('modalTokenInput').value.trim();
+            if (!token) {
+                showToast('Token 不能为空', 'error');
+                return;
+            }
+            setStoredToken(token);
+            updateTokenStatusBtn();
+            hideTokenModal();
+            showToast('Token 已保存，正在验证...', 'success');
+            verifyTokenAndLoad();
+        }
+
+        function showLockScreen() {
+            document.getElementById('tokenLockScreen').style.display = 'flex';
+            document.getElementById('lockTokenInput').value = '';
+            document.getElementById('lockTokenInput').focus();
+        }
+
+        function hideLockScreen() {
+            document.getElementById('tokenLockScreen').style.display = 'none';
+        }
+
+        async function submitLockToken() {
+            const token = document.getElementById('lockTokenInput').value.trim();
+            const errEl = document.getElementById('lockErrorMsg');
+            if (!token) {
+                errEl.textContent = '请输入 Token';
+                return;
+            }
+            setStoredToken(token);
+            errEl.textContent = '验证中...';
+            try {
+                await apiRequest('/admin/overview');
+                errEl.textContent = '';
+                hideLockScreen();
+                updateTokenStatusBtn();
+                bootstrapPanels();
+                showToast('Token 验证成功', 'success');
+            } catch (e) {
+                errEl.textContent = 'Token 验证失败，请检查';
+                clearStoredToken();
+            }
+        }
+
+        // Enter 键提交 token
+        document.addEventListener('DOMContentLoaded', () => {
+            const lockInput = document.getElementById('lockTokenInput');
+            if (lockInput) {
+                lockInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') submitLockToken();
+                });
+            }
+            const modalInput = document.getElementById('modalTokenInput');
+            if (modalInput) {
+                modalInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') saveTokenFromModal();
+                });
+            }
+        });
+
+        async function verifyTokenAndLoad() {
+            try {
+                await apiRequest('/admin/overview');
+                hideLockScreen();
+                updateTokenStatusBtn();
+                bootstrapPanels();
+            } catch (e) {
+                showLockScreen();
+                updateTokenStatusBtn();
+            }
+        }
+
+        // 启动各面板的数据加载（仅在 token 验证通过后调用）
+        function bootstrapPanels() {
+            loadLogModules();
+            refreshAll();
+        }
+
+        async function apiRequest(endpoint, options = {}) {
+            const url = endpoint.startsWith('http') ? endpoint : API_BASE + endpoint;
+            const token = getStoredToken();
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+            if (token) {
+                headers['X-Admin-Token'] = token;
+            }
+            const defaultOptions = { headers };
+            try {
+                const response = await fetch(url, { ...defaultOptions, ...options });
+                if (response.status === 401 || response.status === 403) {
+                    // token 失效，清空并显示锁屏
+                    clearStoredToken();
+                    updateTokenStatusBtn();
+                    showLockScreen();
+                    throw new Error('Token 无效或已失效');
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                if (response.status === 204) return null;
+                return await response.json();
+            } catch (error) {
+                console.error('API请求失败:', error);
+                throw error;
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast toast-${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            if (tabName === 'logs') loadLogs(1);
+            if (tabName === 'analysis') loadAnalysisStats();
+            if (tabName === 'sources') loadSources();
+            if (tabName === 'database') loadDBStats();
+            if (tabName === 'system') loadSystemInfo();
+        }
+
+        async function refreshAll() {
+            try {
+                const data = await apiRequest('/admin/overview');
+                updateOverviewCards(data);
+                showToast('数据已刷新', 'success');
+            } catch (e) {
+                showToast('刷新失败', 'error');
+            }
+        }
+
+        function updateOverviewCards(data) {
+            if (data.news) {
+                document.getElementById('totalNews').textContent = data.news.total_count || 0;
+                document.getElementById('todayNews').textContent = data.news.today_count || 0;
+                document.getElementById('totalSources').textContent = data.news.source_count || 0;
+                const permEl = document.getElementById('permanentNews');
+                if (permEl) permEl.textContent = data.news.permanent_count || 0;
+            }
+            if (data.analysis) {
+                document.getElementById('analyzedCount').textContent = data.analysis.analyzed_count || 0;
+            }
+            if (data.memory) {
+                document.getElementById('memoryUsage').innerHTML = 
+                    Math.round(data.memory.alloc / 1024 / 1024) + '<span class="unit">MB</span>';
+            }
+            if (data.server) {
+                document.getElementById('uptime').innerHTML = 
+                    data.server.uptime_seconds + '<span class="unit">秒</span>';
+            }
+        }
+
+        async function loadAnalysisStats() {
+            try {
+                const data = await apiRequest('/admin/analysis');
+                renderAnalysisStats(data.stats);
+                renderAnalysisSummary(data.summary);
+            } catch (e) {
+                document.getElementById('analysisStats').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        function renderAnalysisStats(stats) {
+            if (!stats) {
+                document.getElementById('analysisStats').innerHTML = '<div class="empty-state">暂无数据</div>';
+                return;
+            }
+
+            const total = stats.analyzed_count || 1;
+            const items = [
+                { label: '保守/政府', value: stats.left_count || 0, color: 'color-red' },
+                { label: '自由/批评', value: stats.right_count || 0, color: 'color-blue' },
+                { label: '中立', value: stats.neutral_count || 0, color: 'color-gray' },
+                { label: '检测到私活', value: stats.private_ad_count || 0, color: 'color-orange' },
+            ];
+
+            let html = '<div class="chart-box" style="min-width:100%;"><h4>政治立场分布</h4>';
+            items.forEach(item => {
+                const percent = ((item.value / total) * 100).toFixed(1);
+                html += `
+                    <div class="chart-bar">
+                        <div class="chart-bar-label">${item.label}</div>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill ${item.color}" style="width: ${percent}%"></div>
+                        </div>
+                        <div class="chart-bar-value">${item.value} (${percent}%)</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            document.getElementById('analysisStats').innerHTML = html;
+        }
+
+        function renderAnalysisSummary(summary) {
+            if (!summary || summary.length === 0) {
+                document.getElementById('analysisSummary').innerHTML = '<div class="empty-state">暂无分析数据</div>';
+                return;
+            }
+
+            const grouped = {};
+            summary.forEach(item => {
+                if (!grouped[item.type]) grouped[item.type] = [];
+                grouped[item.type].push(item);
+            });
+
+            const typeNames = {
+                political_stance: '政治立场',
+                topic_category: '话题分类',
+                reliability: '可靠性'
+            };
+
+            const typeColors = {
+                political_stance: ['color-red', 'color-blue', 'color-gray', 'color-purple'],
+                topic_category: ['color-blue', 'color-green', 'color-orange', 'color-teal', 'color-purple'],
+                reliability: ['color-green', 'color-orange', 'color-red']
+            };
+
+            let html = '';
+            Object.keys(grouped).forEach(type => {
+                const items = grouped[type];
+                const total = items.reduce((sum, i) => sum + i.count, 0);
+                const colors = typeColors[type] || ['color-blue'];
+
+                html += `<div class="chart-box"><h4>${typeNames[type] || type}</h4>`;
+                items.forEach((item, idx) => {
+                    const percent = ((item.count / total) * 100).toFixed(1);
+                    const color = colors[idx % colors.length];
+                    html += `
+                        <div class="chart-bar">
+                            <div class="chart-bar-label">${item.value}</div>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill ${color}" style="width: ${percent}%"></div>
+                            </div>
+                            <div class="chart-bar-value">${item.count}</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            });
+
+            document.getElementById('analysisSummary').innerHTML = html;
+        }
+
+        async function runAnalysis(limit) {
+            if (!confirm(`确定要分析最新 ${limit} 条新闻吗？`)) return;
+
+            try {
+                const data = await apiRequest('/admin/analysis', {
+                    method: 'POST',
+                    body: JSON.stringify({ limit })
+                });
+                showToast(`成功分析 ${data.count} 条新闻`, 'success');
+                loadAnalysisStats();
+                refreshAll();
+            } catch (e) {
+                showToast('分析失败', 'error');
+            }
+        }
+
+        async function clearAllAnalysis() {
+            if (!confirm('确定要清除所有分析结果吗？此操作不可恢复！')) return;
+
+            try {
+                const response = await fetch('/api/news', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'clear_analysis' })
+                });
+                if (response.ok) {
+                    showToast('分析结果已清除', 'success');
+                    loadAnalysisStats();
+                } else {
+                    showToast('清除失败', 'error');
+                }
+            } catch (e) {
+                showToast('清除失败', 'error');
+            }
+        }
+
+        async function loadLogModules() {
+            try {
+                const data = await apiRequest('/admin/logs?page=1&per_page=1');
+                const modules = data.modules || [];
+                const select = document.getElementById('logModuleFilter');
+                select.innerHTML = '<option value="">全部</option>';
+                modules.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function loadLogs(page = 1) {
+            currentLogPage = page;
+            const level = document.getElementById('logLevelFilter').value;
+            const module = document.getElementById('logModuleFilter').value;
+
+            try {
+                const data = await apiRequest(`/admin/logs?page=${page}&per_page=20&level=${level}&module=${module}`);
+                renderLogTable(data.logs);
+                renderLogPagination(data.total, data.page, data.per_page);
+            } catch (e) {
+                document.getElementById('logTableBody').innerHTML = '<tr><td colspan="5" class="loading">加载失败</td></tr>';
+            }
+        }
+
+        function renderLogTable(logs) {
+            const tbody = document.getElementById('logTableBody');
+            if (!logs || logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">暂无日志</td></tr>';
+                return;
+            }
+
+            const levelColors = {
+                'DEBUG': 'log-debug',
+                'INFO': 'log-info',
+                'WARNING': 'log-warning',
+                'ERROR': 'log-error',
+                'FATAL': 'log-fatal'
+            };
+
+            const levelBadgeColors = {
+                'DEBUG': 'badge badge-debug',
+                'INFO': 'badge badge-info',
+                'WARNING': 'badge badge-warning',
+                'ERROR': 'badge badge-danger',
+                'FATAL': 'badge badge-danger'
+            };
+
+            tbody.innerHTML = logs.map(log => `
+                <tr class="log-entry ${levelColors[log.level] || ''}">
+                    <td>${log.id}</td>
+                    <td><span class="${levelBadgeColors[log.level] || 'badge'}">${log.level}</span></td>
+                    <td>${log.module}</td>
+                    <td class="log-message" title="${log.message}">${log.message}</td>
+                    <td>${formatLogTime(log.log_time)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderLogPagination(total, currentPage, perPage) {
+            const totalPages = Math.ceil(total / perPage);
+            logTotalPages = totalPages;
+
+            const container = document.getElementById('logPagination');
+            let html = '';
+
+            if (currentPage > 1) {
+                html += `<button onclick="loadLogs(${currentPage - 1})">上一页</button>`;
+            }
+
+            const start = Math.max(1, currentPage - 2);
+            const end = Math.min(totalPages, start + 4);
+            for (let i = start; i <= end; i++) {
+                html += `<button class="${i === currentPage ? 'active' : ''}" onclick="loadLogs(${i})">${i}</button>`;
+            }
+
+            if (currentPage < totalPages) {
+                html += `<button onclick="loadLogs(${currentPage + 1})">下一页</button>`;
+            }
+
+            html += `<span style="margin-left: 12px; font-size: 13px; color: #666;">共 ${total} 条</span>`;
+            container.innerHTML = html;
+        }
+
+        function formatLogTime(isoTime) {
+            if (!isoTime) return '-';
+            const d = new Date(isoTime);
+            return d.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        async function cleanLogs(days) {
+            if (!confirm(`确定要清理 ${days} 天前的日志吗？`)) return;
+
+            try {
+                const data = await apiRequest('/admin/logs', {
+                    method: 'DELETE',
+                    body: JSON.stringify({ days })
+                });
+                showToast(data.message || '清理成功', 'success');
+                loadLogs(1);
+                loadLogModules();
+            } catch (e) {
+                showToast('清理失败', 'error');
+            }
+        }
+
+        async function refreshLogModules() {
+            try {
+                const data = await apiRequest('/admin/logs?page=1&per_page=1');
+                const modules = data.modules || [];
+                const select = document.getElementById('logModuleFilter');
+                const currentVal = select.value;
+                select.innerHTML = '<option value="">全部</option>';
+                modules.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    select.appendChild(opt);
+                });
+                select.value = currentVal;
+                showToast('模块列表已刷新', 'success');
+            } catch (e) {
+                showToast('刷新失败', 'error');
+            }
+        }
+
+        async function loadSources() {
+            try {
+                const sources = await apiRequest('/admin/sources');
+                renderSourcesTable(sources);
+            } catch (e) {
+                document.getElementById('sourcesTableBody').innerHTML = '<tr><td colspan="8" class="loading">加载失败</td></tr>';
+            }
+        }
+
+        function renderSourcesTable(sources) {
+            const tbody = document.getElementById('sourcesTableBody');
+            if (!sources || sources.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">暂无新闻源</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = sources.map(src => `
+                <tr>
+                    <td>${src.id}</td>
+                    <td>${src.name}</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${src.url}">${src.url}</td>
+                    <td>${src.type}</td>
+                    <td>${src.category}</td>
+                    <td>${src.enabled ? '<span class="badge badge-success">启用</span>' : '<span class="badge badge-danger">禁用</span>'}</td>
+                    <td>${src.last_fetch || '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="fetchSource(${src.id})">抓取</button>
+                        <button class="btn btn-sm btn-warning" onclick="toggleSource(${src.id}, ${!src.enabled})">${src.enabled ? '禁用' : '启用'}</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteSource(${src.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function fetchSource(id) {
+            showToast('正在抓取...', 'info');
+            try {
+                const data = await apiRequest(`/admin/fetch?source_id=${id}`, { method: 'POST' });
+                showToast(`抓取成功，新增 ${data.saved} 条`, 'success');
+                loadSources();
+                refreshAll();
+            } catch (e) {
+                showToast('抓取失败', 'error');
+            }
+        }
+
+        async function fetchAllSources() {
+            if (!confirm('确定要抓取所有新闻源吗？')) return;
+            showToast('正在抓取所有源...', 'info');
+            try {
+                const data = await apiRequest('/admin/fetch', { method: 'POST' });
+                showToast(`抓取成功，新增 ${data.saved} 条`, 'success');
+                loadSources();
+                refreshAll();
+            } catch (e) {
+                showToast('抓取失败', 'error');
+            }
+        }
+
+        async function toggleSource(id, enabled) {
+            try {
+                const data = await apiRequest('/admin/sources', {
+                    method: 'PUT',
+                    body: JSON.stringify({ id, enabled })
+                });
+                showToast('状态已更新', 'success');
+                loadSources();
+            } catch (e) {
+                showToast('更新失败', 'error');
+            }
+        }
+
+        async function deleteSource(id) {
+            if (!confirm('确定要删除此新闻源吗？')) return;
+            try {
+                await apiRequest(`/admin/sources`, {
+                    method: 'DELETE',
+                    body: JSON.stringify({ id })
+                });
+                showToast('删除成功', 'success');
+                loadSources();
+            } catch (e) {
+                showToast('删除失败', 'error');
+            }
+        }
+
+        function showAddSourceForm() {
+            document.getElementById('addSourceForm').style.display = 'block';
+        }
+
+        function hideAddSourceForm() {
+            document.getElementById('addSourceForm').style.display = 'none';
+            document.getElementById('sourceName').value = '';
+            document.getElementById('sourceUrl').value = '';
+        }
+
+        async function addSource() {
+            const name = document.getElementById('sourceName').value.trim();
+            const url = document.getElementById('sourceUrl').value.trim();
+            const type = document.getElementById('sourceType').value;
+            const category = document.getElementById('sourceCategory').value;
+
+            if (!name || !url) {
+                showToast('请填写名称和URL', 'warning');
+                return;
+            }
+
+            try {
+                await apiRequest('/admin/sources', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, url, type, category })
+                });
+                showToast('添加成功', 'success');
+                hideAddSourceForm();
+                loadSources();
+            } catch (e) {
+                showToast('添加失败', 'error');
+            }
+        }
+
+        async function loadDBStats() {
+            try {
+                const data = await apiRequest('/admin/database');
+                renderDBStats(data);
+            } catch (e) {
+                document.getElementById('dbStats').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        function renderDBStats(data) {
+            if (!data) {
+                document.getElementById('dbStats').innerHTML = '<div class="empty-state">暂无数据</div>';
+                return;
+            }
+
+            const items = data.table_stats || [];
+            let html = `<div class="info-item"><span class="key">数据库总大小</span><span class="val">${formatBytes(data.total_size_bytes)}</span></div>`;
+            items.forEach(table => {
+                html += `<div class="info-item"><span class="key">${table.name}</span><span class="val">${table.row_count} 条 / ${formatBytes(table.size_bytes)}</span></div>`;
+            });
+
+            document.getElementById('dbStats').innerHTML = `<div class="chart-box" style="min-width:100%;">${html}</div>`;
+        }
+
+        async function loadSystemInfo() {
+            try {
+                const data = await apiRequest('/admin/overview');
+                const info = data.server || {};
+                const memory = data.memory || {};
+
+                const items = [
+                    ['操作系统', info.os || '-'],
+                    ['架构', info.arch || '-'],
+                    ['Go版本', info.go_version || '-'],
+                    ['运行时间', info.uptime || '-'],
+                    ['启动时间', info.start_time || '-'],
+                    ['协程数', info.num_goroutines || '-'],
+                    ['分配内存', formatBytes(memory.alloc || 0)],
+                    ['总分配内存', formatBytes(memory.total_alloc || 0)],
+                    ['系统内存', formatBytes(memory.sys || 0)],
+                ];
+
+                document.getElementById('systemInfo').innerHTML = 
+                    items.map(([k, v]) => `<div class="info-item"><span class="key">${k}</span><span class="val">${v}</span></div>`).join('');
+
+                const logLevelData = await apiRequest('/admin/logs/level');
+                if (logLevelData.level) {
+                    document.getElementById('logLevelSelect').value = logLevelData.level;
+                }
+            } catch (e) {
+                document.getElementById('systemInfo').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function setLogLevel() {
+            const level = document.getElementById('logLevelSelect').value;
+            try {
+                const data = await apiRequest('/admin/logs/level', {
+                    method: 'POST',
+                    body: JSON.stringify({ level })
+                });
+                showToast(`日志级别已设置为: ${data.level}`, 'success');
+            } catch (e) {
+                showToast('设置失败', 'error');
+            }
+        }
+
+        async function createBackup() {
+            if (!confirm('确定要创建数据库备份吗？')) return;
+            try {
+                const data = await apiRequest('/admin/backup', { method: 'POST' });
+                showToast(`备份成功，大小 ${formatBytes(data.size_bytes)}`, 'success');
+            } catch (e) {
+                showToast('备份失败', 'error');
+            }
+        }
+
+        async function cleanOldNews(days) {
+            if (!confirm(`确定要清理 ${days} 天前的新闻吗？`)) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'clean_news', days })
+                });
+                showToast(`已清理 ${data.deleted} 条新闻`, 'success');
+                loadDBStats();
+                refreshAll();
+            } catch (e) {
+                showToast('清理失败', 'error');
+            }
+        }
+
+        async function cleanOldLogs(days) {
+            if (!confirm(`确定要清理 ${days} 天前的日志吗？`)) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'clean_logs', days })
+                });
+                showToast(`已清理 ${data.deleted} 条日志`, 'success');
+                loadDBStats();
+            } catch (e) {
+                showToast('清理失败', 'error');
+            }
+        }
+
+        async function cleanOldFetchLogs(days) {
+            if (!confirm(`确定要清理 ${days} 天前的抓取日志吗？`)) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'clean_fetch_logs', days })
+                });
+                showToast(`已清理 ${data.deleted} 条抓取日志`, 'success');
+                loadDBStats();
+            } catch (e) {
+                showToast('清理失败', 'error');
+            }
+        }
+
+        async function vacuumDB() {
+            if (!confirm('确定要执行 VACUUM 吗？这会回收数据库空间，但可能需要一些时间。')) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'vacuum' })
+                });
+                showToast(data.message, 'success');
+                loadDBStats();
+            } catch (e) {
+                showToast('VACUUM 失败', 'error');
+            }
+        }
+
+        async function cleanAllData() {
+            if (!confirm('⚠️ 警告：这将清空所有新闻、日志和抓取日志数据！此操作不可恢复！')) return;
+            if (!confirm('请再次确认：确定要清空所有数据吗？')) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'clean_all' })
+                });
+                showToast(data.message, 'success');
+                loadDBStats();
+                refreshAll();
+            } catch (e) {
+                showToast('清空失败', 'error');
+            }
+        }
+
+        async function permanentAll() {
+            if (!confirm('确定要将所有新闻标记为永久保存吗？')) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'permanent_all' })
+                });
+                showToast(data.message, 'success');
+                loadDBStats();
+                refreshAll();
+            } catch (e) {
+                showToast('操作失败', 'error');
+            }
+        }
+
+        async function permanentOld(days) {
+            if (!confirm(`确定要将 ${days} 天前的新闻标记为永久保存吗？`)) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'permanent_old', days })
+                });
+                showToast(data.message, 'success');
+                loadDBStats();
+                refreshAll();
+            } catch (e) {
+                showToast('操作失败', 'error');
+            }
+        }
+
+        async function unpermanentAll() {
+            if (!confirm('确定要取消所有新闻的永久保存标记吗？')) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'unpermanent_all' })
+                });
+                showToast(data.message, 'success');
+                loadDBStats();
+                refreshAll();
+            } catch (e) {
+                showToast('操作失败', 'error');
+            }
+        }
+
+        setInterval(async () => {
+            const activeTab = document.querySelector('.tab.active');
+            if (!activeTab) return;
+
+            const tabName = activeTab.getAttribute('onclick').match(/'(\w+)'/)[1];
+            if (tabName === 'analysis') loadAnalysisStats();
+            if (tabName === 'logs' && currentLogPage === 1) loadLogs(1);
+        }, 30000);
+
+        // 初始化：检查 token，有则验证后加载，无则显示锁屏
+        (function init() {
+            updateTokenStatusBtn();
+            const token = getStoredToken();
+            if (token) {
+                verifyTokenAndLoad();
+            } else {
+                showLockScreen();
+            }
+        })();
+    </script>
+</body>
+</html>

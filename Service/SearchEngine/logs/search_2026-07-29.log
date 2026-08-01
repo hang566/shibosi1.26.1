@@ -1,0 +1,1394 @@
+[INFO] 2026/07/29 00:25:52 SEARCH query="test" engine=Sogou results=0 duration=537.3802ms status=success
+[INFO] 2026/07/29 00:25:52 SEARCH query="test" engine=Baidu results=0 duration=644.6823ms status=success
+[INFO] 2026/07/29 00:25:52 SEARCH query="test" engine=Bing results=5 duration=810.4244ms status=success
+[INFO] 2026/07/29 00:26:00 SEARCH query="test" engine=DuckDuckGo results=0 duration=8.1016956s status=error: Get "https://html.duckduckgo.com/html/?q=test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:26:00 SEARCH query="test" engine=Google results=0 duration=8.1016956s status=error: Get "https://www.google.com/search?num=5&q=test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:26:00 SEARCH COMPLETE query="test" total=5 engines=map[Bing:5]
+[INFO] 2026/07/29 00:26:07 SEARCH query="github" engine=Baidu results=0 duration=231.6705ms status=success
+[INFO] 2026/07/29 00:26:08 SEARCH query="github" engine=Sogou results=0 duration=337.4943ms status=success
+[INFO] 2026/07/29 00:26:08 SEARCH query="github" engine=Bing results=10 duration=380.6299ms status=success
+[INFO] 2026/07/29 00:26:15 SEARCH query="github" engine=Google results=0 duration=8.1090848s status=error: Get "https://www.google.com/search?num=10&q=github": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:26:15 SEARCH query="github" engine=DuckDuckGo results=0 duration=8.1090848s status=error: Get "https://html.duckduckgo.com/html/?q=github": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:26:15 SEARCH COMPLETE query="github" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:26:30 SEARCH query="人工智能" engine=Baidu results=0 duration=292.7699ms status=success
+[INFO] 2026/07/29 00:26:30 SEARCH query="人工智能" engine=Bing results=10 duration=352.9203ms status=success
+[INFO] 2026/07/29 00:26:30 SEARCH query="人工智能" engine=Sogou results=0 duration=567.0912ms status=success
+[INFO] 2026/07/29 00:26:38 SEARCH query="人工智能" engine=Google results=0 duration=8.10086s status=error: Get "https://www.google.com/search?num=15&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:26:38 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.10086s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:26:38 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:26:58 SEARCH query="人工智能" engine=Sogou results=0 duration=294.6464ms status=success
+[INFO] 2026/07/29 00:26:58 SEARCH query="人工智能" engine=Baidu results=0 duration=297.1913ms status=success
+[INFO] 2026/07/29 00:26:58 SEARCH query="人工智能" engine=Bing results=10 duration=364.1489ms status=success
+[INFO] 2026/07/29 00:27:06 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1009626s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:27:06 SEARCH query="人工智能" engine=Google results=0 duration=8.1026761s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:27:06 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:27:32 CACHE HIT query="github"
+[INFO] 2026/07/29 00:35:36 SEARCH query="市舶司" engine=Sogou results=0 duration=402.7988ms status=success
+[INFO] 2026/07/29 00:35:36 SEARCH query="市舶司" engine=Baidu results=0 duration=507.7806ms status=success
+[INFO] 2026/07/29 00:35:36 SEARCH query="市舶司" engine=Bing results=9 duration=553.8934ms status=success
+[INFO] 2026/07/29 00:35:43 SEARCH query="市舶司" engine=Google results=0 duration=8.1010574s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:35:43 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1010574s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:35:43 SEARCH COMPLETE query="市舶司" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 00:36:13 SEARCH query="test" engine=Sogou results=0 duration=310.6851ms status=success
+[INFO] 2026/07/29 00:36:13 SEARCH query="test" engine=Bing results=9 duration=318.8617ms status=success
+[INFO] 2026/07/29 00:36:13 SEARCH query="test" engine=Baidu results=0 duration=348.7874ms status=success
+[INFO] 2026/07/29 00:36:21 SEARCH query="test" engine=Google results=0 duration=8.1011948s status=error: Get "https://www.google.com/search?num=10&q=test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:36:21 SEARCH query="test" engine=DuckDuckGo results=0 duration=8.1013007s status=error: Get "https://html.duckduckgo.com/html/?q=test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:36:21 SEARCH COMPLETE query="test" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 00:37:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 00:38:16 SEARCH query="测试" engine=Sogou results=0 duration=461.907ms status=success
+[INFO] 2026/07/29 00:38:16 SEARCH query="测试" engine=Baidu results=0 duration=556.3191ms status=success
+[INFO] 2026/07/29 00:38:16 SEARCH query="测试" engine=Bing results=10 duration=680.7358ms status=success
+[INFO] 2026/07/29 00:38:23 SEARCH query="测试" engine=Google results=0 duration=8.1018276s status=error: Get "https://www.google.com/search?num=10&q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:38:23 SEARCH query="测试" engine=DuckDuckGo results=0 duration=8.1018276s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:38:23 SEARCH COMPLETE query="测试" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:38:35 SEARCH query="市舶司" engine=Baidu results=0 duration=174.4441ms status=success
+[INFO] 2026/07/29 00:38:35 SEARCH query="市舶司" engine=Sogou results=0 duration=293.4288ms status=success
+[INFO] 2026/07/29 00:38:35 SEARCH query="市舶司" engine=Bing results=9 duration=320.7979ms status=success
+[INFO] 2026/07/29 00:38:43 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1005722s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:38:43 SEARCH query="市舶司" engine=Google results=0 duration=8.1005722s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:38:43 SEARCH COMPLETE query="市舶司" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 00:47:00 SEARCH query="emoji" engine=Baidu results=0 duration=404.9344ms status=success
+[INFO] 2026/07/29 00:47:00 SEARCH query="emoji" engine=Sogou results=0 duration=465.1471ms status=success
+[INFO] 2026/07/29 00:47:00 SEARCH query="emoji" engine=Bing results=10 duration=511.5643ms status=success
+[INFO] 2026/07/29 00:47:02 SEARCH query="emoji" engine=Baidu results=0 duration=179.6254ms status=success
+[INFO] 2026/07/29 00:47:02 SEARCH query="emoji" engine=Sogou results=0 duration=296.7701ms status=success
+[INFO] 2026/07/29 00:47:02 SEARCH query="emoji" engine=Bing results=10 duration=328.1704ms status=success
+[INFO] 2026/07/29 00:47:03 SEARCH query="emoji" engine=Baidu results=0 duration=210.4463ms status=success
+[INFO] 2026/07/29 00:47:03 SEARCH query="emoji" engine=Sogou results=0 duration=307.194ms status=success
+[INFO] 2026/07/29 00:47:03 SEARCH query="emoji" engine=Bing results=10 duration=323.5215ms status=success
+[INFO] 2026/07/29 00:47:03 SEARCH query="emoji" engine=Baidu results=0 duration=212.4112ms status=success
+[INFO] 2026/07/29 00:47:03 SEARCH query="emoji" engine=Bing results=10 duration=322.6176ms status=success
+[INFO] 2026/07/29 00:47:03 SEARCH query="emoji" engine=Sogou results=0 duration=347.2778ms status=success
+[INFO] 2026/07/29 00:47:08 SEARCH query="emoji" engine=Google results=0 duration=8.1019499s status=error: Get "https://www.google.com/search?num=10&q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:08 SEARCH query="emoji" engine=DuckDuckGo results=0 duration=8.1019499s status=error: Get "https://html.duckduckgo.com/html/?q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:08 SEARCH COMPLETE query="emoji" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:47:10 SEARCH query="emoji" engine=Google results=0 duration=8.1013654s status=error: Get "https://www.google.com/search?num=10&q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:10 SEARCH query="emoji" engine=DuckDuckGo results=0 duration=8.1013654s status=error: Get "https://html.duckduckgo.com/html/?q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:10 SEARCH COMPLETE query="emoji" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:47:10 CACHE HIT query="emoji"
+[INFO] 2026/07/29 00:47:10 SEARCH query="emoji" engine=DuckDuckGo results=0 duration=8.1016568s status=error: Get "https://html.duckduckgo.com/html/?q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:10 SEARCH query="emoji" engine=Google results=0 duration=8.1016568s status=error: Get "https://www.google.com/search?num=10&q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:10 SEARCH COMPLETE query="emoji" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:47:11 SEARCH query="emoji" engine=Google results=0 duration=8.1018326s status=error: Get "https://www.google.com/search?num=10&q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:11 SEARCH query="emoji" engine=DuckDuckGo results=0 duration=8.1019556s status=error: Get "https://html.duckduckgo.com/html/?q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:47:11 SEARCH COMPLETE query="emoji" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:47:29 CACHE HIT query="emoji"
+[INFO] 2026/07/29 00:47:38 CACHE HIT query="emoji"
+[INFO] 2026/07/29 00:48:57 SEARCH query="测试" engine=Baidu results=0 duration=410.0357ms status=success
+[INFO] 2026/07/29 00:48:57 SEARCH query="测试" engine=Sogou results=0 duration=414.2479ms status=success
+[INFO] 2026/07/29 00:48:57 SEARCH query="测试" engine=Bing results=10 duration=555.5792ms status=success
+[INFO] 2026/07/29 00:49:05 SEARCH query="测试" engine=Google results=0 duration=8.101631s status=error: Get "https://www.google.com/search?num=10&q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:49:05 SEARCH query="测试" engine=DuckDuckGo results=0 duration=8.101631s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:49:05 SEARCH COMPLETE query="测试" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:56:20 SEARCH query="显示器" engine=Sogou results=0 duration=737.8431ms status=success
+[INFO] 2026/07/29 00:56:20 SEARCH query="显示器" engine=Baidu results=0 duration=745.1121ms status=success
+[INFO] 2026/07/29 00:56:20 SEARCH query="显示器" engine=Bing results=10 duration=879.1808ms status=success
+[INFO] 2026/07/29 00:56:28 SEARCH query="显示器" engine=DuckDuckGo results=0 duration=8.1017526s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:56:28 SEARCH query="显示器" engine=Google results=0 duration=8.1040072s status=error: Get "https://www.google.com/search?num=10&q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:56:28 SEARCH COMPLETE query="显示器" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:57:23 SEARCH query="python 教程" engine=Sogou results=0 duration=324.8895ms status=success
+[INFO] 2026/07/29 00:57:23 SEARCH query="python 教程" engine=Bing results=10 duration=342.9922ms status=success
+[INFO] 2026/07/29 00:57:23 SEARCH query="python 教程" engine=Baidu results=0 duration=438.6841ms status=success
+[INFO] 2026/07/29 00:57:31 SEARCH query="python 教程" engine=Google results=0 duration=8.1008081s status=error: Get "https://www.google.com/search?num=10&q=python+%E6%95%99%E7%A8%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:57:31 SEARCH query="python 教程" engine=DuckDuckGo results=0 duration=8.1008081s status=error: Get "https://html.duckduckgo.com/html/?q=python+%E6%95%99%E7%A8%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:57:31 SEARCH COMPLETE query="python 教程" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:57:51 SEARCH query="跑鞋" engine=Baidu results=0 duration=209.8833ms status=success
+[INFO] 2026/07/29 00:57:51 SEARCH query="跑鞋" engine=Sogou results=0 duration=318.4575ms status=success
+[INFO] 2026/07/29 00:57:51 SEARCH query="跑鞋" engine=Bing results=10 duration=461.7963ms status=success
+[INFO] 2026/07/29 00:57:59 SEARCH query="跑鞋" engine=Google results=0 duration=8.1005341s status=error: Get "https://www.google.com/search?num=10&q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:57:59 SEARCH query="跑鞋" engine=DuckDuckGo results=0 duration=8.1005341s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:57:59 SEARCH COMPLETE query="跑鞋" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 00:59:35 SEARCH query="显示器" engine=Baidu results=0 duration=386.7755ms status=success
+[INFO] 2026/07/29 00:59:35 SEARCH query="显示器" engine=Sogou results=0 duration=396.6511ms status=success
+[INFO] 2026/07/29 00:59:35 SEARCH query="显示器" engine=Bing results=3 duration=525.8526ms status=success
+[INFO] 2026/07/29 00:59:42 SEARCH query="显示器" engine=DuckDuckGo results=0 duration=8.1015667s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:59:42 SEARCH query="显示器" engine=Google results=0 duration=8.1015667s status=error: Get "https://www.google.com/search?num=3&q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:59:42 SEARCH COMPLETE query="显示器" total=3 engines=map[Bing:3]
+[INFO] 2026/07/29 00:59:48 SEARCH query="跑鞋" engine=Baidu results=0 duration=183.5941ms status=success
+[INFO] 2026/07/29 00:59:49 SEARCH query="跑鞋" engine=Sogou results=0 duration=296.1823ms status=success
+[INFO] 2026/07/29 00:59:49 SEARCH query="跑鞋" engine=Bing results=3 duration=320.4028ms status=success
+[INFO] 2026/07/29 00:59:56 SEARCH query="跑鞋" engine=DuckDuckGo results=0 duration=8.1018235s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:59:56 SEARCH query="跑鞋" engine=Google results=0 duration=8.1019808s status=error: Get "https://www.google.com/search?num=3&q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 00:59:56 SEARCH COMPLETE query="跑鞋" total=3 engines=map[Bing:3]
+[INFO] 2026/07/29 01:00:28 SEARCH query="显示器" engine=Baidu results=0 duration=435.1525ms status=success
+[INFO] 2026/07/29 01:00:28 SEARCH query="显示器" engine=Sogou results=0 duration=454.9309ms status=success
+[INFO] 2026/07/29 01:00:28 SEARCH query="显示器" engine=Bing results=10 duration=592.4009ms status=success
+[INFO] 2026/07/29 01:00:36 SEARCH query="显示器" engine=DuckDuckGo results=0 duration=8.1007605s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:00:36 SEARCH query="显示器" engine=Google results=0 duration=8.1007605s status=error: Get "https://www.google.com/search?num=10&q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:00:36 SEARCH COMPLETE query="显示器" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:01:20 SEARCH query="跑鞋" engine=Baidu results=0 duration=291.4971ms status=success
+[INFO] 2026/07/29 01:01:20 SEARCH query="跑鞋" engine=Sogou results=0 duration=306.902ms status=success
+[INFO] 2026/07/29 01:01:20 SEARCH query="跑鞋" engine=Bing results=10 duration=312.2632ms status=success
+[INFO] 2026/07/29 01:01:28 SEARCH query="跑鞋" engine=Google results=0 duration=8.1011707s status=error: Get "https://www.google.com/search?num=10&q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:01:28 SEARCH query="跑鞋" engine=DuckDuckGo results=0 duration=8.1011707s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:01:28 SEARCH COMPLETE query="跑鞋" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:01:40 CACHE HIT query="跑鞋"
+[INFO] 2026/07/29 01:02:30 CACHE HIT query="显示器"
+[INFO] 2026/07/29 01:02:44 CACHE HIT query="跑鞋"
+[INFO] 2026/07/29 01:03:05 SEARCH query="显示器" engine=Sogou results=0 duration=410.173ms status=success
+[INFO] 2026/07/29 01:03:06 SEARCH query="显示器" engine=Baidu results=0 duration=435.4315ms status=success
+[INFO] 2026/07/29 01:03:06 SEARCH query="显示器" engine=Bing results=10 duration=566.1731ms status=success
+[INFO] 2026/07/29 01:03:13 SEARCH query="显示器" engine=DuckDuckGo results=0 duration=8.1024328s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:03:13 SEARCH query="显示器" engine=Google results=0 duration=8.1024616s status=error: Get "https://www.google.com/search?num=10&q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:03:13 SEARCH COMPLETE query="显示器" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:10:05 SEARCH query="跑鞋" engine=Baidu results=0 duration=488.7227ms status=success
+[INFO] 2026/07/29 01:10:05 SEARCH query="跑鞋" engine=Sogou results=0 duration=499.2599ms status=success
+[INFO] 2026/07/29 01:10:05 SEARCH query="跑鞋" engine=Bing results=10 duration=617.5118ms status=success
+[INFO] 2026/07/29 01:10:13 SEARCH query="跑鞋" engine=Google results=0 duration=8.1013045s status=error: Get "https://www.google.com/search?num=10&q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:10:13 SEARCH query="跑鞋" engine=DuckDuckGo results=0 duration=8.1013045s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:10:13 SEARCH COMPLETE query="跑鞋" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:10:38 CACHE HIT query="跑鞋"
+[INFO] 2026/07/29 01:13:57 SEARCH query="显示器" engine=Baidu results=0 duration=398.1954ms status=success
+[INFO] 2026/07/29 01:13:57 SEARCH query="显示器" engine=Sogou results=0 duration=426.4417ms status=success
+[INFO] 2026/07/29 01:13:57 SEARCH query="显示器" engine=Bing results=10 duration=668.3064ms status=success
+[INFO] 2026/07/29 01:14:05 SEARCH query="显示器" engine=DuckDuckGo results=0 duration=8.102642s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:14:05 SEARCH query="显示器" engine=Google results=0 duration=8.102642s status=error: Get "https://www.google.com/search?num=10&q=%E6%98%BE%E7%A4%BA%E5%99%A8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:14:05 SEARCH COMPLETE query="显示器" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:17:23 SEARCH query="跑鞋" engine=Sogou results=0 duration=438.6262ms status=success
+[INFO] 2026/07/29 01:17:23 SEARCH query="跑鞋" engine=Baidu results=0 duration=472.2065ms status=success
+[INFO] 2026/07/29 01:17:23 SEARCH query="跑鞋" engine=Bing results=10 duration=567.1451ms status=success
+[INFO] 2026/07/29 01:17:30 SEARCH query="跑鞋" engine=DuckDuckGo results=0 duration=8.1014334s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:17:30 SEARCH query="跑鞋" engine=Google results=0 duration=8.1014334s status=error: Get "https://www.google.com/search?num=10&q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:17:30 SEARCH COMPLETE query="跑鞋" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:20:06 SEARCH query="测试" engine=Baidu results=0 duration=445.6989ms status=success
+[INFO] 2026/07/29 01:20:06 SEARCH query="测试" engine=Sogou results=0 duration=468.7572ms status=success
+[INFO] 2026/07/29 01:20:06 SEARCH query="测试" engine=Bing results=10 duration=583.5833ms status=success
+[INFO] 2026/07/29 01:20:14 SEARCH query="测试" engine=DuckDuckGo results=0 duration=8.1014357s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:20:14 SEARCH query="测试" engine=Google results=0 duration=8.1014357s status=error: Get "https://www.google.com/search?num=10&q=%E6%B5%8B%E8%AF%95": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:20:14 SEARCH COMPLETE query="测试" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:22:33 SEARCH query="emoji" engine=Baidu results=0 duration=395.9045ms status=success
+[INFO] 2026/07/29 01:22:33 SEARCH query="emoji" engine=Sogou results=0 duration=400.4282ms status=success
+[INFO] 2026/07/29 01:22:33 SEARCH query="emoji" engine=Bing results=10 duration=520.1935ms status=success
+[INFO] 2026/07/29 01:22:41 SEARCH query="emoji" engine=Google results=0 duration=8.1014984s status=error: Get "https://www.google.com/search?num=10&q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:22:41 SEARCH query="emoji" engine=DuckDuckGo results=0 duration=8.1014984s status=error: Get "https://html.duckduckgo.com/html/?q=emoji": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:22:41 SEARCH COMPLETE query="emoji" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:22:45 SEARCH query="emoji表情" engine=Baidu results=0 duration=181.2611ms status=success
+[INFO] 2026/07/29 01:22:45 SEARCH query="emoji表情" engine=Sogou results=0 duration=297.6896ms status=success
+[INFO] 2026/07/29 01:22:45 SEARCH query="emoji表情" engine=Bing results=10 duration=314.4208ms status=success
+[INFO] 2026/07/29 01:22:53 SEARCH query="emoji表情" engine=DuckDuckGo results=0 duration=8.1014253s status=error: Get "https://html.duckduckgo.com/html/?q=emoji%E8%A1%A8%E6%83%85": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:22:53 SEARCH query="emoji表情" engine=Google results=0 duration=8.1014253s status=error: Get "https://www.google.com/search?num=10&q=emoji%E8%A1%A8%E6%83%85": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:22:53 SEARCH COMPLETE query="emoji表情" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:26:31 SEARCH query="市舶司" engine=Sogou results=0 duration=390.4713ms status=success
+[INFO] 2026/07/29 01:26:31 SEARCH query="市舶司" engine=Baidu results=0 duration=406.973ms status=success
+[INFO] 2026/07/29 01:26:31 SEARCH query="市舶司" engine=Bing results=9 duration=521.2567ms status=success
+[INFO] 2026/07/29 01:26:39 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1016944s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:26:39 SEARCH query="市舶司" engine=Google results=0 duration=8.1016944s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:26:39 SEARCH COMPLETE query="市舶司" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 01:27:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 01:28:45 SEARCH query="自杀" engine=Sogou results=0 duration=485.0827ms status=success
+[INFO] 2026/07/29 01:28:45 SEARCH query="自杀" engine=Baidu results=0 duration=561.632ms status=success
+[INFO] 2026/07/29 01:28:45 SEARCH query="自杀" engine=Bing results=10 duration=682.2718ms status=success
+[INFO] 2026/07/29 01:28:53 SEARCH query="自杀" engine=DuckDuckGo results=0 duration=8.1182004s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%87%AA%E6%9D%80": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:28:53 SEARCH query="自杀" engine=Google results=0 duration=8.1317927s status=error: Get "https://www.google.com/search?num=10&q=%E8%87%AA%E6%9D%80": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:28:53 SEARCH COMPLETE query="自杀" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:30:30 SEARCH query="跑鞋" engine=Sogou results=0 duration=397.7415ms status=success
+[INFO] 2026/07/29 01:30:30 SEARCH query="跑鞋" engine=Baidu results=0 duration=444.5193ms status=success
+[INFO] 2026/07/29 01:30:30 SEARCH query="跑鞋" engine=Bing results=10 duration=510.1394ms status=success
+[INFO] 2026/07/29 01:30:37 SEARCH query="跑鞋" engine=DuckDuckGo results=0 duration=8.1018731s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:30:37 SEARCH query="跑鞋" engine=Google results=0 duration=8.1044142s status=error: Get "https://www.google.com/search?num=10&q=%E8%B7%91%E9%9E%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:30:37 SEARCH COMPLETE query="跑鞋" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:30:52 CACHE HIT query="自杀"
+[INFO] 2026/07/29 01:31:03 SEARCH query="自残" engine=Sogou results=0 duration=311.3056ms status=success
+[INFO] 2026/07/29 01:31:03 SEARCH query="自残" engine=Bing results=10 duration=313.7735ms status=success
+[INFO] 2026/07/29 01:31:03 SEARCH query="自残" engine=Baidu results=0 duration=339.0673ms status=success
+[INFO] 2026/07/29 01:31:07 SEARCH query="自残" engine=Baidu results=0 duration=211.3746ms status=success
+[INFO] 2026/07/29 01:31:07 SEARCH query="自残" engine=Sogou results=0 duration=291.1745ms status=success
+[INFO] 2026/07/29 01:31:07 SEARCH query="自残" engine=Bing results=10 duration=320.5504ms status=success
+[INFO] 2026/07/29 01:31:11 SEARCH query="自残" engine=DuckDuckGo results=0 duration=8.1021634s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%87%AA%E6%AE%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:31:11 SEARCH query="自残" engine=Google results=0 duration=8.1030243s status=error: Get "https://www.google.com/search?num=10&q=%E8%87%AA%E6%AE%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:31:11 SEARCH COMPLETE query="自残" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:31:15 SEARCH query="自残" engine=DuckDuckGo results=0 duration=8.1017526s status=error: Get "https://html.duckduckgo.com/html/?q=%E8%87%AA%E6%AE%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:31:15 SEARCH query="自残" engine=Google results=0 duration=8.1017526s status=error: Get "https://www.google.com/search?num=10&q=%E8%87%AA%E6%AE%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:31:15 SEARCH COMPLETE query="自残" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:31:26 SEARCH query="bili" engine=Baidu results=0 duration=209.5543ms status=success
+[INFO] 2026/07/29 01:31:26 SEARCH query="bili" engine=Bing results=7 duration=321.7148ms status=success
+[INFO] 2026/07/29 01:31:26 SEARCH query="bili" engine=Sogou results=0 duration=378.9077ms status=success
+[INFO] 2026/07/29 01:31:34 SEARCH query="bili" engine=Google results=0 duration=8.1017372s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:31:34 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1017372s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:31:34 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:33:24 SEARCH query="bili" engine=Baidu results=0 duration=367.624ms status=success
+[INFO] 2026/07/29 01:33:24 SEARCH query="bili" engine=Bing results=5 duration=525.3528ms status=success
+[INFO] 2026/07/29 01:33:24 SEARCH query="bili" engine=Sogou results=3 duration=898.9803ms status=success
+[INFO] 2026/07/29 01:33:32 SEARCH query="bili" engine=Google results=0 duration=8.1011286s status=error: Get "https://www.google.com/search?num=5&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:33:32 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1011286s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:33:32 SEARCH COMPLETE query="bili" total=5 engines=map[Bing:5 Sogou:3]
+[INFO] 2026/07/29 01:34:20 SEARCH query="人工智能" engine=Baidu results=0 duration=303.9991ms status=success
+[INFO] 2026/07/29 01:34:20 SEARCH query="人工智能" engine=Sogou results=0 duration=321.0166ms status=success
+[INFO] 2026/07/29 01:34:20 SEARCH query="人工智能" engine=Bing results=10 duration=333.2269ms status=success
+[INFO] 2026/07/29 01:34:27 SEARCH query="人工智能" engine=Google results=0 duration=8.1010614s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:34:27 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1010614s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:34:27 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:34:30 SEARCH query="bili" engine=Baidu results=0 duration=265.7921ms status=success
+[INFO] 2026/07/29 01:34:30 SEARCH query="bili" engine=Sogou results=0 duration=305.3611ms status=success
+[INFO] 2026/07/29 01:34:30 SEARCH query="bili" engine=Bing results=7 duration=319.2839ms status=success
+[INFO] 2026/07/29 01:34:38 SEARCH query="bili" engine=Google results=0 duration=8.1014045s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:34:38 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1014045s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:34:38 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:34:51 SEARCH query="测试123" engine=Baidu results=0 duration=214.98ms status=success
+[INFO] 2026/07/29 01:34:51 SEARCH query="测试123" engine=Sogou results=0 duration=304.6659ms status=success
+[INFO] 2026/07/29 01:34:51 SEARCH query="测试123" engine=Bing results=10 duration=319.2378ms status=success
+[INFO] 2026/07/29 01:34:58 SEARCH query="测试123" engine=DuckDuckGo results=0 duration=8.1012186s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%B5%8B%E8%AF%95123": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:34:58 SEARCH query="测试123" engine=Google results=0 duration=8.1012186s status=error: Get "https://www.google.com/search?num=10&q=%E6%B5%8B%E8%AF%95123": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:34:58 SEARCH COMPLETE query="测试123" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:37:10 SEARCH query="人工智能" engine=Sogou results=0 duration=398.5544ms status=success
+[INFO] 2026/07/29 01:37:10 SEARCH query="人工智能" engine=Baidu results=0 duration=411.9228ms status=success
+[INFO] 2026/07/29 01:37:11 SEARCH query="人工智能" engine=Bing results=10 duration=549.3826ms status=success
+[INFO] 2026/07/29 01:37:15 SEARCH query="bili" engine=Baidu results=0 duration=209.0643ms status=success
+[INFO] 2026/07/29 01:37:15 SEARCH query="bili" engine=Sogou results=0 duration=306.2495ms status=success
+[INFO] 2026/07/29 01:37:15 SEARCH query="bili" engine=Bing results=7 duration=320.507ms status=success
+[INFO] 2026/07/29 01:37:18 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1017447s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:18 SEARCH query="人工智能" engine=Google results=0 duration=8.1025623s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:18 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:37:22 SEARCH query="bili" engine=Baidu results=0 duration=184.5716ms status=success
+[INFO] 2026/07/29 01:37:22 SEARCH query="bili" engine=Sogou results=0 duration=307.2598ms status=success
+[INFO] 2026/07/29 01:37:22 SEARCH query="bili" engine=Bing results=7 duration=321.7776ms status=success
+[INFO] 2026/07/29 01:37:23 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1019141s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:23 SEARCH query="bili" engine=Google results=0 duration=8.1019141s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:23 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:37:27 SEARCH query="测试XYZ" engine=Baidu results=0 duration=175.6893ms status=success
+[INFO] 2026/07/29 01:37:27 SEARCH query="测试XYZ" engine=Sogou results=0 duration=294.6844ms status=success
+[INFO] 2026/07/29 01:37:27 SEARCH query="测试XYZ" engine=Bing results=10 duration=310.7872ms status=success
+[INFO] 2026/07/29 01:37:30 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1011873s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:30 SEARCH query="bili" engine=Google results=0 duration=8.1011873s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:30 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:37:35 SEARCH query="测试XYZ" engine=DuckDuckGo results=0 duration=8.1006632s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%B5%8B%E8%AF%95XYZ": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:35 SEARCH query="测试XYZ" engine=Google results=0 duration=8.1006632s status=error: Get "https://www.google.com/search?num=10&q=%E6%B5%8B%E8%AF%95XYZ": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:37:35 SEARCH COMPLETE query="测试XYZ" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:39:29 SEARCH query="人工智能" engine=Baidu results=0 duration=528.2847ms status=success
+[INFO] 2026/07/29 01:39:29 SEARCH query="人工智能" engine=Sogou results=0 duration=567.1429ms status=success
+[INFO] 2026/07/29 01:39:29 SEARCH query="人工智能" engine=Bing results=10 duration=772.8747ms status=success
+[INFO] 2026/07/29 01:39:36 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1014242s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:39:36 SEARCH query="人工智能" engine=Google results=0 duration=8.1015822s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:39:36 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:39:37 SEARCH query="bili" engine=Baidu results=0 duration=175.425ms status=success
+[INFO] 2026/07/29 01:39:37 SEARCH query="bili" engine=Sogou results=0 duration=307.9531ms status=success
+[INFO] 2026/07/29 01:39:37 SEARCH query="bili" engine=Bing results=7 duration=312.1942ms status=success
+[INFO] 2026/07/29 01:39:45 SEARCH query="bili" engine=Google results=0 duration=8.1009744s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:39:45 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1009744s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:39:45 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:39:47 SEARCH query="abc123test" engine=Baidu results=0 duration=217.8912ms status=success
+[INFO] 2026/07/29 01:39:47 SEARCH query="abc123test" engine=Sogou results=0 duration=298.5765ms status=success
+[INFO] 2026/07/29 01:39:47 SEARCH query="abc123test" engine=Bing results=10 duration=320.61ms status=success
+[INFO] 2026/07/29 01:39:51 CACHE HIT query="bili"
+[INFO] 2026/07/29 01:39:55 SEARCH query="abc123test" engine=Google results=0 duration=8.1013283s status=error: Get "https://www.google.com/search?num=10&q=abc123test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:39:55 SEARCH query="abc123test" engine=DuckDuckGo results=0 duration=8.1013283s status=error: Get "https://html.duckduckgo.com/html/?q=abc123test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:39:55 SEARCH COMPLETE query="abc123test" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:39:57 SEARCH query="搜索" engine=Baidu results=0 duration=213.4218ms status=success
+[INFO] 2026/07/29 01:39:57 SEARCH query="搜索" engine=Bing results=10 duration=315.2541ms status=success
+[INFO] 2026/07/29 01:39:57 SEARCH query="搜索" engine=Sogou results=4 duration=892.9815ms status=success
+[INFO] 2026/07/29 01:40:05 SEARCH query="搜索" engine=DuckDuckGo results=0 duration=8.1014182s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%90%9C%E7%B4%A2": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:40:05 SEARCH query="搜索" engine=Google results=0 duration=8.101583s status=error: Get "https://www.google.com/search?num=10&q=%E6%90%9C%E7%B4%A2": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:40:05 SEARCH COMPLETE query="搜索" total=10 engines=map[Bing:10 Sogou:4]
+[INFO] 2026/07/29 01:41:02 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 01:41:06 CACHE HIT query="bili"
+[INFO] 2026/07/29 01:41:57 SEARCH query="bili" engine=Sogou results=0 duration=392.895ms status=success
+[INFO] 2026/07/29 01:41:57 SEARCH query="bili" engine=Baidu results=0 duration=421.1789ms status=success
+[INFO] 2026/07/29 01:41:57 SEARCH query="bili" engine=Bing results=7 duration=509.5022ms status=success
+[INFO] 2026/07/29 01:42:04 SEARCH query="test" engine=Baidu results=0 duration=214.5654ms status=success
+[INFO] 2026/07/29 01:42:04 SEARCH query="test" engine=Sogou results=0 duration=300.6728ms status=success
+[INFO] 2026/07/29 01:42:04 SEARCH query="test" engine=Bing results=9 duration=320.7854ms status=success
+[INFO] 2026/07/29 01:42:04 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1021834s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:42:04 SEARCH query="bili" engine=Google results=0 duration=8.1021834s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:42:04 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:42:11 SEARCH query="test" engine=Google results=0 duration=8.1037327s status=error: Get "https://www.google.com/search?num=10&q=test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:42:11 SEARCH query="test" engine=DuckDuckGo results=0 duration=8.1037327s status=error: Get "https://html.duckduckgo.com/html/?q=test": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:42:11 SEARCH COMPLETE query="test" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 01:43:15 SEARCH query="人工智能" engine=Sogou results=0 duration=442.9783ms status=success
+[INFO] 2026/07/29 01:43:15 SEARCH query="人工智能" engine=Baidu results=0 duration=464.0072ms status=success
+[INFO] 2026/07/29 01:43:15 SEARCH query="人工智能" engine=Bing results=10 duration=553.7113ms status=success
+[INFO] 2026/07/29 01:43:23 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1011908s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:43:23 SEARCH query="人工智能" engine=Google results=0 duration=8.1011908s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:43:23 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:43:26 SEARCH query="bili" engine=Baidu results=0 duration=205.4316ms status=success
+[INFO] 2026/07/29 01:43:26 SEARCH query="bili" engine=Sogou results=0 duration=311.0597ms status=success
+[INFO] 2026/07/29 01:43:26 SEARCH query="bili" engine=Bing results=7 duration=311.5872ms status=success
+[INFO] 2026/07/29 01:43:34 SEARCH query="bili" engine=Google results=0 duration=8.1006658s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:43:34 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1006658s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:43:34 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:43:43 SEARCH query="abc123" engine=Baidu results=0 duration=179.7813ms status=success
+[INFO] 2026/07/29 01:43:43 SEARCH query="abc123" engine=Sogou results=0 duration=314.8739ms status=success
+[INFO] 2026/07/29 01:43:43 SEARCH query="abc123" engine=Bing results=9 duration=317.6054ms status=success
+[INFO] 2026/07/29 01:43:51 SEARCH query="abc123" engine=Google results=0 duration=8.1013578s status=error: Get "https://www.google.com/search?num=10&q=abc123": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:43:51 SEARCH query="abc123" engine=DuckDuckGo results=0 duration=8.1013578s status=error: Get "https://html.duckduckgo.com/html/?q=abc123": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:43:51 SEARCH COMPLETE query="abc123" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 01:43:54 CACHE HIT query="bili"
+[INFO] 2026/07/29 01:45:18 SEARCH query="人工智能" engine=Baidu results=0 duration=443.6603ms status=success
+[INFO] 2026/07/29 01:45:18 SEARCH query="人工智能" engine=Sogou results=0 duration=475.255ms status=success
+[INFO] 2026/07/29 01:45:18 SEARCH query="bili" engine=Sogou results=0 duration=311.751ms status=success
+[INFO] 2026/07/29 01:45:18 SEARCH query="bili" engine=Baidu results=0 duration=312.8735ms status=success
+[INFO] 2026/07/29 01:45:18 SEARCH query="bili" engine=Bing results=7 duration=384.6097ms status=success
+[INFO] 2026/07/29 01:45:18 SEARCH query="人工智能" engine=Bing results=10 duration=595.5051ms status=success
+[INFO] 2026/07/29 01:45:25 SEARCH query="人工智能" engine=Google results=0 duration=8.1002865s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:45:25 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1012871s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:45:25 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:45:25 SEARCH query="bili" engine=Google results=0 duration=8.1011784s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:45:25 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.101214s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:45:25 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:45:48 CACHE HIT query="bili"
+[INFO] 2026/07/29 01:45:57 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 01:47:18 CACHE HIT query="bili"
+[INFO] 2026/07/29 01:47:28 SEARCH query="人工智能" engine=Sogou results=0 duration=575.7649ms status=success
+[INFO] 2026/07/29 01:47:28 SEARCH query="人工智能" engine=Baidu results=0 duration=612.1274ms status=success
+[INFO] 2026/07/29 01:47:28 SEARCH query="人工智能" engine=Bing results=10 duration=700.2231ms status=success
+[INFO] 2026/07/29 01:47:36 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1268663s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:47:36 SEARCH query="人工智能" engine=Google results=0 duration=8.1673432s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:47:36 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:48:15 SEARCH query="人工智能" engine=Baidu results=0 duration=294.2416ms status=success
+[INFO] 2026/07/29 01:48:15 SEARCH query="人工智能" engine=Sogou results=0 duration=301.4415ms status=success
+[INFO] 2026/07/29 01:48:15 SEARCH query="人工智能" engine=Bing results=5 duration=321.9353ms status=success
+[INFO] 2026/07/29 01:48:23 SEARCH query="人工智能" engine=Google results=0 duration=8.1014579s status=error: Get "https://www.google.com/search?num=5&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:48:23 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1016127s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:48:23 SEARCH COMPLETE query="人工智能" total=5 engines=map[Bing:5]
+[INFO] 2026/07/29 01:50:20 SEARCH query="bili" engine=Baidu results=0 duration=443.6341ms status=success
+[INFO] 2026/07/29 01:50:20 SEARCH query="bili" engine=Sogou results=0 duration=449.4411ms status=success
+[INFO] 2026/07/29 01:50:20 SEARCH query="bili" engine=Bing results=7 duration=589.0652ms status=success
+[INFO] 2026/07/29 01:50:28 SEARCH query="bili" engine=Google results=0 duration=8.1025648s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:50:28 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1025648s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:50:28 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:50:34 SEARCH query="人工智能" engine=Baidu results=0 duration=211.3922ms status=success
+[INFO] 2026/07/29 01:50:34 SEARCH query="人工智能" engine=Sogou results=0 duration=337.4698ms status=success
+[INFO] 2026/07/29 01:50:34 SEARCH query="人工智能" engine=Bing results=10 duration=353.7448ms status=success
+[INFO] 2026/07/29 01:50:42 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1037669s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:50:42 SEARCH query="人工智能" engine=Google results=0 duration=8.1049682s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:50:42 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:52:41 SEARCH query="bili" engine=Sogou results=0 duration=443.3431ms status=success
+[INFO] 2026/07/29 01:52:41 SEARCH query="bili" engine=Baidu results=0 duration=476.2879ms status=success
+[INFO] 2026/07/29 01:52:41 SEARCH query="bili" engine=Bing results=7 duration=585.7537ms status=success
+[INFO] 2026/07/29 01:52:49 SEARCH query="bili" engine=Google results=0 duration=8.100922s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:52:49 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1013399s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:52:49 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:52:52 SEARCH query="人工智能" engine=Baidu results=0 duration=218.2223ms status=success
+[INFO] 2026/07/29 01:52:52 SEARCH query="人工智能" engine=Sogou results=0 duration=313.2913ms status=success
+[INFO] 2026/07/29 01:52:52 SEARCH query="人工智能" engine=Bing results=10 duration=327.0989ms status=success
+[INFO] 2026/07/29 01:53:00 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1020792s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:53:00 SEARCH query="人工智能" engine=Google results=0 duration=8.1020792s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:53:00 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:53:07 SEARCH query="编程" engine=Baidu results=0 duration=208.0876ms status=success
+[INFO] 2026/07/29 01:53:07 SEARCH query="编程" engine=Sogou results=0 duration=296.2052ms status=success
+[INFO] 2026/07/29 01:53:07 SEARCH query="编程" engine=Bing results=10 duration=326.6441ms status=success
+[INFO] 2026/07/29 01:53:15 SEARCH query="编程" engine=DuckDuckGo results=0 duration=8.1020158s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%BC%96%E7%A8%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:53:15 SEARCH query="编程" engine=Google results=0 duration=8.1021849s status=error: Get "https://www.google.com/search?num=10&q=%E7%BC%96%E7%A8%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:53:15 SEARCH COMPLETE query="编程" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:57:17 SEARCH query="bili" engine=Baidu results=0 duration=443.4797ms status=success
+[INFO] 2026/07/29 01:57:17 SEARCH query="bili" engine=Sogou results=0 duration=448.0952ms status=success
+[INFO] 2026/07/29 01:57:17 SEARCH query="bili" engine=Bing results=7 duration=572.8498ms status=success
+[INFO] 2026/07/29 01:57:24 SEARCH query="bili" engine=Google results=0 duration=8.1027824s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:57:24 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1027824s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:57:24 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 01:57:36 CACHE HIT query="bili"
+[INFO] 2026/07/29 01:57:37 SEARCH query="哔哩哔哩" engine=Baidu results=0 duration=215.8571ms status=success
+[INFO] 2026/07/29 01:57:37 SEARCH query="哔哩哔哩" engine=Sogou results=0 duration=307.3125ms status=success
+[INFO] 2026/07/29 01:57:37 SEARCH query="哔哩哔哩" engine=Bing results=8 duration=317.8753ms status=success
+[INFO] 2026/07/29 01:57:45 SEARCH query="哔哩哔哩" engine=DuckDuckGo results=0 duration=8.1008222s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:57:45 SEARCH query="哔哩哔哩" engine=Google results=0 duration=8.1008222s status=error: Get "https://www.google.com/search?num=10&q=%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:57:45 SEARCH COMPLETE query="哔哩哔哩" total=8 engines=map[Bing:8]
+[INFO] 2026/07/29 01:58:25 CACHE HIT query="哔哩哔哩"
+[INFO] 2026/07/29 01:58:38 SEARCH query="人工智能" engine=Sogou results=0 duration=312.6985ms status=success
+[INFO] 2026/07/29 01:58:38 SEARCH query="人工智能" engine=Bing results=10 duration=320.3009ms status=success
+[INFO] 2026/07/29 01:58:38 CACHE HIT query="哔哩哔哩"
+[INFO] 2026/07/29 01:58:38 SEARCH query="人工智能" engine=Baidu results=0 duration=394.5999ms status=success
+[INFO] 2026/07/29 01:58:46 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1009851s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:58:46 SEARCH query="人工智能" engine=Google results=0 duration=8.1009851s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 01:58:46 SEARCH COMPLETE query="人工智能" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 01:59:00 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 02:01:01 SEARCH query="bili" engine=Baidu results=0 duration=527.2007ms status=success
+[INFO] 2026/07/29 02:01:01 SEARCH query="bili" engine=Sogou results=0 duration=560.7332ms status=success
+[INFO] 2026/07/29 02:01:01 SEARCH query="bili" engine=Bing results=7 duration=645.1534ms status=success
+[INFO] 2026/07/29 02:01:09 SEARCH query="bili" engine=DuckDuckGo results=0 duration=8.1119666s status=error: Get "https://html.duckduckgo.com/html/?q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 02:01:09 SEARCH query="bili" engine=Google results=0 duration=8.1149575s status=error: Get "https://www.google.com/search?num=10&q=bili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 02:01:09 SEARCH COMPLETE query="bili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 02:01:59 CACHE HIT query="bili"
+[INFO] 2026/07/29 02:02:22 CACHE HIT query="bili"
+[INFO] 2026/07/29 02:05:19 SEARCH query="市舶司" engine=Sogou results=0 duration=401.4104ms status=success
+[INFO] 2026/07/29 02:05:19 SEARCH query="市舶司" engine=Baidu results=0 duration=424.4428ms status=success
+[INFO] 2026/07/29 02:05:19 SEARCH query="市舶司" engine=Bing results=9 duration=553.8215ms status=success
+[INFO] 2026/07/29 02:05:27 SEARCH query="市舶司" engine=Google results=0 duration=8.1010459s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 02:05:27 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1012354s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 02:05:27 SEARCH COMPLETE query="市舶司" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 02:06:04 SEARCH query="天气" engine=Sogou results=0 duration=298.447ms status=success
+[INFO] 2026/07/29 02:06:04 SEARCH query="天气" engine=Bing results=10 duration=317.1744ms status=success
+[INFO] 2026/07/29 02:06:04 SEARCH query="天气" engine=Baidu results=0 duration=317.1744ms status=success
+[INFO] 2026/07/29 02:06:12 SEARCH query="天气" engine=Google results=0 duration=8.1013781s status=error: Get "https://www.google.com/search?num=10&q=%E5%A4%A9%E6%B0%94": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 02:06:12 SEARCH query="天气" engine=DuckDuckGo results=0 duration=8.1013781s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%A4%A9%E6%B0%94": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 02:06:12 SEARCH COMPLETE query="天气" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 02:06:15 CACHE HIT query="天气"
+[INFO] 2026/07/29 10:45:44 SEARCH query="火绒" engine=Bing results=10 duration=618.1235ms status=success
+[INFO] 2026/07/29 10:45:44 SEARCH query="火绒" engine=Baidu results=9 duration=954.8018ms status=success
+[INFO] 2026/07/29 10:45:44 SEARCH query="火绒" engine=Sogou results=9 duration=1.0144604s status=success
+[INFO] 2026/07/29 10:45:51 SEARCH query="火绒" engine=Google results=0 duration=8.1012654s status=error: Get "https://www.google.com/search?num=10&q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:45:51 SEARCH query="火绒" engine=DuckDuckGo results=0 duration=8.1015811s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:45:51 SEARCH COMPLETE query="火绒" total=10 engines=map[Baidu:9 Bing:10 Sogou:9]
+[INFO] 2026/07/29 10:53:01 SEARCH query="市舶司" engine=Bing results=10 duration=546.5438ms status=success
+[INFO] 2026/07/29 10:53:02 SEARCH query="市舶司" engine=Sogou results=7 duration=878.3694ms status=success
+[INFO] 2026/07/29 10:53:02 SEARCH query="市舶司" engine=Baidu results=8 duration=1.3323411s status=success
+[INFO] 2026/07/29 10:53:03 SEARCH query="市舶司" engine=Bing results=10 duration=329.6827ms status=success
+[INFO] 2026/07/29 10:53:03 SEARCH query="市舶司" engine=Sogou results=0 duration=342.9489ms status=success
+[INFO] 2026/07/29 10:53:03 SEARCH query="市舶司" engine=Baidu results=8 duration=797.7566ms status=success
+[INFO] 2026/07/29 10:53:04 SEARCH query="市舶司" engine=Sogou results=0 duration=299.3687ms status=success
+[INFO] 2026/07/29 10:53:04 SEARCH query="市舶司" engine=Bing results=10 duration=319.2969ms status=success
+[INFO] 2026/07/29 10:53:05 SEARCH query="市舶司" engine=Baidu results=8 duration=683.3329ms status=success
+[INFO] 2026/07/29 10:53:06 SEARCH query="市舶司" engine=Sogou results=0 duration=331.4458ms status=success
+[INFO] 2026/07/29 10:53:06 SEARCH query="市舶司" engine=Bing results=10 duration=338.7236ms status=success
+[INFO] 2026/07/29 10:53:06 SEARCH query="市舶司" engine=Baidu results=8 duration=716.7301ms status=success
+[INFO] 2026/07/29 10:53:07 SEARCH query="市舶司" engine=Sogou results=0 duration=297.9809ms status=success
+[INFO] 2026/07/29 10:53:07 SEARCH query="市舶司" engine=Bing results=10 duration=314.1431ms status=success
+[INFO] 2026/07/29 10:53:08 SEARCH query="市舶司" engine=Baidu results=8 duration=836.9792ms status=success
+[INFO] 2026/07/29 10:53:09 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1015076s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:09 SEARCH query="市舶司" engine=Google results=0 duration=8.1015076s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:09 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:10 Sogou:7]
+[INFO] 2026/07/29 10:53:09 SEARCH query="市舶司" engine=Sogou results=0 duration=297.8793ms status=success
+[INFO] 2026/07/29 10:53:09 SEARCH query="市舶司" engine=Bing results=10 duration=343.3158ms status=success
+[INFO] 2026/07/29 10:53:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:09 SEARCH query="市舶司" engine=Baidu results=9 duration=693.4247ms status=success
+[INFO] 2026/07/29 10:53:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:10 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1004274s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:10 SEARCH query="市舶司" engine=Google results=0 duration=8.1004274s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:10 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:10]
+[INFO] 2026/07/29 10:53:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:12 SEARCH query="市舶司" engine=Google results=0 duration=8.1007756s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:12 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1007756s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:12 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:10]
+[INFO] 2026/07/29 10:53:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:14 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1020207s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:14 SEARCH query="市舶司" engine=Google results=0 duration=8.1020207s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:14 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:10]
+[INFO] 2026/07/29 10:53:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:15 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1050604s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:15 SEARCH query="市舶司" engine=Google results=0 duration=8.1097518s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:15 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:10]
+[INFO] 2026/07/29 10:53:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:17 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.102027s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:17 SEARCH query="市舶司" engine=Google results=0 duration=8.103027s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:53:17 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:9 Bing:10]
+[INFO] 2026/07/29 10:53:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:53:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:04 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:04 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:54:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:04 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:17 SEARCH query="市舶司" engine=Bing results=9 duration=505.5249ms status=success
+[INFO] 2026/07/29 10:55:18 SEARCH query="市舶司" engine=Baidu results=8 duration=859.1017ms status=success
+[INFO] 2026/07/29 10:55:18 SEARCH query="市舶司" engine=Sogou results=7 duration=958.7829ms status=success
+[INFO] 2026/07/29 10:55:19 SEARCH query="市舶司" engine=Sogou results=0 duration=325.7242ms status=success
+[INFO] 2026/07/29 10:55:19 SEARCH query="市舶司" engine=Bing results=9 duration=334.1792ms status=success
+[INFO] 2026/07/29 10:55:19 SEARCH query="市舶司" engine=Baidu results=8 duration=768.7993ms status=success
+[INFO] 2026/07/29 10:55:21 SEARCH query="市舶司" engine=Sogou results=0 duration=312.7801ms status=success
+[INFO] 2026/07/29 10:55:21 SEARCH query="市舶司" engine=Bing results=9 duration=330.1972ms status=success
+[INFO] 2026/07/29 10:55:21 SEARCH query="市舶司" engine=Baidu results=8 duration=795.7958ms status=success
+[INFO] 2026/07/29 10:55:22 SEARCH query="市舶司" engine=Sogou results=0 duration=318.4856ms status=success
+[INFO] 2026/07/29 10:55:22 SEARCH query="市舶司" engine=Bing results=9 duration=332.6802ms status=success
+[INFO] 2026/07/29 10:55:23 SEARCH query="市舶司" engine=Baidu results=8 duration=731.5757ms status=success
+[INFO] 2026/07/29 10:55:23 SEARCH query="市舶司" engine=Sogou results=0 duration=294.8448ms status=success
+[INFO] 2026/07/29 10:55:23 SEARCH query="市舶司" engine=Bing results=9 duration=374.5748ms status=success
+[INFO] 2026/07/29 10:55:24 SEARCH query="市舶司" engine=Baidu results=8 duration=831.3401ms status=success
+[INFO] 2026/07/29 10:55:25 SEARCH query="市舶司" engine=Sogou results=0 duration=308.9869ms status=success
+[INFO] 2026/07/29 10:55:25 SEARCH query="市舶司" engine=Bing results=9 duration=353.4407ms status=success
+[INFO] 2026/07/29 10:55:25 SEARCH query="市舶司" engine=Google results=0 duration=8.1013618s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:25 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1013618s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:25 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9 Sogou:7]
+[INFO] 2026/07/29 10:55:25 SEARCH query="市舶司" engine=Baidu results=8 duration=790.7064ms status=success
+[INFO] 2026/07/29 10:55:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:27 SEARCH query="市舶司" engine=Google results=0 duration=8.1040877s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:27 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1107447s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:27 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:55:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:28 SEARCH query="市舶司" engine=Google results=0 duration=8.1008715s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:28 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1008715s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:28 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:55:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:30 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.103013s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:30 SEARCH query="市舶司" engine=Google results=0 duration=8.112022s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:30 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:55:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:31 SEARCH query="市舶司" engine=Google results=0 duration=8.1013355s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:31 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1013355s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:31 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:55:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:32 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1018182s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:32 SEARCH query="市舶司" engine=Google results=0 duration=8.1018182s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:55:32 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:55:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:55:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:04 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:56:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:33 SEARCH query="市舶司" engine=Sogou results=0 duration=406.0927ms status=success
+[INFO] 2026/07/29 10:57:33 SEARCH query="市舶司" engine=Bing results=9 duration=618.3749ms status=success
+[INFO] 2026/07/29 10:57:34 SEARCH query="市舶司" engine=Baidu results=8 duration=958.9131ms status=success
+[INFO] 2026/07/29 10:57:35 SEARCH query="市舶司" engine=Sogou results=0 duration=299.8704ms status=success
+[INFO] 2026/07/29 10:57:35 SEARCH query="市舶司" engine=Bing results=9 duration=329.4756ms status=success
+[INFO] 2026/07/29 10:57:35 SEARCH query="市舶司" engine=Baidu results=8 duration=734.4658ms status=success
+[INFO] 2026/07/29 10:57:36 SEARCH query="市舶司" engine=Sogou results=0 duration=313.5102ms status=success
+[INFO] 2026/07/29 10:57:36 SEARCH query="市舶司" engine=Bing results=9 duration=334.647ms status=success
+[INFO] 2026/07/29 10:57:37 SEARCH query="市舶司" engine=Baidu results=8 duration=815.728ms status=success
+[INFO] 2026/07/29 10:57:38 SEARCH query="市舶司" engine=Sogou results=0 duration=297.5182ms status=success
+[INFO] 2026/07/29 10:57:38 SEARCH query="市舶司" engine=Bing results=9 duration=317.7731ms status=success
+[INFO] 2026/07/29 10:57:39 SEARCH query="市舶司" engine=Baidu results=8 duration=866.7336ms status=success
+[INFO] 2026/07/29 10:57:40 SEARCH query="市舶司" engine=Sogou results=0 duration=313.5711ms status=success
+[INFO] 2026/07/29 10:57:40 SEARCH query="市舶司" engine=Bing results=9 duration=327.5542ms status=success
+[INFO] 2026/07/29 10:57:40 SEARCH query="市舶司" engine=Baidu results=8 duration=753.2384ms status=success
+[INFO] 2026/07/29 10:57:41 SEARCH query="市舶司" engine=Google results=0 duration=8.1011405s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:41 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1011405s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:41 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:57:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:43 SEARCH query="市舶司" engine=Google results=0 duration=8.1028005s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:43 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1028005s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:43 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:57:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:44 SEARCH query="市舶司" engine=Google results=0 duration=8.1042583s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:44 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1112587s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:44 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:57:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:46 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1010687s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:46 SEARCH query="市舶司" engine=Google results=0 duration=8.1020684s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:46 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:57:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:47 SEARCH query="市舶司" engine=Google results=0 duration=8.1022956s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:47 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1022956s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:57:47 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 10:57:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:57:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:30 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:31 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:32 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:33 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:34 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:35 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:36 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:37 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:38 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:58:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:03 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:04 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:05 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:06 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:22 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:23 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:24 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:25 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:26 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:27 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:28 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:29 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:33 SEARCH query="市舶司" engine=Sogou results=0 duration=448.6729ms status=success
+[INFO] 2026/07/29 10:59:33 SEARCH query="市舶司" engine=Baidu results=0 duration=485.7141ms status=success
+[INFO] 2026/07/29 10:59:33 SEARCH query="市舶司" engine=Baidu results=0 duration=498.3897ms status=success
+[INFO] 2026/07/29 10:59:33 SEARCH query="市舶司" engine=Sogou results=0 duration=520.7496ms status=success
+[INFO] 2026/07/29 10:59:34 SEARCH query="市舶司" engine=Bing results=9 duration=689.0757ms status=success
+[INFO] 2026/07/29 10:59:34 SEARCH query="市舶司" engine=Bing results=9 duration=670.7642ms status=success
+[INFO] 2026/07/29 10:59:41 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1021318s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:59:41 SEARCH query="市舶司" engine=Google results=0 duration=8.1069953s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:59:41 SEARCH COMPLETE query="市舶司" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 10:59:41 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1010958s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:59:41 SEARCH query="市舶司" engine=Google results=0 duration=8.1010958s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 10:59:41 SEARCH COMPLETE query="市舶司" total=9 engines=map[Bing:9]
+[INFO] 2026/07/29 10:59:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 10:59:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:31 SEARCH query="火绒" engine=Sogou results=0 duration=296.5992ms status=success
+[INFO] 2026/07/29 11:00:31 SEARCH query="火绒" engine=Baidu results=0 duration=327.4191ms status=success
+[INFO] 2026/07/29 11:00:31 SEARCH query="火绒" engine=Bing results=5 duration=341.5014ms status=success
+[INFO] 2026/07/29 11:00:38 SEARCH query="火绒" engine=Google results=0 duration=8.1013848s status=error: Get "https://www.google.com/search?num=5&q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:00:38 SEARCH query="火绒" engine=DuckDuckGo results=0 duration=8.1013848s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:00:38 SEARCH COMPLETE query="火绒" total=5 engines=map[Bing:5]
+[INFO] 2026/07/29 11:00:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:39 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:48 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:49 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:50 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:54 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:55 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:56 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:57 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:58 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:00:59 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:00 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:01 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:02 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:43 SEARCH query="市舶司" engine=Sogou results=0 duration=466.8302ms status=success
+[INFO] 2026/07/29 11:01:43 SEARCH query="市舶司" engine=Bing results=9 duration=587.0442ms status=success
+[INFO] 2026/07/29 11:01:44 SEARCH query="市舶司" engine=Baidu results=8 duration=963.6596ms status=success
+[INFO] 2026/07/29 11:01:51 SEARCH query="市舶司" engine=Google results=0 duration=8.1017373s status=error: Get "https://www.google.com/search?num=10&q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:01:51 SEARCH query="市舶司" engine=DuckDuckGo results=0 duration=8.1021264s status=error: Get "https://html.duckduckgo.com/html/?q=%E5%B8%82%E8%88%B6%E5%8F%B8": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:01:51 SEARCH COMPLETE query="市舶司" total=10 engines=map[Baidu:8 Bing:9]
+[INFO] 2026/07/29 11:01:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:51 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:52 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:01:53 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:02:00 SEARCH query="火绒" engine=Sogou results=0 duration=304.7968ms status=success
+[INFO] 2026/07/29 11:02:00 SEARCH query="火绒" engine=Bing results=5 duration=328.4422ms status=success
+[INFO] 2026/07/29 11:02:00 SEARCH query="火绒" engine=Baidu results=2 duration=671.0947ms status=success
+[INFO] 2026/07/29 11:02:08 SEARCH query="火绒" engine=Google results=0 duration=8.1003697s status=error: Get "https://www.google.com/search?num=5&q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:02:08 SEARCH query="火绒" engine=DuckDuckGo results=0 duration=8.1003697s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:02:08 SEARCH COMPLETE query="火绒" total=5 engines=map[Baidu:2 Bing:5]
+[INFO] 2026/07/29 11:02:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:02:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:02:59 SEARCH query="火绒" engine=Bing results=10 duration=429.2283ms status=success
+[INFO] 2026/07/29 11:02:59 SEARCH query="火绒" engine=Sogou results=0 duration=429.2283ms status=success
+[INFO] 2026/07/29 11:02:59 SEARCH query="火绒" engine=Baidu results=0 duration=439.3808ms status=success
+[INFO] 2026/07/29 11:03:06 SEARCH query="火绒" engine=Google results=0 duration=8.1015865s status=error: Get "https://www.google.com/search?num=10&q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:03:06 SEARCH query="火绒" engine=DuckDuckGo results=0 duration=8.1015865s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%81%AB%E7%BB%92": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:03:06 SEARCH COMPLETE query="火绒" total=10 engines=map[Bing:10]
+[INFO] 2026/07/29 11:03:07 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:08 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:09 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:10 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:11 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:12 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:13 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:14 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:15 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:16 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:17 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:18 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:19 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:20 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:21 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:40 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:41 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:42 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:43 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:44 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:45 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:46 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:03:47 CACHE HIT query="市舶司"
+[INFO] 2026/07/29 11:04:05 SEARCH query="bilibili" engine=Sogou results=0 duration=323.9227ms status=success
+[INFO] 2026/07/29 11:04:05 SEARCH query="bilibili" engine=Bing results=7 duration=328.6227ms status=success
+[INFO] 2026/07/29 11:04:05 SEARCH query="bilibili" engine=Baidu results=0 duration=399.8099ms status=success
+[INFO] 2026/07/29 11:04:13 SEARCH query="bilibili" engine=DuckDuckGo results=0 duration=8.1009793s status=error: Get "https://html.duckduckgo.com/html/?q=bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:04:13 SEARCH query="bilibili" engine=Google results=0 duration=8.1010873s status=error: Get "https://www.google.com/search?num=10&q=bilibili": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:04:13 SEARCH COMPLETE query="bilibili" total=7 engines=map[Bing:7]
+[INFO] 2026/07/29 11:23:20 SEARCH query="最新资讯" engine=Bing results=7 duration=616.4913ms status=success
+[INFO] 2026/07/29 11:23:21 SEARCH query="最新资讯" engine=Baidu results=8 duration=918.7473ms status=success
+[INFO] 2026/07/29 11:23:21 SEARCH query="最新资讯" engine=Sogou results=7 duration=1.1310195s status=success
+[INFO] 2026/07/29 11:23:28 SEARCH query="最新资讯" engine=DuckDuckGo results=0 duration=8.1010658s status=error: Get "https://html.duckduckgo.com/html/?q=%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:23:28 SEARCH query="最新资讯" engine=Google results=0 duration=8.1010658s status=error: Get "https://www.google.com/search?num=10&q=%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 11:23:28 SEARCH COMPLETE query="最新资讯" total=10 engines=map[Baidu:8 Bing:7 Sogou:7]
+[INFO] 2026/07/29 13:17:32 SEARCH query="人工智能" engine=Bing results=10 duration=689.8249ms status=success
+[INFO] 2026/07/29 13:17:33 SEARCH query="人工智能" engine=Baidu results=7 duration=1.3211861s status=success
+[INFO] 2026/07/29 13:17:33 SEARCH query="人工智能" engine=Sogou results=5 duration=1.499269s status=success
+[INFO] 2026/07/29 13:17:40 SEARCH query="人工智能" engine=Google results=0 duration=8.1029237s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:17:40 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1062618s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:17:40 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:7 Bing:10 Sogou:5]
+[INFO] 2026/07/29 13:18:21 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 13:34:39 SEARCH query="熊家无二" engine=Bing results=10 duration=556.9514ms status=success
+[INFO] 2026/07/29 13:34:39 SEARCH query="熊家无二" engine=Sogou results=6 duration=983.0775ms status=success
+[INFO] 2026/07/29 13:34:39 SEARCH query="熊家无二" engine=Baidu results=3 duration=1.0091966s status=success
+[INFO] 2026/07/29 13:34:46 SEARCH query="熊家无二" engine=DuckDuckGo results=0 duration=8.1007941s status=error: Get "https://html.duckduckgo.com/html/?q=%E7%86%8A%E5%AE%B6%E6%97%A0%E4%BA%8C": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:34:46 SEARCH query="熊家无二" engine=Google results=0 duration=8.1030093s status=error: Get "https://www.google.com/search?num=10&q=%E7%86%8A%E5%AE%B6%E6%97%A0%E4%BA%8C": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:34:46 SEARCH COMPLETE query="熊家无二" total=10 engines=map[Baidu:3 Bing:10 Sogou:6]
+[INFO] 2026/07/29 13:34:50 CACHE HIT query="熊家无二"
+[INFO] 2026/07/29 13:35:13 SEARCH query="人工智能" engine=Bing results=10 duration=324.804ms status=success
+[INFO] 2026/07/29 13:35:13 SEARCH query="人工智能" engine=Sogou results=0 duration=330.5713ms status=success
+[INFO] 2026/07/29 13:35:14 SEARCH query="人工智能" engine=Baidu results=9 duration=804.7476ms status=success
+[INFO] 2026/07/29 13:35:21 SEARCH query="人工智能" engine=Sogou results=0 duration=292.5342ms status=success
+[INFO] 2026/07/29 13:35:21 SEARCH query="人工智能" engine=Bing results=10 duration=352.9391ms status=success
+[INFO] 2026/07/29 13:35:21 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1017464s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:35:21 SEARCH query="人工智能" engine=Google results=0 duration=8.1017464s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:35:21 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:9 Bing:10]
+[INFO] 2026/07/29 13:35:21 SEARCH query="人工智能" engine=Baidu results=7 duration=1.0263083s status=success
+[INFO] 2026/07/29 13:35:28 SEARCH query="人工智能" engine=Google results=0 duration=8.1050723s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:35:28 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1050723s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:35:28 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:7 Bing:10]
+[INFO] 2026/07/29 13:37:27 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 13:41:12 SEARCH query="人工智能" engine=Sogou results=0 duration=387.104ms status=success
+[INFO] 2026/07/29 13:41:12 SEARCH query="人工智能" engine=Bing results=10 duration=565.182ms status=success
+[INFO] 2026/07/29 13:41:13 SEARCH query="人工智能" engine=Baidu results=8 duration=1.0667279s status=success
+[INFO] 2026/07/29 13:41:20 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1007681s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:41:20 SEARCH query="人工智能" engine=Google results=0 duration=8.100958s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:41:20 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:8 Bing:10]
+[INFO] 2026/07/29 13:42:10 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 13:42:13 CACHE HIT query="人工智能"
+[INFO] 2026/07/29 13:45:57 SEARCH query="人工智能" engine=Sogou results=0 duration=412.1114ms status=success
+[INFO] 2026/07/29 13:45:57 SEARCH query="人工智能" engine=Bing results=10 duration=576.4696ms status=success
+[INFO] 2026/07/29 13:45:57 SEARCH query="人工智能" engine=Baidu results=9 duration=1.0470388s status=success
+[INFO] 2026/07/29 13:46:04 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1077634s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:46:04 SEARCH query="人工智能" engine=Google results=0 duration=8.1180754s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 13:46:04 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:9 Bing:10]
+[INFO] 2026/07/29 14:12:16 SEARCH query="人工智能" engine=Bing results=10 duration=597.9314ms status=success
+[INFO] 2026/07/29 14:12:17 SEARCH query="人工智能" engine=Baidu results=8 duration=1.3729195s status=success
+[INFO] 2026/07/29 14:12:17 SEARCH query="人工智能" engine=Sogou results=5 duration=1.3910628s status=success
+[INFO] 2026/07/29 14:12:20 SEARCH query="人工智能" engine=Bing results=10 duration=341.3091ms status=success
+[INFO] 2026/07/29 14:12:20 SEARCH query="人工智能" engine=Sogou results=0 duration=345.6481ms status=success
+[INFO] 2026/07/29 14:12:21 SEARCH query="人工智能" engine=Baidu results=8 duration=901.6018ms status=success
+[INFO] 2026/07/29 14:12:24 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1024698s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 14:12:24 SEARCH query="人工智能" engine=Google results=0 duration=8.1024698s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 14:12:24 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:8 Bing:10 Sogou:5]
+[INFO] 2026/07/29 14:12:28 SEARCH query="人工智能" engine=DuckDuckGo results=0 duration=8.1007047s status=error: Get "https://html.duckduckgo.com/html/?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 14:12:28 SEARCH query="人工智能" engine=Google results=0 duration=8.1007047s status=error: Get "https://www.google.com/search?num=10&q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 14:12:28 SEARCH COMPLETE query="人工智能" total=10 engines=map[Baidu:8 Bing:10]
+[INFO] 2026/07/29 14:24:24 SEARCH query="select能有多么好看" engine=Bing results=10 duration=625.6987ms status=success
+[INFO] 2026/07/29 14:24:24 SEARCH query="select能有多么好看" engine=Baidu results=8 duration=764.6465ms status=success
+[INFO] 2026/07/29 14:24:24 SEARCH query="select能有多么好看" engine=Sogou results=8 duration=1.0177931s status=success
+[INFO] 2026/07/29 14:24:31 SEARCH query="select能有多么好看" engine=Google results=0 duration=8.1008434s status=error: Get "https://www.google.com/search?num=10&q=select%E8%83%BD%E6%9C%89%E5%A4%9A%E4%B9%88%E5%A5%BD%E7%9C%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 14:24:31 SEARCH query="select能有多么好看" engine=DuckDuckGo results=0 duration=8.1008434s status=error: Get "https://html.duckduckgo.com/html/?q=select%E8%83%BD%E6%9C%89%E5%A4%9A%E4%B9%88%E5%A5%BD%E7%9C%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 14:24:31 SEARCH COMPLETE query="select能有多么好看" total=10 engines=map[Baidu:8 Bing:10 Sogou:8]
+[INFO] 2026/07/29 14:25:08 CACHE HIT query="select能有多么好看"
+[INFO] 2026/07/29 17:00:05 SEARCH query="select能有多么好看" engine=Bing results=8 duration=622.6633ms status=success
+[INFO] 2026/07/29 17:00:05 SEARCH query="select能有多么好看" engine=Baidu results=8 duration=923.8485ms status=success
+[INFO] 2026/07/29 17:00:06 SEARCH query="select能有多么好看" engine=Sogou results=8 duration=1.1563041s status=success
+[INFO] 2026/07/29 17:00:13 SEARCH query="select能有多么好看" engine=DuckDuckGo results=0 duration=8.1024288s status=error: Get "https://html.duckduckgo.com/html/?q=select%E8%83%BD%E6%9C%89%E5%A4%9A%E4%B9%88%E5%A5%BD%E7%9C%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 17:00:13 SEARCH query="select能有多么好看" engine=Google results=0 duration=8.1072991s status=error: Get "https://www.google.com/search?num=10&q=select%E8%83%BD%E6%9C%89%E5%A4%9A%E4%B9%88%E5%A5%BD%E7%9C%8B": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[INFO] 2026/07/29 17:00:13 SEARCH COMPLETE query="select能有多么好看" total=10 engines=map[Baidu:8 Bing:8 Sogou:8]

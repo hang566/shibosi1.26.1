@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索引擎运维面板 · 市舶司</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .admin-header h1 { font-size: 20px; font-weight: 600; }
+        .admin-header .subtitle { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+        .admin-nav { display: flex; gap: 10px; }
+        .admin-nav a, .admin-nav button {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .admin-nav a:hover, .admin-nav button:hover { background: rgba(255,255,255,0.25); }
+
+        .admin-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .stat-card .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; }
+        .stat-card .unit { font-size: 14px; color: #888; margin-left: 4px; }
+        .stat-card.info .value { color: #1976d2; }
+        .stat-card.success .value { color: #2e7d32; }
+        .stat-card.warning .value { color: #f57c00; }
+        .stat-card.danger .value { color: #d32f2f; }
+
+        .panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .panel-header h2 { font-size: 16px; font-weight: 600; color: #1a1a2e; }
+        .panel-body { padding: 20px; }
+
+        .tabs { display: flex; gap: 4px; border-bottom: 2px solid #eee; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+        .tab:hover { color: #1976d2; }
+        .tab.active { color: #1976d2; border-bottom-color: #1976d2; font-weight: 600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #1976d2; color: white; }
+        .btn-primary:hover { background: #1565c0; }
+        .btn-success { background: #2e7d32; color: white; }
+        .btn-success:hover { background: #1b5e20; }
+        .btn-warning { background: #f57c00; color: white; }
+        .btn-warning:hover { background: #ef6c00; }
+        .btn-danger { background: #d32f2f; color: white; }
+        .btn-danger:hover { background: #c62828; }
+        .btn-secondary { background: #757575; color: white; }
+        .btn-secondary:hover { background: #616161; }
+        .btn-sm { padding: 4px 10px; font-size: 12px; }
+
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+        }
+        .data-table td { padding: 10px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .data-table tr:hover { background: #fafafa; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-success { background: #e8f5e9; color: #2e7d32; }
+        .badge-warning { background: #fff3e0; color: #f57c00; }
+        .badge-info { background: #e3f2fd; color: #1976d2; }
+        .badge-danger { background: #ffebee; color: #d32f2f; }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+        .loading { text-align: center; padding: 20px; color: #999; }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #1976d2;
+            padding: 14px 18px;
+            margin: 16px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast-success { background: #2e7d32; }
+        .toast-error { background: #d32f2f; }
+        .toast-info { background: #1976d2; }
+        .toast-warning { background: #f57c00; }
+
+        .system-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        .info-item {
+            background: #fafafa;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border-left: 3px solid #1976d2;
+        }
+        .info-item .key { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-item .val { font-size: 14px; color: #333; margin-top: 4px; word-break: break-all; font-family: monospace; }
+
+        /* Token 认证弹窗 */
+        .token-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .token-modal.show { display: flex; }
+        .token-modal-box {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            width: 380px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: tokenIn 0.25s ease-out;
+        }
+        @keyframes tokenIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .token-modal-box h2 { font-size: 18px; color: #1a1a2e; margin-bottom: 8px; }
+        .token-modal-box p { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+        .token-modal-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .token-modal-box input:focus { outline: none; border-color: #1976d2; }
+        .token-modal-box .actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
+
+        .token-lock-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .token-lock-screen .lock-box {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .token-lock-screen .lock-icon { font-size: 48px; margin-bottom: 16px; }
+        .token-lock-screen input {
+            display: block;
+            width: 280px;
+            margin: 16px auto;
+            padding: 12px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: monospace;
+            box-sizing: border-box;
+        }
+        .token-lock-screen input::placeholder { color: rgba(255,255,255,0.6); }
+        .token-lock-screen input:focus { outline: none; border-color: rgba(255,255,255,0.8); }
+        .token-lock-screen button {
+            padding: 10px 28px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .token-lock-screen button:hover { background: rgba(255,255,255,0.3); }
+        .token-lock-screen .hint { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 12px; }
+        .token-lock-screen .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+        .engine-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .engine-card {
+            background: #fafafa;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #1976d2;
+        }
+        .engine-card .name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+        .engine-card .weight { font-size: 12px; color: #888; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <!-- Token 锁屏 -->
+    <div id="tokenLockScreen" class="token-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔐</div>
+            <h2 style="font-size:20px;margin-bottom:8px;">SearchEngine 运维面板</h2>
+            <p style="font-size:13px;opacity:0.7;margin-bottom:8px;">独立端口访问 · 需要 Token 认证</p>
+            <input type="password" id="lockTokenInput" placeholder="请输入运维 Token" autocomplete="off">
+            <div class="error-msg" id="lockErrorMsg"></div>
+            <button onclick="submitLockToken()">进入面板</button>
+            <div class="hint">Token 保存在本机 localStorage，关闭浏览器后需重新输入</div>
+        </div>
+    </div>
+
+    <div class="admin-header">
+        <div>
+            <h1>🔍 搜索引擎运维面板</h1>
+            <div class="subtitle">缓存管理 · 数据库维护 · 收录审核</div>
+        </div>
+        <div class="admin-nav">
+            <button onclick="refreshAll()">🔄 刷新</button>
+            <a href="/" target="_blank">🔎 前往搜索</a>
+            <button id="tokenStatusBtn" onclick="showTokenModal()" title="点击更换 Token">🔒 Token: 已设置</button>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <!-- 概览卡片 -->
+        <div class="stats-grid" id="overviewCards">
+            <div class="stat-card info">
+                <div class="label">搜索引擎数量</div>
+                <div class="value" id="engineCount">0</div>
+            </div>
+            <div class="stat-card success">
+                <div class="label">缓存项总数</div>
+                <div class="value" id="cacheTotal">0</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="label">数据库大小</div>
+                <div class="value" id="dbSize">0<span class="unit">B</span></div>
+            </div>
+            <div class="stat-card danger">
+                <div class="label">运行时长</div>
+                <div class="value" id="uptime">0<span class="unit">秒</span></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>📋 管理面板</h2>
+                <span style="font-size:12px;color:#999;">业务端口 8081 · 运维端口 8091（仅本机）</span>
+            </div>
+            <div class="panel-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('system', event)">🖥️ 系统</button>
+                    <button class="tab" onclick="switchTab('cache', event)">⚡ 缓存</button>
+                    <button class="tab" onclick="switchTab('database', event)">💾 数据库</button>
+                    <button class="tab" onclick="switchTab('history', event)">📜 搜索历史</button>
+                    <button class="tab" onclick="switchTab('stats', event)">📊 搜索统计</button>
+                    <button class="tab" onclick="switchTab('sessions', event)">🗂️ 搜索会话</button>
+                    <button class="tab" onclick="switchTab('sites', event)">🌐 收录站点</button>
+                    <button class="tab" onclick="switchTab('engines', event)">⚙️ 搜索引擎</button>
+                </div>
+
+                <!-- 系统信息 -->
+                <div class="tab-content active" id="tab-system">
+                    <div id="systemInfo" class="system-info-grid">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+
+                <!-- 缓存管理 -->
+                <div class="tab-content" id="tab-cache">
+                    <div class="action-row">
+                        <button class="btn btn-danger" onclick="clearCache()">🗑️ 清空搜索缓存</button>
+                        <button class="btn btn-secondary" onclick="loadCacheInfo()">🔄 刷新缓存统计</button>
+                    </div>
+                    <div id="cacheInfo" class="system-info-grid">
+                        <div class="empty-state">点击"刷新缓存统计"查看</div>
+                    </div>
+                </div>
+
+                <!-- 数据库 -->
+                <div class="tab-content" id="tab-database">
+                    <div class="action-row">
+                        <button class="btn btn-warning" onclick="dbAction('clean_history')">🗑️ 清空搜索历史</button>
+                        <button class="btn btn-warning" onclick="dbAction('clean_sessions')">🗑️ 清空搜索会话</button>
+                        <button class="btn btn-warning" onclick="dbAction('clean_stats')">🗑️ 清空搜索统计</button>
+                        <button class="btn btn-primary" onclick="dbAction('vacuum')">📦 VACUUM 回收空间</button>
+                    </div>
+                    <div class="info-box">
+                        <strong>💡 数据库维护建议：</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                            <li>清理操作不可恢复，请谨慎执行</li>
+                            <li>VACUUM 会重建数据库文件，回收已删除数据的空间</li>
+                            <li>缓存清空后，下次搜索会重新查询各搜索引擎</li>
+                        </ul>
+                    </div>
+                    <div id="dbStats" class="system-info-grid">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+
+                <!-- 搜索历史 -->
+                <div class="tab-content" id="tab-history">
+                    <div class="action-row">
+                        <button class="btn btn-secondary" onclick="loadHistory()">🔄 刷新</button>
+                        <button class="btn btn-danger" onclick="clearHistory()">🗑️ 清空所有历史</button>
+                    </div>
+                    <div id="historyList">
+                        <div class="empty-state">点击"刷新"加载</div>
+                    </div>
+                </div>
+
+                <!-- 搜索统计 -->
+                <div class="tab-content" id="tab-stats">
+                    <div class="action-row">
+                        <button class="btn btn-secondary" onclick="loadStats()">🔄 刷新</button>
+                        <button class="btn btn-danger" onclick="clearStats()">🗑️ 清空统计</button>
+                    </div>
+                    <div id="statsList">
+                        <div class="empty-state">点击"刷新"加载</div>
+                    </div>
+                </div>
+
+                <!-- 搜索会话 -->
+                <div class="tab-content" id="tab-sessions">
+                    <div class="action-row">
+                        <button class="btn btn-secondary" onclick="loadSessions()">🔄 刷新</button>
+                        <button class="btn btn-danger" onclick="clearSessions()">🗑️ 清空所有会话</button>
+                    </div>
+                    <div id="sessionsList">
+                        <div class="empty-state">点击"刷新"加载</div>
+                    </div>
+                </div>
+
+                <!-- 收录站点 -->
+                <div class="tab-content" id="tab-sites">
+                    <div class="action-row">
+                        <button class="btn btn-secondary" onclick="loadSites()">🔄 刷新</button>
+                        <span style="font-size:12px;color:#888;">显示所有站点（含未审核），可审核或删除</span>
+                    </div>
+                    <div id="sitesList">
+                        <div class="empty-state">点击"刷新"加载</div>
+                    </div>
+                </div>
+
+                <!-- 搜索引擎 -->
+                <div class="tab-content" id="tab-engines">
+                    <div class="info-box">
+                        <strong>⚙️ 内置搜索引擎：</strong>权重越高优先级越高。自定义引擎可在业务端口 /api/custom-engines 管理。
+                    </div>
+                    <div id="enginesList" class="engine-list">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Token 更换弹窗 -->
+    <div id="tokenModal" class="token-modal">
+        <div class="token-modal-box">
+            <h2>🔒 更换运维 Token</h2>
+            <p>当前 Token 已保存。输入新 Token 后点击保存，下次请求生效。Token 错误将无法调用运维 API。</p>
+            <input type="password" id="modalTokenInput" placeholder="新 Token" autocomplete="off">
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="hideTokenModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveTokenFromModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        const TOKEN_KEY = 'searchengine_admin_token';
+
+        // ===== Token 管理 =====
+        function getStoredToken() {
+            const fromUrl = new URLSearchParams(location.search).get('token');
+            if (fromUrl) {
+                localStorage.setItem(TOKEN_KEY, fromUrl);
+                history.replaceState(null, '', location.pathname);
+                return fromUrl;
+            }
+            return localStorage.getItem(TOKEN_KEY) || '';
+        }
+        function setStoredToken(token) { localStorage.setItem(TOKEN_KEY, token); }
+        function clearStoredToken() { localStorage.removeItem(TOKEN_KEY); }
+
+        function updateTokenStatusBtn() {
+            const btn = document.getElementById('tokenStatusBtn');
+            const token = getStoredToken();
+            if (token) {
+                const preview = token.slice(0, 4) + '****' + token.slice(-2);
+                btn.textContent = '🔒 Token: ' + preview;
+                btn.style.background = 'rgba(46,125,50,0.5)';
+            } else {
+                btn.textContent = '🔓 Token: 未设置';
+                btn.style.background = 'rgba(211,47,47,0.5)';
+            }
+        }
+
+        function showTokenModal() {
+            document.getElementById('modalTokenInput').value = '';
+            document.getElementById('tokenModal').classList.add('show');
+            setTimeout(() => document.getElementById('modalTokenInput').focus(), 100);
+        }
+        function hideTokenModal() { document.getElementById('tokenModal').classList.remove('show'); }
+
+        function saveTokenFromModal() {
+            const token = document.getElementById('modalTokenInput').value.trim();
+            if (!token) { showToast('Token 不能为空', 'error'); return; }
+            setStoredToken(token);
+            updateTokenStatusBtn();
+            hideTokenModal();
+            showToast('Token 已保存，正在验证...', 'success');
+            verifyTokenAndLoad();
+        }
+
+        function showLockScreen() {
+            document.getElementById('tokenLockScreen').style.display = 'flex';
+            document.getElementById('lockTokenInput').value = '';
+            setTimeout(() => document.getElementById('lockTokenInput').focus(), 100);
+        }
+        function hideLockScreen() { document.getElementById('tokenLockScreen').style.display = 'none'; }
+
+        async function submitLockToken() {
+            const token = document.getElementById('lockTokenInput').value.trim();
+            const errEl = document.getElementById('lockErrorMsg');
+            if (!token) { errEl.textContent = '请输入 Token'; return; }
+            setStoredToken(token);
+            errEl.textContent = '验证中...';
+            try {
+                await apiRequest('/admin/overview');
+                errEl.textContent = '';
+                hideLockScreen();
+                updateTokenStatusBtn();
+                bootstrapPanels();
+                showToast('Token 验证成功', 'success');
+            } catch (e) {
+                errEl.textContent = 'Token 验证失败，请检查';
+                clearStoredToken();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const lockInput = document.getElementById('lockTokenInput');
+            if (lockInput) lockInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitLockToken(); });
+            const modalInput = document.getElementById('modalTokenInput');
+            if (modalInput) modalInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveTokenFromModal(); });
+        });
+
+        async function verifyTokenAndLoad() {
+            try {
+                await apiRequest('/admin/overview');
+                hideLockScreen();
+                updateTokenStatusBtn();
+                bootstrapPanels();
+            } catch (e) {
+                showLockScreen();
+                updateTokenStatusBtn();
+            }
+        }
+
+        function bootstrapPanels() { refreshAll(); }
+
+        // ===== API 请求封装 =====
+        async function apiRequest(endpoint, options = {}) {
+            const url = endpoint.startsWith('http') ? endpoint : API_BASE + endpoint;
+            const token = getStoredToken();
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['X-Admin-Token'] = token;
+            const defaultOptions = { headers };
+            try {
+                const response = await fetch(url, { ...defaultOptions, ...options });
+                if (response.status === 401 || response.status === 403) {
+                    clearStoredToken();
+                    updateTokenStatusBtn();
+                    showLockScreen();
+                    throw new Error('Token 无效或已失效');
+                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (response.status === 204) return null;
+                return await response.json();
+            } catch (error) {
+                console.error('API请求失败:', error);
+                throw error;
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast toast-${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function escapeHtml(s) {
+            if (s == null) return '';
+            return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        function switchTab(tabName, ev) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            ev.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            if (tabName === 'cache') loadCacheInfo();
+            if (tabName === 'database') loadDBStats();
+            if (tabName === 'history') loadHistory();
+            if (tabName === 'stats') loadStats();
+            if (tabName === 'sessions') loadSessions();
+            if (tabName === 'sites') loadSites();
+            if (tabName === 'engines') loadEngines();
+            if (tabName === 'system') loadSystemInfo();
+        }
+
+        // ===== 概览 =====
+        async function refreshAll() {
+            try {
+                const data = await apiRequest('/admin/overview');
+                renderOverview(data);
+            } catch (e) {
+                showToast('刷新失败', 'error');
+            }
+        }
+
+        function renderOverview(data) {
+            if (data.engines) {
+                document.getElementById('engineCount').textContent = data.engines.count || 0;
+            }
+            if (data.cache) {
+                document.getElementById('cacheTotal').textContent = data.cache.total || 0;
+            }
+            if (data.database) {
+                document.getElementById('dbSize').innerHTML = formatBytes(data.database.size_bytes);
+            }
+            if (data.server) {
+                document.getElementById('uptime').innerHTML = data.server.uptime_seconds + '<span class="unit">秒</span>';
+            }
+            loadSystemInfo(data);
+        }
+
+        function loadSystemInfo(data) {
+            const el = document.getElementById('systemInfo');
+            if (!data) { refreshAll(); return; }
+            const items = [];
+            if (data.server) {
+                items.push({ key: '启动时间', val: data.server.start_time });
+                items.push({ key: '运行时长', val: data.server.uptime });
+                items.push({ key: 'Go 版本', val: data.server.go_version });
+                items.push({ key: 'Goroutines', val: data.server.num_goroutines });
+                items.push({ key: '操作系统', val: data.server.os + '/' + data.server.arch });
+            }
+            if (data.memory) {
+                items.push({ key: '内存分配', val: formatBytes(data.memory.alloc) });
+                items.push({ key: '累计分配', val: formatBytes(data.memory.total_alloc) });
+                items.push({ key: '系统内存', val: formatBytes(data.memory.sys) });
+            }
+            if (data.cache) {
+                items.push({ key: '缓存总数', val: data.cache.total });
+                items.push({ key: '过期缓存', val: data.cache.expired });
+                items.push({ key: '缓存TTL', val: (data.cache.ttl_seconds || 120) + ' 秒' });
+            }
+            if (data.engines && data.engines.names) {
+                items.push({ key: '搜索引擎', val: data.engines.names.join(', ') });
+            }
+            el.innerHTML = items.map(i => `<div class="info-item"><div class="key">${escapeHtml(i.key)}</div><div class="val">${escapeHtml(i.val)}</div></div>`).join('');
+        }
+
+        // ===== 缓存 =====
+        async function loadCacheInfo() {
+            try {
+                const data = await apiRequest('/admin/overview');
+                const c = data.cache || {};
+                const items = [
+                    { key: '缓存项总数', val: c.total || 0 },
+                    { key: '已过期', val: c.expired || 0 },
+                    { key: '有效缓存', val: (c.total || 0) - (c.expired || 0) },
+                    { key: 'TTL', val: (c.ttl_seconds || 120) + ' 秒' },
+                ];
+                document.getElementById('cacheInfo').innerHTML = items.map(i => `<div class="info-item"><div class="key">${i.key}</div><div class="val">${i.val}</div></div>`).join('');
+            } catch (e) {
+                document.getElementById('cacheInfo').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function clearCache() {
+            if (!confirm('确定清空所有搜索缓存？下次搜索会重新查询各搜索引擎。')) return;
+            try {
+                const data = await apiRequest('/admin/cache/clear', { method: 'POST' });
+                showToast(data.message, 'success');
+                loadCacheInfo();
+                refreshAll();
+            } catch (e) { showToast('清空失败', 'error'); }
+        }
+
+        // ===== 数据库 =====
+        async function loadDBStats() {
+            try {
+                const data = await apiRequest('/admin/database');
+                const items = [
+                    { key: '数据库大小', val: formatBytes(data.size_bytes) },
+                ];
+                if (data.table_stats) {
+                    for (const [t, n] of Object.entries(data.table_stats)) {
+                        items.push({ key: t, val: n + ' 行' });
+                    }
+                }
+                document.getElementById('dbStats').innerHTML = items.map(i => `<div class="info-item"><div class="key">${escapeHtml(i.key)}</div><div class="val">${escapeHtml(i.val)}</div></div>`).join('');
+            } catch (e) {
+                document.getElementById('dbStats').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function dbAction(action) {
+            const names = {
+                'clean_history': '清空所有搜索历史',
+                'clean_sessions': '清空所有搜索会话',
+                'clean_stats': '清空所有搜索统计',
+                'vacuum': '执行 VACUUM 回收空间'
+            };
+            if (!confirm(`确定要${names[action] || action}？此操作不可恢复。`)) return;
+            try {
+                const data = await apiRequest('/admin/database', {
+                    method: 'POST',
+                    body: JSON.stringify({ action })
+                });
+                showToast(data.message, 'success');
+                loadDBStats();
+                refreshAll();
+            } catch (e) { showToast('操作失败', 'error'); }
+        }
+
+        // ===== 搜索历史 =====
+        async function loadHistory() {
+            try {
+                const data = await apiRequest('/admin/history?limit=50');
+                const list = document.getElementById('historyList');
+                if (!data.items || data.items.length === 0) {
+                    list.innerHTML = '<div class="empty-state">暂无搜索历史</div>';
+                    return;
+                }
+                list.innerHTML = `
+                    <table class="data-table">
+                        <thead><tr><th style="width:60px;">ID</th><th>搜索词</th><th style="width:170px;">时间</th><th style="width:80px;">结果数</th></tr></thead>
+                        <tbody>
+                        ${data.items.map(h => `<tr>
+                            <td>${h.id}</td>
+                            <td>${escapeHtml(h.query)}</td>
+                            <td>${escapeHtml(h.created_at)}</td>
+                            <td>${h.results ? h.results.length : 0}</td>
+                        </tr>`).join('')}
+                        </tbody></table>`;
+            } catch (e) {
+                document.getElementById('historyList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm('确定清空所有搜索历史？此操作不可恢复。')) return;
+            try {
+                const data = await apiRequest('/admin/history', { method: 'DELETE' });
+                showToast(data.message, 'success');
+                loadHistory();
+                refreshAll();
+            } catch (e) { showToast('清空失败', 'error'); }
+        }
+
+        // ===== 搜索统计 =====
+        async function loadStats() {
+            try {
+                const data = await apiRequest('/admin/stats?limit=50');
+                const list = document.getElementById('statsList');
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div class="empty-state">暂无搜索统计</div>';
+                    return;
+                }
+                list.innerHTML = `
+                    <table class="data-table">
+                        <thead><tr><th style="width:60px;">排名</th><th>关键词</th><th style="width:100px;">搜索次数</th><th style="width:170px;">最后搜索</th></tr></thead>
+                        <tbody>
+                        ${data.map((s, i) => `<tr>
+                            <td>${i + 1}</td>
+                            <td>${escapeHtml(s.keyword)}</td>
+                            <td>${s.count}</td>
+                            <td>${escapeHtml(s.last_searched_at)}</td>
+                        </tr>`).join('')}
+                        </tbody></table>`;
+            } catch (e) {
+                document.getElementById('statsList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function clearStats() {
+            if (!confirm('确定清空所有搜索统计？')) return;
+            try {
+                const data = await apiRequest('/admin/stats', { method: 'DELETE' });
+                showToast(data.message, 'success');
+                loadStats();
+            } catch (e) { showToast('清空失败', 'error'); }
+        }
+
+        // ===== 搜索会话 =====
+        async function loadSessions() {
+            try {
+                const data = await apiRequest('/admin/sessions?limit=50');
+                const list = document.getElementById('sessionsList');
+                if (!data.items || data.items.length === 0) {
+                    list.innerHTML = '<div class="empty-state">暂无搜索会话</div>';
+                    return;
+                }
+                list.innerHTML = `
+                    <table class="data-table">
+                        <thead><tr><th style="width:60px;">ID</th><th>查询</th><th style="width:100px;">结果数</th><th style="width:170px;">创建时间</th></tr></thead>
+                        <tbody>
+                        ${data.items.map(s => `<tr>
+                            <td>${s.id}</td>
+                            <td>${escapeHtml(s.query)}</td>
+                            <td>${s.result_count}</td>
+                            <td>${escapeHtml(s.created_at)}</td>
+                        </tr>`).join('')}
+                        </tbody></table>`;
+            } catch (e) {
+                document.getElementById('sessionsList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function clearSessions() {
+            if (!confirm('确定清空所有搜索会话？')) return;
+            try {
+                const data = await apiRequest('/admin/sessions', { method: 'DELETE' });
+                showToast(data.message, 'success');
+                loadSessions();
+                refreshAll();
+            } catch (e) { showToast('清空失败', 'error'); }
+        }
+
+        // ===== 收录站点 =====
+        async function loadSites() {
+            try {
+                const data = await apiRequest('/admin/indexed-sites');
+                const list = document.getElementById('sitesList');
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div class="empty-state">暂无收录站点</div>';
+                    return;
+                }
+                list.innerHTML = `
+                    <table class="data-table">
+                        <thead><tr><th style="width:60px;">ID</th><th>名称</th><th>URL</th><th style="width:80px;">状态</th><th style="width:140px;">操作</th></tr></thead>
+                        <tbody>
+                        ${data.map(s => `<tr>
+                            <td>${s.id}</td>
+                            <td>${escapeHtml(s.name)}</td>
+                            <td><a href="${escapeHtml(s.url)}" target="_blank" style="color:#1976d2;">${escapeHtml(s.url)}</a></td>
+                            <td>${s.approved ? '<span class="badge badge-success">已审核</span>' : '<span class="badge badge-warning">待审核</span>'}</td>
+                            <td>
+                                ${!s.approved ? `<button class="btn btn-sm btn-success" onclick="approveSite(${s.id})">✓ 审核</button>` : ''}
+                                <button class="btn btn-sm btn-danger" onclick="deleteSite(${s.id})">🗑️ 删除</button>
+                            </td>
+                        </tr>`).join('')}
+                        </tbody></table>`;
+            } catch (e) {
+                document.getElementById('sitesList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function approveSite(id) {
+            try {
+                const data = await apiRequest(`/admin/indexed-sites/${id}/approve`, { method: 'POST' });
+                showToast(data.message, 'success');
+                loadSites();
+            } catch (e) { showToast('审核失败', 'error'); }
+        }
+
+        async function deleteSite(id) {
+            if (!confirm('确定删除该站点？')) return;
+            try {
+                const data = await apiRequest('/admin/indexed-sites', {
+                    method: 'DELETE',
+                    body: JSON.stringify({ id })
+                });
+                showToast('已删除', 'success');
+                loadSites();
+            } catch (e) { showToast('删除失败', 'error'); }
+        }
+
+        // ===== 搜索引擎 =====
+        async function loadEngines() {
+            try {
+                const data = await apiRequest('/admin/engines');
+                const list = document.getElementById('enginesList');
+                const builtin = data.builtin_engines || [];
+                if (builtin.length === 0) {
+                    list.innerHTML = '<div class="empty-state">无内置搜索引擎</div>';
+                    return;
+                }
+                list.innerHTML = builtin.map(e => `<div class="engine-card">
+                    <div class="name">${escapeHtml(e.name)}</div>
+                    <div class="weight">权重: ${e.weight || '—'}</div>
+                </div>`).join('');
+            } catch (e) {
+                document.getElementById('enginesList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        // ===== 初始化 =====
+        (function init() {
+            updateTokenStatusBtn();
+            const token = getStoredToken();
+            if (token) {
+                verifyTokenAndLoad();
+            } else {
+                showLockScreen();
+            }
+        })();
+    </script>
+</body>
+</html>

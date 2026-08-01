@@ -1,0 +1,417 @@
+{
+    "clean": {
+        "bath": {
+            "name": "洗澡",
+            "effect": {"energy": -10, "mood": 20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg>",
+            "consumeItem": null
+        },
+        "wash": {
+            "name": "洗脸",
+            "effect": {"mood": 10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z\"/><polyline points=\"3.27 6.96 12 12.01 20.73 6.96\"/><line x1=\"12\" y1=\"22.08\" x2=\"12\" y2=\"12\"/></svg>",
+            "consumeItem": null
+        },
+        "hair": {
+            "name": "梳毛",
+            "effect": {"mood": 15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 16V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8\"/><path d=\"M16 16V2\"/><path d=\"M8 16V2\"/><path d=\"M12 16V2\"/></svg>",
+            "consumeItem": "brush"
+        },
+        "clothes": {
+            "name": "换衣",
+            "effect": {"mood": 25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/></svg>",
+            "consumeItem": null
+        },
+        "brush_teeth": {
+            "name": "刷牙",
+            "effect": {"life": 5, "mood": 5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2v20\"/><path d=\"M8 2v20\"/><path d=\"M16 2v20\"/><path d=\"M20 9l-5 5\"/><path d=\"M4 9l5 5\"/></svg>",
+            "consumeItem": null
+        },
+        "nail": {
+            "name": "修指甲",
+            "effect": {"mood": 15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 12h8\"/><path d=\"M12 8v8\"/></svg>",
+            "consumeItem": null
+        }
+    },
+    "rest": {
+        "nap": {
+            "name": "小憩",
+            "effect": {"energy": 25, "mood": 5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z\"/></svg>",
+            "consumeItem": null
+        },
+        "sleep": {
+            "name": "睡眠",
+            "effect": {"energy": 60, "hunger": -10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"/></svg>",
+            "consumeItem": null
+        },
+        "relax": {
+            "name": "放松",
+            "effect": {"energy": 15, "mood": 20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/></svg>",
+            "consumeItem": null
+        },
+        "meditate": {
+            "name": "冥想",
+            "effect": {"energy": 20, "mood": 30},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>",
+            "consumeItem": null
+        },
+        "massage": {
+            "name": "按摩",
+            "effect": {"energy": 20, "mood": 25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 12l3-3 3 3 3-3 3 3\"/></svg>",
+            "consumeItem": null
+        },
+        "sauna": {
+            "name": "桑拿",
+            "effect": {"energy": 10, "mood": 30},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/><path d=\"M15 9a3 3 0 0 0-6 0\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"2\"/></svg>",
+            "consumeItem": null
+        }
+    },
+    "feed": {
+        "bread": {
+            "name": "面包",
+            "effect": {"hunger": 25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M5 22C3.68 22 3.15 19.64 3.04 18.7A5.56 5.56 0 0 1 3.36 16A2.5 2.5 0 0 1 5.23 14.38C6.4 14.18 7.23 14.88 8.29 15.12A1.21 1.21 0 0 0 9.85 13.75C9.41 12.03 6.28 12 5 12C5 10.14 7.04 9.9 8.5 10.04A10.8 10.8 0 0 1 11.04 10.6C11.54 10.77 12.12 11.2 12.67 11.16C13.5 11.09 13.67 10.23 13.31 9.6C12.44 8.12 9.97 8 8.5 8C8.5 6 10.23 5.62 11.89 5.92A11.58 11.58 0 0 1 14.38 6.71C14.89 6.93 15.5 7.35 16.06 7.16C17.5 6.72 16 5.18 15.36 4.81A6.6 6.6 0 0 0 13.94 4.23C13.4 4.07 12.74 4.13 13.23 3.5A5.13 5.13 0 0 1 15.96 2.26C17.85 1.82 20.46 1.74 20.92 4.12A5.3 5.3 0 0 1 20.07 7.7A38.96 38.96 0 0 1 13.22 16.33A36.6 36.6 0 0 1 8.62 20.32C7.62 21.04 6.3 22 5 22Z\"/></svg>",
+            "consumeItem": "bread"
+        },
+        "apple": {
+            "name": "苹果",
+            "effect": {"hunger": 15, "mood": 5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M17.5 10c.83 0 1.5-.67 1.5-1.5S18.33 7 17.5 7 16 7.67 16 8.5 16.67 10 17.5 10z\"/><path d=\"M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z\"/></svg>",
+            "consumeItem": "apple"
+        },
+        "meat": {
+            "name": "肉类",
+            "effect": {"hunger": 40, "energy": 10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg>",
+            "consumeItem": "meat"
+        },
+        "water": {
+            "name": "喝水",
+            "effect": {"hunger": 5, "energy": 5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>",
+            "consumeItem": "water_bottle"
+        },
+        "milk": {
+            "name": "牛奶",
+            "effect": {"hunger": 10, "energy": 15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z\"/><path d=\"M8 5v14\"/><path d=\"M16 5v14\"/></svg>",
+            "consumeItem": "milk"
+        },
+        "snack": {
+            "name": "零食",
+            "effect": {"hunger": 10, "mood": 15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 18h10\"/><path d=\"M9 22h6\"/><path d=\"M12 2v-2\"/><path d=\"M8 22V10a4 4 0 0 1 8 0v12\"/></svg>",
+            "consumeItem": "candy"
+        }
+    },
+    "play": {
+        "balloon": {
+            "name": "气球",
+            "effect": {"mood": 25, "energy": -10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M13.16,12.74L14,14H12.5C12.35,16.71 12,19.41 11.5,22.08L10.5,21.92C11,19.3 11.34,16.66 11.5,14H10L10.84,12.74C8.64,11.79 7,8.36 7,6A5,5 0 0,1 12,1A5,5 0 0,1 17,6C17,8.36 15.36,11.79 13.16,12.74Z\"/></svg>",
+            "consumeItem": "balloon"
+        },
+        "game": {
+            "name": "游戏",
+            "effect": {"mood": 35, "energy": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"6\" y=\"11\" width=\"12\" height=\"9\" rx=\"2\"/><path d=\"M11 11V7a2 2 0 0 1 2-2v0a2 2 0 0 1 2 2v4\"/></svg>",
+            "consumeItem": "gamepad"
+        },
+        "story": {
+            "name": "讲故事",
+            "effect": {"mood": 20, "energy": -5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"/><polyline points=\"14 2 14 8 20 8\"/><line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"/><line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"/></svg>",
+            "consumeItem": "book"
+        },
+        "dance": {
+            "name": "跳舞",
+            "effect": {"mood": 30, "energy": -20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2v4\"/><path d=\"M12 18v4\"/><path d=\"M4 12h4\"/><path d=\"M16 12h4\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>",
+            "consumeItem": null
+        },
+        "sing": {
+            "name": "唱歌",
+            "effect": {"mood": 25, "energy": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 19V5\"/><path d=\"M9 12l3-3 3 3\"/></svg>",
+            "consumeItem": null
+        },
+        "draw": {
+            "name": "画画",
+            "effect": {"mood": 30, "energy": -10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 20V10\"/><path d=\"M18 20V4\"/><path d=\"M8 20V14\"/></svg>",
+            "consumeItem": "paint"
+        },
+        "puzzle": {
+            "name": "拼图",
+            "effect": {"mood": 20, "energy": -5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 3h18v18H3z\"/><path d=\"M9 9h6v6H9z\"/></svg>",
+            "consumeItem": null
+        },
+        "photo": {
+            "name": "拍照",
+            "effect": {"mood": 25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z\"/><circle cx=\"12\" cy=\"13\" r=\"4\"/></svg>",
+            "consumeItem": "camera"
+        }
+    },
+    "games": {
+        "light_corridor": {
+            "name": "光明走廊",
+            "effect": {"mood": 40, "energy": -20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 3v18\"/><path d=\"M8 21l4-4 4 4\"/><path d=\"M4 3h16\"/><circle cx=\"12\" cy=\"9\" r=\"2\"/></svg>",
+            "gameUrl": "../../LightCorridor/LightCorridor.html",
+            "gameName": "光明走廊",
+            "reward": {"points": 20},
+            "consumeItem": null
+        },
+        "monopoly": {
+            "name": "大富翁",
+            "effect": {"mood": 50, "energy": -25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M7 7h10v10H7z\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/></svg>",
+            "gameUrl": "../../Monopoly/Monopoly.html",
+            "gameName": "大富翁",
+            "reward": {"points": 30},
+            "consumeItem": null
+        },
+        "doudizhu": {
+            "name": "斗地主",
+            "effect": {"mood": 45, "energy": -20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"5\" y=\"2\" width=\"14\" height=\"20\" rx=\"2\"/><path d=\"M9 5h6\"/><path d=\"M9 9h6\"/><path d=\"M9 13h6\"/></svg>",
+            "gameUrl": "../../DouDizhu/DouDizhu.html",
+            "gameName": "斗地主",
+            "reward": {"points": 25},
+            "consumeItem": null
+        },
+        "star_luster": {
+            "name": "星耀",
+            "effect": {"mood": 50, "energy": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polygon points=\"12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\"/></svg>",
+            "gameUrl": "../../Star Luster/Star Luster.html",
+            "gameName": "星耀",
+            "reward": {"points": 35},
+            "consumeItem": null
+        },
+        "tetris": {
+            "name": "俄罗斯方块",
+            "effect": {"mood": 35, "energy": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"6\" height=\"6\"/><rect x=\"9\" y=\"3\" width=\"6\" height=\"6\"/><rect x=\"15\" y=\"3\" width=\"6\" height=\"6\"/><rect x=\"3\" y=\"9\" width=\"6\" height=\"6\"/><rect x=\"9\" y=\"9\" width=\"6\" height=\"6\"/><rect x=\"3\" y=\"15\" width=\"6\" height=\"6\"/></svg>",
+            "gameUrl": "../../Tetris/Tetris.html",
+            "gameName": "俄罗斯方块",
+            "reward": {"points": 15},
+            "consumeItem": null
+        },
+        "tictactoe": {
+            "name": "井字棋",
+            "effect": {"mood": 25, "energy": -5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M9 3v18\"/><path d=\"M15 3v18\"/><path d=\"M3 9h18\"/><path d=\"M3 15h18\"/></svg>",
+            "gameUrl": "../../Tic-tac-toe/Tic-Tac-Toe.html",
+            "gameName": "井字棋",
+            "reward": {"points": 10},
+            "consumeItem": null
+        },
+        "gacha": {
+            "name": "抽卡",
+            "effect": {"mood": 40},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>",
+            "gameUrl": "../../gacha.html",
+            "gameName": "抽卡",
+            "reward": {"points": 25},
+            "consumeItem": null
+        }
+    },
+    "status_events": {
+        "happy": {
+            "name": "开心",
+            "effect": {"mood": 30},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5-2 4-2 4 2 4 2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>",
+            "type": "buff",
+            "chance": 0.15,
+            "duration": 300000,
+            "description": "角色今天心情特别好！"
+        },
+        "excited": {
+            "name": "兴奋",
+            "effect": {"mood": 20, "energy": 15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z\"/></svg>",
+            "type": "buff",
+            "chance": 0.08,
+            "duration": 180000,
+            "description": "角色充满了活力！"
+        },
+        "lucky": {
+            "name": "幸运",
+            "effect": {"mood": 25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"/><polyline points=\"22 4 12 14.01 9 11.01\"/></svg>",
+            "type": "buff",
+            "chance": 0.05,
+            "duration": 600000,
+            "description": "今天运气不错！"
+        },
+        "hungry": {
+            "name": "饥饿",
+            "effect": {"hunger": -25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z\"/><path d=\"M12 9v10\"/><path d=\"M8 13h8\"/></svg>",
+            "type": "debuff",
+            "chance": 0.2,
+            "duration": 300000,
+            "removeItem": "bread",
+            "description": "肚子好饿啊，想吃点东西..."
+        },
+        "tired": {
+            "name": "疲惫",
+            "effect": {"energy": -20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/><path d=\"M12 12v8\"/></svg>",
+            "type": "debuff",
+            "chance": 0.15,
+            "duration": 300000,
+            "removeItem": null,
+            "description": "好累啊，想休息一下..."
+        },
+        "sad": {
+            "name": "悲伤",
+            "effect": {"mood": -25},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>",
+            "type": "debuff",
+            "chance": 0.12,
+            "duration": 300000,
+            "removeItem": "heart",
+            "description": "心里有点难过..."
+        },
+        "sick": {
+            "name": "生病",
+            "effect": {"life": -15, "mood": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8\"/><path d=\"M12 12V6a4 4 0 0 1 4-4h4\"/><path d=\"M12 12V6a4 4 0 0 0-4-4H4\"/><circle cx=\"12\" cy=\"19\" r=\"2\"/></svg>",
+            "type": "debuff",
+            "chance": 0.08,
+            "duration": 600000,
+            "removeItem": "medicine_health",
+            "description": "身体不舒服，需要吃药..."
+        },
+        "heatstroke": {
+            "name": "中暑",
+            "effect": {"energy": -30, "life": -10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"5\"/><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"/><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"/><line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"/><line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"/><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"/><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"/></svg>",
+            "type": "debuff",
+            "chance": 0.06,
+            "duration": 450000,
+            "removeItem": "herb_tao",
+            "description": "好热啊，头有点晕..."
+        },
+        "poisoned": {
+            "name": "中毒",
+            "effect": {"life": -20, "mood": -20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2a10 10 0 0 0-10 10c0 6 8 12 8 12s8-6 8-12a10 10 0 0 0-10-10z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>",
+            "type": "debuff",
+            "chance": 0.04,
+            "duration": 600000,
+            "removeItem": "medicine_all",
+            "description": "好像中毒了，好难受..."
+        },
+        "injured": {
+            "name": "受伤",
+            "effect": {"life": -25, "energy": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/></svg>",
+            "type": "debuff",
+            "chance": 0.05,
+            "duration": 480000,
+            "removeItem": "medicine_health",
+            "description": "不小心受伤了，需要治疗..."
+        },
+        "sleepy": {
+            "name": "困倦",
+            "effect": {"energy": -15, "mood": -5},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/><path d=\"M9 12l3 3 3-3\"/></svg>",
+            "type": "debuff",
+            "chance": 0.1,
+            "duration": 300000,
+            "removeItem": null,
+            "description": "好困啊，眼皮都睁不开了..."
+        },
+        "cold": {
+            "name": "感冒",
+            "effect": {"energy": -15, "life": -10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z\"/><path d=\"M16 14l-4 4\"/><path d=\"M8 14l4 4\"/></svg>",
+            "type": "debuff",
+            "chance": 0.07,
+            "duration": 600000,
+            "removeItem": "medicine_energy",
+            "description": "阿嚏！好像感冒了..."
+        },
+        "bored": {
+            "name": "无聊",
+            "effect": {"mood": -15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M9 9h6\"/><path d=\"M9 15h6\"/></svg>",
+            "type": "debuff",
+            "chance": 0.18,
+            "duration": 300000,
+            "removeItem": "balloon",
+            "description": "好无聊啊，想找点乐子..."
+        },
+        "lonely": {
+            "name": "孤独",
+            "effect": {"mood": -20},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 15s1.5-2 4-2 4 2 4 2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>",
+            "type": "debuff",
+            "chance": 0.09,
+            "duration": 450000,
+            "removeItem": "flower",
+            "description": "一个人好孤单..."
+        },
+        "angry": {
+            "name": "生气",
+            "effect": {"mood": -30},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 8h8M12 12h.01\"/><path d=\"M9.07 14.93a4 4 0 0 1 5.86 0\"/></svg>",
+            "type": "debuff",
+            "chance": 0.06,
+            "duration": 300000,
+            "removeItem": "chocolate",
+            "description": "哼！不想理人..."
+        },
+        "happy_birthday": {
+            "name": "生日祝福",
+            "effect": {"mood": 50, "energy": 20, "life": 10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"10\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 10V6a4 4 0 0 1 8 0v4\"/><path d=\"M12 22v-6\"/><path d=\"M10 16l4 4 4-4\"/></svg>",
+            "type": "buff",
+            "chance": 0.02,
+            "duration": 600000,
+            "description": "今天是角色的生日！"
+        },
+        "festival": {
+            "name": "节日庆祝",
+            "effect": {"mood": 40, "energy": 15},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/></svg>",
+            "type": "buff",
+            "chance": 0.06,
+            "duration": 600000,
+            "description": "今天有节日活动！"
+        },
+        "treasure": {
+            "name": "发现宝藏",
+            "effect": {"mood": 40},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M12 8v8\"/><path d=\"M8 12h8\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/></svg>",
+            "type": "buff",
+            "chance": 0.03,
+            "duration": 300000,
+            "reward": {"points": 50},
+            "description": "哇！发现了一个宝藏！"
+        },
+        "surprise_visit": {
+            "name": "惊喜来访",
+            "effect": {"mood": 35, "energy": 10},
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M18 20V10M12 20V4M6 20v-6\"/></svg>",
+            "type": "buff",
+            "chance": 0.08,
+            "duration": 300000,
+            "description": "有客人来拜访了！"
+        }
+    }
+}

@@ -1,0 +1,424 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, Microsoft YaHei;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0f1722, #162438);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.view {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    transition: opacity 0.3s ease;
+}
+
+.view-hidden {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#startView {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+}
+
+.start-card {
+    width: min(420px, 98vw);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 16px;
+    padding: 28px 20px;
+}
+
+.start-card h1 {
+    font-size: clamp(32px, 8vw, 42px);
+    color: #8cf;
+    margin-bottom: 8px;
+}
+
+.start-card .subtitle {
+    opacity: 0.7;
+    margin-bottom: 24px;
+    font-size: clamp(14px, 3vw, 16px);
+}
+
+.set-group {
+    margin: 16px 0;
+    text-align: left;
+}
+
+.set-group h4 {
+    margin-bottom: 8px;
+    color: #adf;
+    font-size: clamp(15px, 3vw, 18px);
+}
+
+.diff-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+}
+
+.diff-btn {
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    background: #333848;
+    color: #fff;
+    font-size: clamp(13px, 2.5vw, 15px);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.diff-btn:hover {
+    background: #3d4458;
+}
+
+.diff-btn.active {
+    background: linear-gradient(90deg, #08c, #0ad);
+}
+
+.switch-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+    font-size: clamp(13px, 2.5vw, 15px);
+}
+
+input[type=checkbox] {
+    width: 16px;
+    height: 16px;
+    accent-color: #0cf;
+}
+
+.start-main-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: clamp(16px, 4vw, 18px);
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    margin-top: 16px;
+    background: linear-gradient(90deg, #08c, #0ad);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.start-main-btn:hover {
+    transform: translateY(-2px);
+}
+
+.rule-text {
+    margin-top: 16px;
+    opacity: 0.6;
+    font-size: clamp(12px, 2.5vw, 14px);
+    line-height: 1.6;
+}
+
+.high-score {
+    margin-top: 8px;
+    color: #fd8;
+    font-size: clamp(14px, 3vw, 16px);
+}
+
+#gameView {
+    gap: 16px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+@media (max-width: 720px) {
+    #gameView {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 10px;
+    }
+}
+
+.game-wrap {
+    position: relative;
+}
+
+#gameBox {
+    border: 3px solid #4488dd;
+    box-shadow: 0 0 24px rgba(36, 106, 204, 0.33);
+    background: #000;
+    max-width: min(300px, 90vw);
+    height: auto;
+    aspect-ratio: 10 / 20;
+    touch-action: none;
+}
+
+@media (max-width: 480px) {
+    #gameBox {
+        max-width: 280px;
+        border-width: 2px;
+        box-shadow: 0 0 16px rgba(36, 106, 204, 0.25);
+    }
+}
+
+.mask {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(24px, 6vw, 32px);
+    font-weight: bold;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+}
+
+.game-over-overlay {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+}
+
+.game-over-content {
+    text-align: center;
+    padding: 24px;
+}
+
+.game-over-content h2 {
+    color: #ff6b6b;
+    margin-bottom: 16px;
+    font-size: clamp(24px, 5vw, 32px);
+}
+
+.game-over-stats {
+    margin-bottom: 20px;
+    font-size: clamp(14px, 3vw, 16px);
+}
+
+.game-over-stats div {
+    margin: 6px 0;
+}
+
+.game-over-stats span {
+    color: #8cf;
+    font-weight: bold;
+}
+
+.sidebar {
+    width: min(220px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        width: min(320px, 95vw);
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .panel {
+        width: calc(50% - 5px);
+        min-width: 140px;
+    }
+}
+
+.panel {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.panel h4 {
+    margin-bottom: 8px;
+    color: #8cf;
+    font-size: clamp(14px, 3vw, 16px);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.13);
+    margin: 8px 0;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;
+    font-size: clamp(13px, 2.5vw, 15px);
+}
+
+.info-row span {
+    color: #8cf;
+}
+
+.canvas-mini {
+    width: 120px;
+    height: 120px;
+    background: #000;
+    border: 1px solid #444;
+    border-radius: 6px;
+    margin: 6px auto;
+    display: block;
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+button {
+    transition: all 0.2s;
+    font-size: clamp(13px, 2.5vw, 15px);
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 0;
+}
+
+.btn-main {
+    background: linear-gradient(90deg, #08c, #0ad);
+    color: #fff;
+}
+
+.btn-main:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 140, 200, 0.4);
+}
+
+.btn-sec {
+    background: #333848;
+    color: #eee;
+}
+
+.btn-sec:hover {
+    background: #3d4458;
+}
+
+.btn-warn {
+    background: linear-gradient(90deg, #f70, #f93);
+    color: #fff;
+}
+
+.btn-warn:hover {
+    box-shadow: 0 2px 8px rgba(255, 119, 0, 0.4);
+}
+
+button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.back-home {
+    margin-top: 6px;
+    width: 100%;
+}
+
+.touch-container {
+    display: none;
+    margin-top: 10px;
+}
+
+@media (max-width: 720px) {
+    .touch-container {
+        display: block;
+    }
+}
+
+.touch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 75px);
+    gap: 10px;
+    justify-content: center;
+}
+
+.touch-btn {
+    width: 75px;
+    height: 75px;
+    font-size: 32px;
+    background: rgba(34, 34, 85, 0.85);
+    color: #fff;
+    border-radius: 12px;
+    border: 2px solid rgba(100, 150, 200, 0.5);
+    cursor: pointer;
+    transition: all 0.15s;
+    touch-action: manipulation;
+    user-select: none;
+    font-weight: bold;
+}
+
+.touch-btn:active {
+    background: rgba(100, 150, 200, 0.6);
+    transform: scale(0.93);
+    border-color: rgba(150, 200, 255, 0.8);
+}
+
+@media (hover: hover) {
+    .touch-btn:hover {
+        background: rgba(68, 68, 136, 0.9);
+        border-color: rgba(150, 200, 255, 0.6);
+    }
+}
+
+/* 手机端优化 */
+@media (max-width: 480px) {
+    .touch-grid {
+        grid-template-columns: repeat(3, 65px);
+        gap: 8px;
+    }
+    
+    .touch-btn {
+        width: 65px;
+        height: 65px;
+        font-size: 26px;
+        border-radius: 10px;
+    }
+}
+
+@media (min-width: 721px) {
+    .touch-container {
+        display: none !important;
+    }
+}

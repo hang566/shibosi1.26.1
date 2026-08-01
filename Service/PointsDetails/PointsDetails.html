@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分明细 - 市舶司</title>
+    <link rel="icon" href="../../favicon.ico">
+    <link href="../../ui/css/modules/variables.css" rel="stylesheet">
+    <link href="../../ui/css/modules/base.css" rel="stylesheet">
+    <link href="../../ui/css/modules/display.css" rel="stylesheet">
+    <link href="../../ui/css/modules/feedback.css" rel="stylesheet">
+    <link href="../../ui/css/modules/forms.css" rel="stylesheet">
+    <link href="../../ui/css/modules/layout.css" rel="stylesheet">
+    <link href="../../ui/css/modules/tabs-browser.css" rel="stylesheet">
+    <script src="../../js/userAccount.js" defer></script>
+    <script src="../../js/syncManager.js"></script>
+    <style>
+        body {
+            padding-bottom: 40px;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--main), #5856d6);
+            color: #fff;
+            padding: 20px 20px 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .header-section h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 12px 0 4px;
+            position: relative;
+            opacity: 0.95;
+        }
+
+        .header-section p {
+            font-size: 0.85rem;
+            opacity: 0.75;
+            margin: 0 0 12px;
+            position: relative;
+        }
+
+        .points-big-display {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            position: relative;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+            margin: 8px 0 2px;
+            line-height: 1;
+        }
+
+        .points-big-display .unit {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-left: 6px;
+            opacity: 0.8;
+        }
+
+        .points-sub {
+            font-size: 0.85rem;
+            opacity: 0.75;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255,255,255,0.18);
+            border: none;
+            color: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            min-width: auto;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .page-content {
+            max-width: 900px;
+            margin: -30px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--main), #5856d6);
+            opacity: 0.6;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(88,86,214,0.1));
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            font-size: 1.2rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--block-bg);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: auto;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--main);
+            color: var(--main);
+        }
+
+        .filter-btn.active {
+            background: var(--main);
+            color: #fff;
+            border-color: var(--main);
+        }
+
+        .record-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        .record-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease;
+            gap: 14px;
+        }
+
+        .record-item:last-child {
+            border-bottom: none;
+        }
+
+        .record-item:hover {
+            background: var(--block-bg);
+        }
+
+        .record-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            background: var(--block-bg);
+        }
+
+        .record-icon.earn {
+            background: rgba(0, 180, 42, 0.1);
+        }
+
+        .record-icon.spend {
+            background: rgba(245, 63, 63, 0.1);
+        }
+
+        .record-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .record-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+
+        .record-desc {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .record-points {
+            font-weight: 700;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .record-points.earn {
+            color: var(--success);
+        }
+
+        .record-points.spend {
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-placeholder);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 0.9rem;
+        }
+
+        .compliance-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .compliance-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compliance-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(0,122,255,0.15), rgba(88,86,214,0.15));
+            color: var(--main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .compliance-title {
+            font-weight: 600;
+            font-size: 1rem;
+            flex: 1;
+        }
+
+        .compliance-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(0, 180, 42, 0.1);
+            color: var(--success);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .compliance-text {
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text-sub);
+        }
+
+        .compliance-text ul {
+            margin: 8px 0 0 20px;
+            padding: 0;
+        }
+
+        .compliance-text li {
+            margin-bottom: 6px;
+        }
+
+        .task-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            gap: 14px;
+            transition: background 0.2s ease;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item:hover {
+            background: var(--block-bg);
+        }
+
+        .task-item.completed .task-title {
+            color: var(--text-sub);
+            text-decoration: line-through;
+        }
+
+        .task-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(88,86,214,0.1));
+        }
+
+        .task-item.completed .task-icon {
+            background: rgba(0, 180, 42, 0.1);
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .task-desc {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .task-progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .task-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--main), #5856d6);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .task-item.completed .task-progress-fill {
+            background: var(--success);
+        }
+
+        .task-reward {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .task-reward-points {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--success);
+        }
+
+        .task-reward-points.spend {
+            color: var(--danger);
+        }
+
+        .task-reward-label {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .task-status {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            background: var(--block-bg);
+            color: var(--text-sub);
+        }
+
+        .task-item.completed .task-status {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .tabs-bar {
+            display: flex;
+            background: var(--block-bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            font-weight: 500;
+            min-width: auto;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            color: var(--main);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: var(--main);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .points-big-display {
+                font-size: 3rem;
+            }
+
+            .header-section {
+                padding: 30px 16px 50px;
+            }
+
+            .page-content {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 右上角账户头像占位（由 userAccount.js 自动注入） -->
+    <div id="user-account-slot" style="position:fixed;top:14px;right:16px;z-index:101;"></div>
+
+    <div class="header-section">
+        <button class="back-btn" onclick="goBack()" title="返回">←</button>
+        <h1>🌟 积分明细</h1>
+        <p>记录每一次获得与成长</p>
+        <div class="points-big-display">
+            <span id="totalPoints">0</span>
+            <span class="unit">分</span>
+        </div>
+        <div class="points-sub">
+            累计获得 <span id="totalEarned">0</span> 分
+            <span id="cloudPointsHint" style="margin-left:12px;opacity:0.85;"></span>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon-wrap">🎮</div>
+                <div class="stat-value" id="gamePoints">0</div>
+                <div class="stat-label">游戏积分</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrap">🔍</div>
+                <div class="stat-value" id="searchPoints">0</div>
+                <div class="stat-label">搜索积分</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrap">📅</div>
+                <div class="stat-value" id="todayPoints">0</div>
+                <div class="stat-label">今日获得</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrap">🏆</div>
+                <div class="stat-value" id="gameCount">0</div>
+                <div class="stat-label">游戏场次</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon">📋</span>
+                    积分记录
+                </div>
+                <div class="cloud-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button id="btnRefreshCloudPoints" class="filter-btn" style="border:1px solid var(--border,#ddd);background:#fff;">☁️ 同步云端</button>
+                    <button id="btnPushLocalToCloud" class="filter-btn active" style="background:var(--main,#007aff);color:#fff;">本地入云</button>
+                    <a href="../../Service/user/user.html#view=points" style="text-decoration:none;">
+                        <span class="filter-btn" style="border:1px solid var(--border,#ddd);background:#fff;display:inline-block;">用户中心 ›</span>
+                    </a>
+                </div>
+            </div>
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="earn">获得</button>
+                <button class="filter-btn" data-filter="spend">消耗</button>
+                <button class="filter-btn" data-filter="search">搜索</button>
+                <button class="filter-btn" data-filter="game">游戏</button>
+            </div>
+            <ul class="record-list" id="recordList">
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon">🎯</span>
+                    加分途径
+                </div>
+            </div>
+            <div class="tabs-bar">
+                <button class="tab-btn active" data-tab="daily">每日任务</button>
+                <button class="tab-btn" data-tab="achievement">成就任务</button>
+                <button class="tab-btn" data-tab="game">游戏项目</button>
+            </div>
+            <div class="tab-content active" id="tab-daily">
+                <ul class="task-list" id="dailyTaskList">
+                </ul>
+            </div>
+            <div class="tab-content" id="tab-achievement">
+                <ul class="task-list" id="achievementTaskList">
+                </ul>
+            </div>
+            <div class="tab-content" id="tab-game">
+                <ul class="task-list" id="gameTaskList">
+                </ul>
+            </div>
+        </div>
+
+        <div class="compliance-card">
+            <div class="compliance-header">
+                <div class="compliance-icon">🛡️</div>
+                <div class="compliance-title">在华合规提示</div>
+                <span class="compliance-badge">已合规</span>
+            </div>
+            <div class="compliance-text">
+                <p>本平台所有积分功能严格遵守中华人民共和国相关法律法规：</p>
+                <ul>
+                    <li><strong>积分性质：</strong>积分仅为平台内虚拟激励道具，不具备货币属性，不可兑换现金或法定货币。</li>
+                    <li><strong>获取方式：</strong>积分仅可通过正常使用平台功能（搜索、游戏、指令等）合法获取，严禁刷分、作弊等行为。</li>
+                    <li><strong>使用范围：</strong>积分仅限在本平台内兑换虚拟物品或服务，不得用于任何形式的赌博、洗钱或其他违法活动。</li>
+                    <li><strong>数据安全：</strong>所有积分数据存储于本地浏览器 localStorage，不上传至服务器，充分保护用户隐私。</li>
+                    <li><strong>最终解释：</strong>积分规则的最终解释权归平台所有，如发现违规行为，平台有权收回违规所得积分。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../ui/js/modules/theme.js"></script>
+    <script src="../../js/pointsSystem.js"></script>
+    <script src="../../ui/js/modules/feedback.js"></script>
+    <script>
+        var currentFilter = 'all';
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '../../index.html';
+            }
+        }
+
+        function formatTime(ts) {
+            if (!ts) return '';
+            var d = new Date(ts);
+            var now = new Date();
+            var isToday = d.toDateString() === now.toDateString();
+            var hours = d.getHours().toString().padStart(2, '0');
+            var minutes = d.getMinutes().toString().padStart(2, '0');
+            if (isToday) {
+                return '今天 ' + hours + ':' + minutes;
+            }
+            var month = (d.getMonth() + 1).toString().padStart(2, '0');
+            var day = d.getDate().toString().padStart(2, '0');
+            return month + '/' + day + ' ' + hours + ':' + minutes;
+        }
+
+        function getGameName(key) {
+            var names = {
+                'light_corridor': '光之回廊',
+                'star_luster': '星空璀璨',
+                'tic_tac_toe': '井字棋',
+                'tetris': '俄罗斯方块',
+                'monopoly': '大富翁',
+                'dou_dizhu': '斗地主',
+                'daily_login': '每日登录',
+                'search': '搜索',
+                'gacha': '抽卡',
+                'stock': '股票',
+                'oc': '原创角色',
+                'collector': '收集系统'
+            };
+            return names[key] || key;
+        }
+
+        function getGameIcon(key) {
+            var icons = {
+                'light_corridor': '💡',
+                'star_luster': '⭐',
+                'tic_tac_toe': '⭕',
+                'tetris': '🧱',
+                'monopoly': '🎲',
+                'dou_dizhu': '🃏',
+                'daily_login': '📅',
+                'search': '🔍',
+                'gacha': '🎰',
+                'stock': '📈',
+                'oc': '🎨',
+                'collector': '📚'
+            };
+            return icons[key] || '🎯';
+        }
+
+        function loadRecords() {
+            var records = [];
+
+            try {
+                var saved = localStorage.getItem('points_history');
+                if (saved) {
+                    records = JSON.parse(saved);
+                }
+            } catch (e) {}
+
+            var gameRecords = PointsSystem.getAllRecords();
+
+            if (records.length === 0) {
+                Object.keys(gameRecords).forEach(function(key) {
+                    var rec = gameRecords[key];
+                    if (rec.totalPoints > 0) {
+                        var isSearch = key === 'search' || key === 'daily_login';
+                        records.push({
+                            type: 'earn',
+                            category: isSearch ? 'search' : 'game',
+                            gameKey: key,
+                            title: getGameName(key),
+                            desc: '累计获得 ' + rec.totalPoints + ' 分',
+                            points: rec.totalPoints,
+                            timestamp: Date.now() - Math.random() * 86400000
+                        });
+                    }
+                });
+
+                records.sort(function(a, b) { return b.timestamp - a.timestamp; });
+            }
+
+            return records.filter(function(r) {
+                return r.points > 0;
+            });
+        }
+
+        function renderRecords() {
+            var list = document.getElementById('recordList');
+            var allRecords = loadRecords();
+
+            var filtered = allRecords.filter(function(r) {
+                if (currentFilter === 'all') return true;
+                if (currentFilter === 'earn') return r.type === 'earn';
+                if (currentFilter === 'spend') return r.type === 'spend';
+                if (currentFilter === 'search') return r.category === 'search';
+                if (currentFilter === 'game') return r.category === 'game';
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                list.innerHTML =
+                    '<div class="empty-state">' +
+                        '<div class="empty-state-icon">📭</div>' +
+                        '<div class="empty-state-text">暂无积分记录</div>' +
+                    '</div>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(function(r) {
+                var iconClass = r.type === 'earn' ? 'earn' : 'spend';
+                var pointsClass = r.type === 'earn' ? 'earn' : 'spend';
+                var pointsPrefix = r.type === 'earn' ? '+' : '-';
+                var icon;
+                if (r.type === 'spend') {
+                    icon = '💸';
+                } else if (r.category === 'game') {
+                    icon = getGameIcon(r.gameKey);
+                } else if (r.category === 'search') {
+                    icon = '🔍';
+                } else {
+                    icon = '⭐';
+                }
+
+                return (
+                    '<li class="record-item">' +
+                        '<div class="record-icon ' + iconClass + '">' + icon + '</div>' +
+                        '<div class="record-info">' +
+                            '<div class="record-title">' + r.title + '</div>' +
+                            '<div class="record-desc">' + r.desc + ' · ' + formatTime(r.timestamp) + '</div>' +
+                        '</div>' +
+                        '<div class="record-points ' + pointsClass + '">' + pointsPrefix + r.points + '</div>' +
+                    '</li>'
+                );
+            }).join('');
+        }
+
+        function updateStats() {
+            var total = PointsSystem.getTotalPoints();
+            var records = PointsSystem.getAllRecords();
+
+            document.getElementById('totalPoints').textContent = total.toLocaleString();
+
+            var gamePoints = 0;
+            var gameCount = 0;
+            var searchPoints = 0;
+            var totalEarned = 0;
+
+            Object.keys(records).forEach(function(key) {
+                var rec = records[key];
+                var earned = rec.totalPoints || 0;
+                totalEarned += earned;
+                if (key === 'search' || key === 'daily_login') {
+                    searchPoints += earned;
+                } else {
+                    gamePoints += earned;
+                }
+                gameCount += rec.gamesPlayed || 0;
+            });
+
+            document.getElementById('gamePoints').textContent = gamePoints.toLocaleString();
+            document.getElementById('searchPoints').textContent = searchPoints.toLocaleString();
+            document.getElementById('gameCount').textContent = gameCount.toLocaleString();
+
+            var todayPoints = 0;
+            var allRecords = loadRecords();
+            var today = new Date().toDateString();
+
+            allRecords.forEach(function(r) {
+                if (r.type === 'earn' && r.timestamp) {
+                    var d = new Date(r.timestamp);
+                    if (d.toDateString() === today) {
+                        todayPoints += r.points || 0;
+                    }
+                }
+            });
+
+            document.getElementById('todayPoints').textContent = todayPoints.toLocaleString();
+            document.getElementById('totalEarned').textContent = totalEarned.toLocaleString();
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(function(b) {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                renderRecords();
+            });
+        });
+
+        function getDailyTasks() {
+            var tasks = [];
+            var hasPointsSystem = window.PointsSystem && PointsSystem.getDailyData;
+
+            if (!hasPointsSystem) {
+                return [
+                    { id: 'cmd_s', icon: '⚡', title: '使用 /s 指令', desc: '每日首次使用搜索指令', reward: 10, progress: 0, total: 1, completed: false },
+                    { id: 'cmd_go', icon: '🚀', title: '使用 /go 指令', desc: '每日首次使用快捷跳转', reward: 10, progress: 0, total: 1, completed: false },
+                    { id: 'cmd_email', icon: '📧', title: '使用 /Email 指令', desc: '每日首次使用邮件功能', reward: 10, progress: 0, total: 1, completed: false },
+                    { id: 'search', icon: '🔍', title: '搜索获得积分', desc: '搜索次数越多，每次奖励越少', reward: 21, progress: 0, total: 5, completed: false },
+                    { id: 'random_word', icon: '🎯', title: '隐藏字奖励', desc: '每日5个随机字，每命中一个 +50', reward: 250, progress: 0, total: 5, completed: false }
+                ];
+            }
+
+            var cmdSData = PointsSystem.getDailyData('cmd_s');
+            var cmdGoData = PointsSystem.getDailyData('cmd_go');
+            var cmdEmailData = PointsSystem.getDailyData('cmd_email');
+            var searchData = PointsSystem.getDailyData('search_count');
+            var randomWordData = null;
+
+            try {
+                var saved = localStorage.getItem('daily_random_word_data');
+                if (saved) {
+                    randomWordData = JSON.parse(saved);
+                }
+            } catch (e) {}
+
+            var usedCount = 0;
+            var totalChars = 5;
+            if (randomWordData && randomWordData.used) {
+                usedCount = Object.keys(randomWordData.used).filter(function(k) { return randomWordData.used[k]; }).length;
+            }
+
+            var searchCount = searchData.count || 0;
+            var tiers = [10, 5, 3, 2, 1];
+            var earnedSearch = 0;
+            for (var i = 1; i <= Math.min(searchCount, 5); i++) {
+                earnedSearch += tiers[i - 1];
+            }
+            var totalSearchReward = 21;
+
+            tasks.push({
+                id: 'cmd_s',
+                icon: '⚡',
+                title: '使用 /s 指令',
+                desc: '每日首次使用搜索指令 +10 积分',
+                reward: 10,
+                progress: cmdSData.firstTime ? 0 : 1,
+                total: 1,
+                completed: !cmdSData.firstTime
+            });
+
+            tasks.push({
+                id: 'cmd_go',
+                icon: '🚀',
+                title: '使用 /go 指令',
+                desc: '每日首次使用快捷跳转 +10 积分',
+                reward: 10,
+                progress: cmdGoData.firstTime ? 0 : 1,
+                total: 1,
+                completed: !cmdGoData.firstTime
+            });
+
+            tasks.push({
+                id: 'cmd_email',
+                icon: '📧',
+                title: '使用 /Email 指令',
+                desc: '每日首次使用邮件功能 +10 积分',
+                reward: 10,
+                progress: cmdEmailData.firstTime ? 0 : 1,
+                total: 1,
+                completed: !cmdEmailData.firstTime
+            });
+
+            tasks.push({
+                id: 'search',
+                icon: '🔍',
+                title: '搜索获得积分',
+                desc: '已搜索 ' + searchCount + ' 次，获得 ' + earnedSearch + ' 积分',
+                reward: totalSearchReward,
+                progress: Math.min(searchCount, 5),
+                total: 5,
+                completed: false
+            });
+
+            tasks.push({
+                id: 'random_word',
+                icon: '🎯',
+                title: '隐藏字奖励',
+                desc: '已命中 ' + usedCount + '/5 个隐藏字，每个 +50 分',
+                reward: 250,
+                progress: usedCount,
+                total: 5,
+                completed: usedCount >= 5
+            });
+
+            return tasks;
+        }
+
+        function getAchievementTasks() {
+            var tasks = [];
+            var hasPointsSystem = window.PointsSystem && PointsSystem.getDailyData;
+
+            var firstCmdDone = false;
+            if (hasPointsSystem) {
+                var firstCmdData = PointsSystem.getDailyData('first_cmd_ever');
+                firstCmdDone = !firstCmdData.firstTime;
+            }
+
+            tasks.push({
+                id: 'first_cmd',
+                icon: '🌟',
+                title: '首次使用指令',
+                desc: '首次使用任意指令获得奖励',
+                reward: 50,
+                progress: firstCmdDone ? 1 : 0,
+                total: 1,
+                completed: firstCmdDone
+            });
+
+            tasks.push({
+                id: 'first_game',
+                icon: '🎮',
+                title: '首次体验游戏',
+                desc: '首次进入任意游戏',
+                reward: 20,
+                progress: 0,
+                total: 1,
+                completed: false
+            });
+
+            tasks.push({
+                id: 'first_search',
+                icon: '🔍',
+                title: '探索搜索功能',
+                desc: '完成第一次搜索',
+                reward: 10,
+                progress: 0,
+                total: 1,
+                completed: false
+            });
+
+            var allRecords = PointsSystem.getAllRecords();
+            var totalGamesPlayed = 0;
+            var totalSearches = 0;
+            try {
+                var searchDaily = PointsSystem.getDailyData('search_count');
+                totalSearches = searchDaily.count || 0;
+            } catch (e) {}
+
+            Object.keys(allRecords).forEach(function(key) {
+                if (key !== 'search' && key !== 'daily_login') {
+                    totalGamesPlayed += allRecords[key].gamesPlayed || 0;
+                }
+            });
+
+            tasks[1].progress = totalGamesPlayed > 0 ? 1 : 0;
+            tasks[1].completed = totalGamesPlayed > 0;
+
+            tasks[2].progress = totalSearches > 0 ? 1 : 0;
+            tasks[2].completed = totalSearches > 0;
+
+            return tasks;
+        }
+
+        function renderTaskList(listId, tasks) {
+            var list = document.getElementById(listId);
+            if (!list) return;
+
+            list.innerHTML = tasks.map(function(task) {
+                var progressPct = Math.min(100, (task.progress / task.total) * 100);
+                var statusIcon = task.completed ? '✓' : '›';
+                var isSpend = task.type === 'spend';
+                var rewardClass = isSpend ? 'task-reward-points spend' : 'task-reward-points';
+                var rewardText;
+                var rewardLabel;
+
+                if (task.rewardIsText) {
+                    rewardText = task.reward;
+                    rewardLabel = isSpend ? '消耗' : '奖励';
+                } else {
+                    rewardText = (isSpend ? '-' : '+') + task.reward;
+                    rewardLabel = '积分';
+                }
+
+                return (
+                    '<li class="task-item' + (task.completed ? ' completed' : '') + '">' +
+                        '<div class="task-icon">' + task.icon + '</div>' +
+                        '<div class="task-info">' +
+                            '<div class="task-title">' + task.title + '</div>' +
+                            '<div class="task-desc">' + task.desc + '</div>' +
+                            (task.total > 1 ? (
+                                '<div class="task-progress-bar">' +
+                                    '<div class="task-progress-fill" style="width:' + progressPct + '%"></div>' +
+                                '</div>'
+                            ) : '') +
+                        '</div>' +
+                        '<div class="task-reward">' +
+                            '<div class="' + rewardClass + '">' + rewardText + '</div>' +
+                            '<div class="task-reward-label">' + rewardLabel + '</div>' +
+                        '</div>' +
+                        '<div class="task-status">' + statusIcon + '</div>' +
+                    '</li>'
+                );
+            }).join('');
+        }
+
+        function getGameTasks() {
+            var allRecords = PointsSystem.getAllRecords();
+            var games = [
+                {
+                    key: 'light_corridor',
+                    icon: '💡',
+                    title: '光之回廊',
+                    desc: '益智解谜，点亮所有灯泡获得积分',
+                    reward: '按关卡',
+                    type: 'earn'
+                },
+                {
+                    key: 'star_luster',
+                    icon: '✨',
+                    title: '星河',
+                    desc: '太空射击，击毁敌人获得积分',
+                    reward: '按得分',
+                    type: 'earn'
+                },
+                {
+                    key: 'tic_tac_toe',
+                    icon: '⭕',
+                    title: '井字棋',
+                    desc: '对战游戏，获胜 +20，平局 +10',
+                    reward: '10~20',
+                    type: 'earn'
+                },
+                {
+                    key: 'tetris',
+                    icon: '🧱',
+                    title: '俄罗斯方块',
+                    desc: '经典消除，消除行数越多积分越高',
+                    reward: '按得分',
+                    type: 'earn'
+                },
+                {
+                    key: 'monopoly',
+                    icon: '🎲',
+                    title: '大富翁',
+                    desc: '策略经营，游戏结束获得积分',
+                    reward: '按资产',
+                    type: 'earn'
+                },
+                {
+                    key: 'dou_dizhu',
+                    icon: '🃏',
+                    title: '斗地主',
+                    desc: '牌类对战，获胜获得积分',
+                    reward: '按倍数',
+                    type: 'earn'
+                },
+                {
+                    key: 'stock',
+                    icon: '📈',
+                    title: '虚拟股市',
+                    desc: '股票投资，盈利可兑换积分',
+                    reward: '按盈利',
+                    type: 'earn'
+                },
+                {
+                    key: 'oc',
+                    icon: '🎭',
+                    title: 'OC养成',
+                    desc: '互动养成，事件、工作、小游戏均有积分',
+                    reward: '多种途径',
+                    type: 'earn'
+                },
+                {
+                    key: 'gacha',
+                    icon: '🎴',
+                    title: '传说卡牌召唤',
+                    desc: '消耗积分抽取稀有卡牌',
+                    reward: '-200/次',
+                    type: 'spend'
+                },
+                {
+                    key: 'collector',
+                    icon: '📚',
+                    title: '收集系统',
+                    desc: '收集各种物品和成就',
+                    reward: '成就奖励',
+                    type: 'earn'
+                }
+            ];
+
+            return games.map(function(g) {
+                var rec = allRecords[g.key] || { gamesPlayed: 0, totalPoints: 0, highScore: 0 };
+                var played = (rec.gamesPlayed || 0) > 0;
+                var totalPoints = rec.totalPoints || 0;
+                var desc = g.desc;
+                if (played) {
+                    desc += ' · 已玩 ' + rec.gamesPlayed + ' 次，累计 ' + totalPoints + ' 分';
+                }
+                return {
+                    id: g.key,
+                    icon: g.icon,
+                    title: g.title,
+                    desc: desc,
+                    reward: g.reward,
+                    rewardIsText: true,
+                    progress: played ? 1 : 0,
+                    total: 1,
+                    completed: played,
+                    type: g.type
+                };
+            });
+        }
+
+        function renderTasks() {
+            renderTaskList('dailyTaskList', getDailyTasks());
+            renderTaskList('achievementTaskList', getAchievementTasks());
+            renderTaskList('gameTaskList', getGameTasks());
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(function(b) {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+
+                var tabId = btn.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(function(tc) {
+                    tc.classList.remove('active');
+                });
+                document.getElementById('tab-' + tabId).classList.add('active');
+            });
+        });
+
+        function addPointsRecord(type, category, title, desc, points, gameKey) {
+            var records = [];
+            try {
+                var saved = localStorage.getItem('points_history');
+                if (saved) {
+                    records = JSON.parse(saved);
+                }
+            } catch (e) {}
+
+            records.unshift({
+                type: type,
+                category: category,
+                gameKey: gameKey || null,
+                title: title,
+                desc: desc,
+                points: points,
+                timestamp: Date.now()
+            });
+
+            records = records.slice(0, 100);
+
+            try {
+                localStorage.setItem('points_history', JSON.stringify(records));
+            } catch (e) {}
+        }
+
+        window.PointsHistory = {
+            addRecord: addPointsRecord
+        };
+
+        // =============== 云端同步（用户中心 JWT） ===============
+        function getCloudApiBase() {
+            if (window.__APP_CONFIG__ && window.__APP_CONFIG__.apiBase) {
+                return window.__APP_CONFIG__.apiBase;
+            }
+            return 'http://localhost:8084';
+        }
+
+        function withToken(headers) {
+            const t = localStorage.getItem('shibosi_token');
+            if (t) headers['Authorization'] = 'Bearer ' + t;
+            return headers;
+        }
+
+        function exportPointsLogs() {
+            const arr = [];
+            try {
+                const raw = localStorage.getItem('points_history');
+                if (raw) {
+                    const list = JSON.parse(raw) || [];
+                    list.forEach(function(r) {
+                        if (!r) return;
+                        arr.push({
+                            points: Number(r.points) || 0,
+                            action: r.category || r.gameKey || r.type || 'local',
+                            description: (r.title ? r.title + ' — ' : '') + (r.desc || ''),
+                            created_at: r.timestamp ? new Date(r.timestamp).toLocaleString('sv-SE').replace('T', ' ').substr(0, 19) : ''
+                        });
+                    });
+                }
+            } catch (e) {}
+            // 补充 PointsSystem 导出
+            if (window.PointsSystem && typeof PointsSystem.exportLogs === 'function') {
+                try {
+                    const extra = PointsSystem.exportLogs() || [];
+                    if (Array.isArray(extra)) extra.forEach(function(x) { arr.push(x); });
+                } catch (e) {}
+            }
+            // 去重（按 created_at+action+points）
+            const seen = {};
+            return arr.filter(function(x) {
+                const k = (x.created_at || '') + '|' + (x.action || '') + '|' + (x.points || 0);
+                if (seen[k]) return false;
+                seen[k] = true;
+                return true;
+            }).slice(0, 2000);
+        }
+
+        async function loadCloudPoints() {
+            const token = localStorage.getItem('shibosi_token');
+            const hint = document.getElementById('cloudPointsHint');
+            if (!token) {
+                if (hint) hint.innerHTML = '· <a href="../../Service/user/user.html?modal=login" style="color:#fff;text-decoration:underline;">登录</a>后可将积分与云端账户同步';
+                return null;
+            }
+            try {
+                const resp = await fetch(getCloudApiBase() + '/api/v1/user/points', {
+                    headers: withToken({ 'Content-Type': 'application/json' })
+                });
+                if (resp.status === 401) {
+                    localStorage.removeItem('shibosi_token');
+                    return null;
+                }
+                const json = await resp.json().catch(() => ({}));
+                if (!resp.ok || (json.code !== undefined && json.code !== 0)) {
+                    if (hint) hint.textContent = ' · 云端不可达';
+                    return null;
+                }
+                const data = json.data || json;
+                if (hint) {
+                    const cp = data && typeof data.total_points === 'number' ? data.total_points : 0;
+                    hint.innerHTML = ' · 云端账户：<b style="font-weight:600;">' + cp + '</b> 分';
+                }
+                return data || null;
+            } catch (e) {
+                if (hint) hint.textContent = ' · 云端不可达';
+                return null;
+            }
+        }
+
+        async function pushLocalToCloud() {
+            const token = localStorage.getItem('shibosi_token');
+            if (!token) {
+                if (confirm('还未登录，先去登录再同步积分？')) {
+                    window.location.href = '../../Service/user/user.html?modal=login&redirect=' + encodeURIComponent(location.href);
+                }
+                return;
+            }
+            const totalPoints = window.PointsSystem && typeof PointsSystem.getTotalPoints === 'function'
+                ? PointsSystem.getTotalPoints() : Number(document.getElementById('totalPoints').textContent.replace(/\D/g,'')) || 0;
+            const logs = exportPointsLogs();
+            if (totalPoints <= 0 && logs.length === 0) {
+                alert('本地积分暂无可同步内容');
+                return;
+            }
+            if (!confirm('准备把本地累计积分 ' + totalPoints + ' 分、' + logs.length + ' 条记录同步到云端账户（重复的会自动跳过），继续吗？')) return;
+            try {
+                const resp = await fetch(getCloudApiBase() + '/api/v1/user/points/import', {
+                    method: 'POST',
+                    headers: withToken({ 'Content-Type': 'application/json' }),
+                    body: JSON.stringify({ total_points: totalPoints, logs: logs })
+                });
+                const json = await resp.json().catch(() => ({}));
+                if (resp.ok && (!json.code || json.code === 0) && json.data && json.data.success) {
+                    const d = json.data;
+                    alert('入云完成：余额增加 ' + (d.balance_added || 0) + '，新增日志 ' + (d.logs_inserted || 0) + ' 条');
+                    await loadCloudPoints();
+                    if (window.ShiboSiAccount && typeof window.ShiboSiAccount.refresh === 'function') {
+                        await window.ShiboSiAccount.refresh();
+                    }
+                } else {
+                    alert('同步失败：' + ((json && (json.msg || json.error)) || resp.statusText));
+                }
+            } catch (e) {
+                alert('同步失败：' + (e.message || e));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            renderRecords();
+            renderTasks();
+            // 首次进入：拉取云端积分并展示提示
+            loadCloudPoints();
+            const r1 = document.getElementById('btnRefreshCloudPoints');
+            const r2 = document.getElementById('btnPushLocalToCloud');
+            if (r1) r1.addEventListener('click', function() { loadCloudPoints().then(function() { updateStats(); renderRecords(); renderTasks(); }); });
+            if (r2) r2.addEventListener('click', pushLocalToCloud);
+        });
+    </script>
+</body>
+</html>

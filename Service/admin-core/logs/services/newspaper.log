@@ -1,0 +1,47 @@
+[2026-07-31 00:21:15] >>> 启动命令: newspaper.exe (工作目录: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper)
+[2026-07-31 00:22:08] >>> 启动命令: newspaper.exe (工作目录: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper)
+Loaded page from: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper\home.html
+Loaded admin page from: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper\admin.html
+[2026-07-31 00:22:09.429] [INFO] [system] 日志系统初始化完成
+Auto cleanup completed at 2026-07-31 00:22:09
+========================================
+  市舶司 - 昨日晚报服务
+========================================
+访问地址: http://localhost:8082
+健康检查: http://localhost:8082/api/health
+API列表:
+  GET  /api/news          - 获取新闻列表
+  GET  /api/news/:id      - 获取新闻详情
+  GET  /api/search?q=..   - 搜索新闻
+  GET  /api/categories    - 获取分类列表
+  GET  /api/sources       - 获取新闻源
+  POST /api/fetch         - 抓取新闻
+  POST /api/fetch?source_id=X - 抓取指定源
+  POST /api/export        - 导出新闻
+  GET  /api/stats         - 获取统计信息
+  POST /api/clean?days=30 - 清理旧数据
+========================================
+[2026-07-31 02:39:23] >>> 启动命令: newspaper.exe (工作目录: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper)
+Loaded page from: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper\home.html
+Loaded admin page from: F:\projects\市舶司 1.x\市舶司 1.26.1\Service\Newspaper\admin.html
+[2026-07-31 02:39:23.920] [INFO] [system] 日志系统初始化完成
+Auto cleanup completed at 2026-07-31 02:39:24
+========================================
+  市舶司 - 昨日晚报服务
+========================================
+访问地址: http://localhost:8082
+健康检查: http://localhost:8082/api/health
+API列表:
+  GET  /api/news          - 获取新闻列表
+  GET  /api/news/:id      - 获取新闻详情
+  GET  /api/search?q=..   - 搜索新闻
+  GET  /api/categories    - 获取分类列表
+  GET  /api/sources       - 获取新闻源
+  POST /api/fetch         - 抓取新闻
+  POST /api/fetch?source_id=X - 抓取指定源
+  POST /api/export        - 导出新闻
+  GET  /api/stats         - 获取统计信息
+  POST /api/clean?days=30 - 清理旧数据
+========================================
+服务启动失败: listen tcp :8082: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+[2026-07-31 02:39:24] <<< 进程已结束 (PID=9324)

@@ -1,0 +1,425 @@
+# ============================================
+# 市舶司 v2.0 统一管理后台 - 配置文件
+# 敏感信息请通过环境变量注入，不要提交到Git
+# ============================================
+
+server:
+  port: 8084
+  mode: release  # debug | release | test
+  tls_cert: ""   # HTTPS证书路径
+  tls_key: ""    # HTTPS私钥路径
+
+database:
+  driver: sqlite  # sqlite | mysql | postgres
+  dbname: data/admin.db  # SQLite文件路径（mysql时为数据库名）
+  # 以下配置仅 mysql/postgres 生效
+  host: 127.0.0.1
+  port: 3306
+  user: shibosi
+  password: ""  # 通过环境变量 SHIBOSI_DATABASE_PASSWORD 注入
+  max_open_conns: 100
+  max_idle_conns: 10
+  conn_max_lifetime: 3600
+  read_hosts: []
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""  # 通过环境变量 SHIBOSI_REDIS_PASSWORD 注入
+  db: 0
+  pool_size: 100
+
+jwt:
+  secret: ""  # 通过环境变量 SHIBOSI_JWT_SECRET 注入
+  access_token_ttl: 30    # 访问令牌有效期（分钟）
+  refresh_token_ttl: 10080  # 刷新令牌有效期（分钟，7天）
+  blacklist_enabled: true
+
+security:
+  bcrypt_cost: 12
+  rate_limit_qps: 100
+  rate_limit_burst: 200
+  admin_ip_whitelist:
+    - "127.0.0.1"
+    - "::1"
+    - "10."
+    - "172.16."
+    - "192.168."
+  cors_origins:
+    - "*"
+  enable_tls: false  # 生产环境必须开启
+
+log:
+  level: info
+  file_path: "./logs/app.log"
+  max_size_mb: 100
+  max_backups: 10
+  max_age_days: 30
+
+# ============================================
+# 万能管理后台 - 服务注册表
+# 支持静态配置 + 动态注册（服务启动时自动注册）
+# ============================================
+services:
+  admin-core:
+    name: "管理后台"
+    port: 8084
+    base_url: "http://localhost:8084"
+    health_path: "/api/health"
+    web_url: "http://localhost:8084/admin"
+    icon: "⚙️"
+    tags: ["core", "admin"]
+    description: "统一管理后台 v2，集成模块化页面、服务监控、文件管理、机器人调度等功能"
+    version: "2.0"
+    start_command: ""
+    work_dir: "."
+  newspaper:
+    name: "新闻服务"
+    port: 8082
+    base_url: "http://localhost:8082"
+    health_path: "/api/health"
+    web_url: "http://localhost:8082/home.html"
+    icon: "📰"
+    tags: ["news", "爬虫"]
+    description: "新闻聚合抓取、分类、导出、分析后台"
+    version: "1.0"
+    work_dir: "../Newspaper"
+    start_command: "newspaper.exe"
+    stop_command: "taskkill /F /IM newspaper.exe"
+  search-engine:
+    name: "搜索服务"
+    port: 8081
+    base_url: "http://localhost:8081"
+    health_path: "/"
+    web_url: "http://localhost:8081/index.html"
+    icon: "🔍"
+    tags: ["search", "索引"]
+    description: "全文检索、分词、缓存过滤、历史记录"
+    version: "1.0"
+    work_dir: "../SearchEngine"
+    start_command: "searchengine.exe"
+    stop_command: "taskkill /F /IM searchengine.exe"
+  user-service:
+    name: "用户中心"
+    port: 8083
+    base_url: "http://localhost:8083"
+    health_path: "/"
+    web_url: "http://localhost:8083/user.html"
+    icon: "👤"
+    tags: ["user", "认证"]
+    description: "静态用户注册/登录与个人中心页面"
+    version: "1.0"
+    work_dir: "../user"
+    start_command: "python -m http.server 8083"
+    stop_command: "managed_by_port"
+  static:
+    name: "静态文件"
+    port: 8080
+    base_url: "http://localhost:8080"
+    health_path: "/"
+    web_url: "http://localhost:8080/index.html"
+    icon: "🌐"
+    tags: ["frontend", "www"]
+    description: "前端静态文件分发（css/db/help/img/js 等）"
+    version: "1.0"
+    # work_dir 指向整个项目根目录（admin-core 向上两级）
+    work_dir: "../.."
+    start_command: "python -m http.server 8080"
+    stop_command: "managed_by_port"
+
+# ============================================
+# 万能管理后台 - 模块/页面配置
+# 定义侧边栏结构和页面内容
+# ============================================
+modules:
+  system:
+    name: "系统管理"
+    icon: "🔧"
+    pages:
+      - id: dashboard
+        title: "仪表盘"
+        type: "stats"
+        icon: "📊"
+        data_source:
+          url: "/admin/dashboard"
+      - id: users
+        title: "用户管理"
+        type: "table"
+        icon: "👥"
+        data_source:
+          url: "/admin/users"
+        columns:
+          - { key: id, label: "ID", width: "60px" }
+          - { key: username, label: "用户名" }
+          - { key: nickname, label: "昵称" }
+          - { key: email, label: "邮箱" }
+          - { key: role, label: "角色", render: "tag" }
+          - { key: status, label: "状态", render: "boolean" }
+          - { key: created_at, label: "创建时间", render: "datetime" }
+        actions:
+          - { type: create, label: "新增用户", method: "POST", url: "/admin/users", fields: [{ key: username, label: "用户名" }, { key: password, label: "密码" }, { key: nickname, label: "昵称" }, { key: email, label: "邮箱" }, { key: role, label: "角色", options: ["user", "admin"] }] }
+          - { type: edit, label: "编辑", method: "PUT", url: "/admin/users/:id", fields: [{ key: nickname, label: "昵称" }, { key: email, label: "邮箱" }] }
+          - { type: delete, label: "删除", method: "DELETE", url: "/admin/users/:id", confirm: true }
+      - id: audit
+        title: "操作日志"
+        type: "logs"
+        icon: "📋"
+        data_source:
+          url: "/admin/audit-logs"
+        fields: ["id", "username", "action", "resource", "ip", "created_at", "status", "detail"]
+      - id: config
+        title: "系统配置"
+        type: "table"
+        icon: "⚙️"
+        data_source:
+          url: "/admin/configs"
+        columns:
+          - { key: key, label: "配置键" }
+          - { key: value, label: "值" }
+          - { key: type, label: "类型" }
+          - { key: description, label: "描述" }
+        actions:
+          - { type: edit, label: "保存", method: "PUT", url: "/admin/configs/:key", fields: [{ key: value, label: "值" }] }
+      - id: roles
+        title: "角色管理"
+        type: "table"
+        icon: "🎭"
+        data_source:
+          url: "/admin/roles"
+        columns:
+          - { key: id, label: "ID", width: "60px" }
+          - { key: name, label: "角色标识" }
+          - { key: description, label: "描述" }
+          - { key: created_at, label: "创建时间", render: "datetime" }
+        actions:
+          - { type: create, label: "新增角色", method: "POST", url: "/admin/roles", fields: [{ key: name, label: "角色标识" }, { key: description, label: "描述" }] }
+          - { type: delete, label: "删除", method: "DELETE", url: "/admin/roles/:id", confirm: true }
+
+  news:
+    name: "新闻服务"
+    icon: "📰"
+    pages:
+      - id: news-overview
+        title: "新闻总览"
+        type: "stats"
+        icon: "📊"
+        data_source:
+          url: "/native/newspaper/overview"
+          transform: "news_overview"
+      - id: news-analysis
+        title: "新闻分析"
+        type: "custom"
+        icon: "📈"
+        widgets:
+          - type: action-group
+            title: "分析操作"
+            config:
+              actions:
+                - { type: custom, label: "获取分析数据", method: "GET", url: "/native/newspaper/analysis" }
+                - { type: custom, label: "触发分析", method: "POST", url: "/native/newspaper/analyze" }
+                - { type: danger, label: "清空数据", method: "DELETE", url: "/native/newspaper/data", confirm: true }
+          - type: bar-chart
+            title: "政治倾向分析"
+            data_source: "/native/newspaper/analysis"
+      - id: news-sources
+        title: "新闻源管理"
+        type: "table"
+        icon: "📡"
+        data_source:
+          url: "/native/newspaper/sources"
+        columns:
+          - { key: id, label: "ID" }
+          - { key: name, label: "名称" }
+          - { key: url, label: "URL", render: "truncate" }
+          - { key: type, label: "类型" }
+          - { key: category, label: "分类" }
+          - { key: enabled, label: "状态", render: "boolean" }
+        actions:
+          - { type: create, label: "添加新闻源", fields: [{ key: name, label: "名称" }, { key: url, label: "URL" }, { key: type, label: "类型", options: ["rss", "atom"] }] }
+      - id: news-list
+        title: "新闻列表"
+        type: "table"
+        icon: "📰"
+        data_source:
+          url: "/native/newspaper/news"
+        columns:
+          - { key: id, label: "ID", width: "60px" }
+          - { key: title, label: "标题", render: "truncate" }
+          - { key: source, label: "来源" }
+          - { key: category, label: "分类" }
+          - { key: published_at, label: "发布时间", render: "datetime" }
+          - { key: political_stance, label: "倾向" }
+      - id: news-logs
+        title: "系统日志"
+        type: "logs"
+        icon: "📝"
+        data_source:
+          url: "/native/newspaper/logs"
+        log_levels: ["DEBUG", "INFO", "WARNING", "ERROR", "FATAL"]
+        fields: ["id", "level", "module", "message", "log_time"]
+      - id: news-database
+        title: "数据库维护"
+        type: "custom"
+        icon: "💾"
+        widgets:
+          - type: action-group
+            title: "数据库操作"
+            config:
+              actions:
+                - { type: custom, label: "查看数据库大小", method: "GET", url: "/native/databases" }
+                - { type: custom, label: "查看抓取日志", method: "GET", url: "/native/newspaper/fetch-logs" }
+                - { type: danger, label: "清空所有新闻数据", method: "DELETE", url: "/native/newspaper/data", confirm: true }
+
+  user-center:
+    name: "用户中心"
+    icon: "👤"
+    pages:
+      - id: user-overview
+        title: "用户概览"
+        type: "stats"
+        icon: "📊"
+        data_source:
+          url: "/admin/users/stats"
+      - id: user-list
+        title: "用户列表"
+        type: "table"
+        icon: "👥"
+        data_source:
+          url: "/admin/users"
+        columns:
+          - { key: id, label: "ID", width: "60px" }
+          - { key: username, label: "用户名" }
+          - { key: nickname, label: "昵称" }
+          - { key: email, label: "邮箱" }
+          - { key: role, label: "角色", render: "tag" }
+          - { key: status, label: "状态", render: "boolean" }
+          - { key: created_at, label: "创建时间", render: "datetime" }
+        searchable: true
+        search_fields: ["username", "nickname", "email"]
+        actions:
+          - { type: create, label: "新增用户", method: "POST", url: "/admin/users", fields: [{ key: username, label: "用户名" }, { key: password, label: "密码" }, { key: nickname, label: "昵称" }, { key: email, label: "邮箱" }, { key: role, label: "角色", options: ["user", "admin"] }] }
+          - { type: edit, label: "编辑", method: "PUT", url: "/admin/users/:id", fields: [{ key: nickname, label: "昵称" }, { key: email, label: "邮箱" }] }
+          - { type: danger, label: "重置密码", method: "POST", url: "/admin/users/:id/reset-password", confirm: true }
+          - { type: danger, label: "删除", method: "DELETE", url: "/admin/users/:id", confirm: true }
+      - id: user-stats
+        title: "用户统计"
+        type: "stats"
+        icon: "📈"
+        data_source:
+          url: "/native/user/stats"
+
+  search:
+    name: "搜索引擎"
+    icon: "🔍"
+    pages:
+      - id: search-overview
+        title: "搜索概览"
+        type: "stats"
+        icon: "📊"
+        data_source:
+          url: "/native/search/stats"
+      - id: search-service
+        title: "服务状态"
+        type: "monitor"
+        icon: "🖥️"
+        services_ref: "search-engine"
+
+  monitoring:
+    name: "服务监控"
+    icon: "🖥️"
+    pages:
+      - id: service-monitor
+        title: "服务状态"
+        type: "monitor"
+        icon: "🖥️"
+        services_ref: "services"
+
+  # ============================================
+  # 运维工具模块（6大核心 - 对标宝塔）
+  # ============================================
+  ops-security:
+    name: "安全中心"
+    icon: "🛡️"
+    order: 10
+    pages:
+      - id: firewall
+        title: "防火墙管理"
+        type: "custom"
+        icon: "🛡️"
+        description: "端口放行/禁止、SSH防爆破"
+      - id: ssh-blocks
+        title: "SSH封禁列表"
+        type: "custom"
+        icon: "🚫"
+        description: "SSH爆破IP黑名单管理"
+
+  ops-files:
+    name: "文件管理"
+    icon: "📁"
+    order: 11
+    pages:
+      - id: file-manager
+        title: "文件管理器"
+        type: "custom"
+        icon: "📁"
+        description: "目录浏览/在线编辑/压缩解压"
+
+  ops-cron:
+    name: "计划任务"
+    icon: "⏰"
+    order: 13
+    pages:
+      - id: crontab
+        title: "计划任务"
+        type: "custom"
+        icon: "⏰"
+        description: "Cron可视化/备份任务"
+
+  ops-terminal:
+    name: "终端与日志"
+    icon: "💻"
+    order: 14
+    pages:
+      - id: terminal
+        title: "Web终端"
+        type: "custom"
+        icon: "💻"
+        description: "WebSocket Shell终端"
+      - id: log-viewer
+        title: "实时日志"
+        type: "custom"
+        icon: "📋"
+        description: "日志尾部追踪/关键词过滤"
+
+  # ============================================
+  # 算法机器人模块 - 高并发与网络攻击自动化响应
+  # ============================================
+  algorithm-bots:
+    name: "算法机器人"
+    icon: "🤖"
+    order: 3
+    pages:
+      - id: bot-overview
+        title: "机器人总览"
+        type: "custom"
+        icon: "📊"
+        extra:
+          renderer: "renderBotOverviewPage"
+      - id: bot-manage
+        title: "机器人管理"
+        type: "custom"
+        icon: "🤖"
+        extra:
+          renderer: "renderBotManagePage"
+      - id: bot-config
+        title: "自动配置"
+        type: "custom"
+        icon: "⚙️"
+        extra:
+          renderer: "renderBotConfigPage"
+      - id: bot-logs
+        title: "运行日志"
+        type: "custom"
+        icon: "📝"
+        extra:
+          renderer: "renderBotLogsPage"
