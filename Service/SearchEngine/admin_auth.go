@@ -131,6 +131,19 @@ func startAdminServer() {
 	mux.HandleFunc("/api/admin/indexed-sites", adminAuthMiddleware(adminIndexedSitesHandler))
 	mux.HandleFunc("/api/admin/indexed-sites/", adminAuthMiddleware(adminIndexedSitesHandler))
 	mux.HandleFunc("/api/admin/engines", adminAuthMiddleware(adminEnginesHandler))
+	mux.HandleFunc("/api/admin/engines/toggle", adminAuthMiddleware(adminEngineToggleHandler))
+	// 关键词反馈管理
+	mux.HandleFunc("/api/admin/keyword-feedback", adminAuthMiddleware(adminKeywordFeedbackHandler))
+	// 自定义搜索源管理
+	mux.HandleFunc("/api/admin/custom-engines", adminAuthMiddleware(adminCustomEnginesHandler))
+	// 爬虫管理
+	mux.HandleFunc("/api/admin/crawler/status", adminAuthMiddleware(adminCrawlerStatusHandler))
+	mux.HandleFunc("/api/admin/crawler/start", adminAuthMiddleware(adminCrawlerStartHandler))
+	mux.HandleFunc("/api/admin/crawler/stop", adminAuthMiddleware(adminCrawlerStopHandler))
+	mux.HandleFunc("/api/admin/crawler/pages", adminAuthMiddleware(adminCrawlerPagesHandler))
+	mux.HandleFunc("/api/admin/crawler/pages/", adminAuthMiddleware(adminCrawlerPagesHandler))
+	mux.HandleFunc("/api/admin/crawler/seeds", adminAuthMiddleware(adminCrawlerSeedsHandler))
+	mux.HandleFunc("/api/admin/crawler/seeds/", adminAuthMiddleware(adminCrawlerSeedsHandler))
 
 	addr := "127.0.0.1:" + adminPort
 	srv := &http.Server{

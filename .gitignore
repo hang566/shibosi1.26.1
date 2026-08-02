@@ -1,0 +1,32 @@
+# ===== 数据库运行时文件 =====
+*.db
+*.db-shm
+*.db-wal
+
+# ===== 编译产物 =====
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# ===== 日志文件 =====
+*.log
+logs/
+**/logs/
+
+# ===== Go 测试 / 构建中间产物 =====
+*.test
+*.out
+
+# ===== 编辑器 / 系统 =====
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+.DS_Store
+
+# ===== 调试输出 =====
+debug_error.txt
+debug_output.txt

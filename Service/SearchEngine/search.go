@@ -29,11 +29,12 @@ type Searcher interface {
 
 // 搜索引擎权重
 var engineWeights = map[string]float64{
-	"Google":     1.0,
-	"Bing":       0.9,
-	"Baidu":      0.85,
-	"DuckDuckGo": 0.8,
-	"Sogou":      0.7,
+	"Google":       1.0,
+	"Bing":         0.9,
+	"Baidu":        0.85,
+	"DuckDuckGo":   0.8,
+	"Sogou":        0.7,
+	"CrawlerIndex": 0.95, // 本地爬虫索引：内容完整、可信度高
 }
 
 // BrandOfficialEntry 品牌官方域名条目
@@ -287,6 +288,11 @@ func (m *MultiSearcher) Search(query string, limit int, forceRefresh bool) ([]Se
 	engineResults := make(map[string]int)
 
 	for _, s := range m.searchers {
+		// 跳过已禁用的引擎
+		if !IsEngineEnabled(s.Name()) {
+			m.logger.Info("ENGINE DISABLED, skip %s query=%q", s.Name(), query)
+			continue
+		}
 		wg.Add(1)
 		go func(searcher Searcher) {
 			defer wg.Done()
@@ -351,6 +357,9 @@ func (m *MultiSearcher) Search(query string, limit int, forceRefresh bool) ([]Se
 	sort.Slice(allResults, func(i, j int) bool {
 		return allResults[i].Score > allResults[j].Score
 	})
+
+	// 域名多样性去重：每个主域最多 3 条
+	allResults = applyDomainDiversity(allResults, 3)
 
 	if len(allResults) > limit {
 		allResults = allResults[:limit]
@@ -518,7 +527,53 @@ func MergeResults(query string, resultGroups ...[]SearchResult) []SearchResult {
 		return merged[i].Score > merged[j].Score
 	})
 
+	// 域名多样性去重
+	merged = applyDomainDiversity(merged, 3)
+
 	return merged
+}
+
+// applyDomainDiversity 对搜索结果做域名多样性过滤，每个主域最多 maxPerDomain 条
+func applyDomainDiversity(results []SearchResult, maxPerDomain int) []SearchResult {
+	domainCount := make(map[string]int)
+	var filtered []SearchResult
+	for _, r := range results {
+		rootDomain := extractRootDomainFromURL(r.URL)
+		if rootDomain == "" {
+			filtered = append(filtered, r)
+			continue
+		}
+		if domainCount[rootDomain] >= maxPerDomain {
+			continue
+		}
+		domainCount[rootDomain]++
+		filtered = append(filtered, r)
+	}
+	return filtered
+}
+
+// extractRootDomainFromURL 从 URL 提取主域
+func extractRootDomainFromURL(rawURL string) string {
+	u, err := url.Parse(rawURL)
+	if err != nil || u.Host == "" {
+		// 简单 fallback
+		parts := strings.Split(rawURL, "/")
+		if len(parts) >= 3 {
+			host := parts[2]
+			dotParts := strings.Split(host, ".")
+			if len(dotParts) >= 2 {
+				return dotParts[len(dotParts)-2] + "." + dotParts[len(dotParts)-1]
+			}
+			return host
+		}
+		return ""
+	}
+	host := u.Hostname()
+	dotParts := strings.Split(host, ".")
+	if len(dotParts) >= 2 {
+		return dotParts[len(dotParts)-2] + "." + dotParts[len(dotParts)-1]
+	}
+	return host
 }
 
 // newHTTPClient 创建带超时的HTTP客户端

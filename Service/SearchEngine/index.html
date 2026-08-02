@@ -425,6 +425,17 @@
             font-weight: 700;
             animation: pulse-hot 2s ease-in-out infinite;
         }
+        .engine-badge.site-badge {
+            background: rgba(25,118,210,0.1);
+            color: #1976d2;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background .15s;
+        }
+        .engine-badge.site-badge:hover {
+            background: rgba(25,118,210,0.22);
+            text-decoration: underline;
+        }
         .result-card.multi-source {
             background: linear-gradient(135deg, rgba(255,140,0,0.06), var(--card-bg));
             border-color: rgba(255,140,0,0.25);
@@ -742,6 +753,90 @@
         }
         .drop-zone-hint.show { opacity: 1; }
 
+        /* 标签输入模态框 */
+        .tag-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+        .tag-modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .tag-modal {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .tag-modal h3 {
+            margin: 0 0 12px;
+            font-size: 16px;
+            color: var(--text);
+        }
+        .tag-modal .tm-item-info {
+            padding: 10px 12px;
+            background: var(--block-bg);
+            border-radius: var(--radius-md);
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+        .tag-modal .tm-item-info .tm-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+        .tag-modal .tm-item-info .tm-url {
+            font-size: 11px;
+            color: var(--text-placeholder);
+            word-break: break-all;
+        }
+        .tag-modal label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .tag-modal input[type="text"],
+        .tag-modal select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            background: var(--bg);
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .tag-modal input[type="text"]:focus,
+        .tag-modal select:focus {
+            outline: none;
+            border-color: var(--main);
+        }
+        .tag-modal .tm-hint {
+            font-size: 12px;
+            color: var(--text-placeholder);
+            margin-bottom: 12px;
+        }
+        .tag-modal .tm-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
         .custom-engines-bar {
             display: flex;
             flex-wrap: wrap;
@@ -825,14 +920,14 @@
             <div class="nav-item" data-tab="history"><span class="nav-icon">🕒</span> 搜索历史</div>
         </div>
         <div class="panel">
-            <div class="panel-title">系统</div>
-            <div class="nav-item" data-tab="admin"><span class="nav-icon">⚙️</span> 管理员面板</div>
+            <div class="panel-title">工具</div>
             <div class="nav-item" id="openScraperBtn"><span class="nav-icon">🪟</span> 打开资料收集器</div>
+            <div class="nav-item" id="openAdminBtn"><span class="nav-icon">⚙️</span> 管理员运维</div>
         </div>
         <div class="panel">
             <div class="panel-title">提示</div>
             <p style="font-size:12px;color:var(--text-sub);line-height:1.7;">
-                💡 拖拽搜索结果卡片上的 <strong>≡</strong> 图标可加入资料收集器（画中画）
+                💡 拖拽搜索结果卡片上的 <strong>★</strong> 图标可加入收藏夹（存入资料收集器）
             </p>
         </div>
     </aside>
@@ -867,7 +962,6 @@
                     <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button class="btn" id="btnBackToHero">← 返回</button>
                         <button class="btn btn-success" id="btnRefreshSearch">🔄 刷新</button>
-                        <button class="btn btn-main" id="btnSaveSession">💾 保存结果</button>
                     </div>
                 </div>
                 <div id="keywordFeedbackArea"></div>
@@ -1011,7 +1105,7 @@
             <div id="historyList"></div>
         </section>
 
-        <!-- ============ 管理员面板 Tab ============ -->
+        <!-- 管理员运维面板已迁移至独立页面 admin.html，侧边栏"管理员运维"按钮可跳转 -->
         <section class="tab-panel" id="tab-admin">
             <div class="content-header">
                 <div>
@@ -1019,140 +1113,12 @@
                     <div class="header-sub">敏感词反馈、收录审核、自定义搜索源管理</div>
                 </div>
             </div>
-            <div id="adminAuthGate">
-                <div class="admin-auth-gate card">
-                    <div class="auth-icon">🔐</div>
-                    <h2>管理员验证</h2>
-                    <p>请输入管理员密码以访问运维面板</p>
-                    <div class="form-item">
-                        <label class="form-label">管理员密码</label>
-                        <input type="password" id="adminPwd" placeholder="默认密码：admin123">
-                    </div>
-                    <div class="btn-group" style="justify-content:center;">
-                        <button class="btn btn-main" id="adminAuthBtn">✓ 进入面板</button>
-                    </div>
-                    <p style="margin-top:12px;font-size:12px;color:var(--text-placeholder);">首次使用请输入默认密码，进入后可在 JS 代码中修改</p>
-                </div>
+            <div style="text-align:center;padding:60px 20px;">
+                <div style="font-size:48px;margin-bottom:16px;">🔐</div>
+                <h2 style="margin-bottom:10px;">管理员运维面板已迁移</h2>
+                <p style="color:var(--text-sub);margin-bottom:24px;">完整的运维管理功能已移至独立页面，访问更安全</p>
+                <a href="admin.html" class="btn btn-main" style="text-decoration:inline-flex;align-items:center;">打开独立运维面板 →</a>
             </div>
-            <div id="adminContent" style="display:none;">
-            <div class="admin-subnav" id="adminSubnav">
-                <button data-admin-tab="kf" class="active">💙 敏感词反馈</button>
-                <button data-admin-tab="sites">🌐 收录审核</button>
-                <button data-admin-tab="engines">🔧 自定义搜索源</button>
-                <button id="adminLogoutBtn" style="margin-left:auto;background:transparent;border:none;color:var(--text-sub);font-size:12px;cursor:pointer;padding:6px 10px;">🚪 退出</button>
-            </div>
-
-            <!-- 敏感词反馈管理 -->
-            <div id="admin-kf">
-                <div class="form-card" id="kfFormCard">
-                    <h3 id="kfFormTitle">➕ 添加关键词反馈</h3>
-                    <input type="hidden" id="kfId">
-                    <div class="form-item">
-                        <label class="form-label">触发关键词 *（模糊匹配）</label>
-                        <input type="text" id="kfKeyword" placeholder="例如：自杀">
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label">提示标题 *</label>
-                        <input type="text" id="kfTitle" placeholder="例如：💙 请珍惜生命">
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label">提示内容 *</label>
-                        <textarea id="kfContent" placeholder="详细的帮助内容..."></textarea>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-item">
-                                <label class="form-label">链接文字</label>
-                                <input type="text" id="kfLinkText" placeholder="例如：了解更多">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-item">
-                                <label class="form-label">链接地址</label>
-                                <input type="url" id="kfLinkUrl" placeholder="https://...">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="switch-row">
-                        <span style="font-size:13px;">启用该反馈规则</span>
-                        <label class="switch">
-                            <input type="checkbox" id="kfEnabled" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="btn-group" style="margin:14px 0 0;">
-                        <button class="btn btn-main" id="kfSaveBtn">✓ 保存</button>
-                        <button class="btn" id="kfResetBtn">重置表单</button>
-                    </div>
-                </div>
-
-                <div class="admin-table kf" id="kfTable">
-                    <div class="at-row at-head">
-                        <div>关键词</div>
-                        <div>提示内容</div>
-                        <div>操作</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 收录审核管理 -->
-            <div id="admin-sites" style="display:none;">
-                <div class="admin-table site" id="sitesTable">
-                    <div class="at-row at-head">
-                        <div>名称</div>
-                        <div>URL / 简介</div>
-                        <div>状态</div>
-                        <div>操作</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 自定义搜索源管理 -->
-            <div id="admin-engines" style="display:none;">
-                <div class="form-card" id="ceFormCard">
-                    <h3 id="ceFormTitle">➕ 添加自定义搜索源</h3>
-                    <input type="hidden" id="ceId">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-item">
-                                <label class="form-label">搜索引擎名称 *</label>
-                                <input type="text" id="ceName" placeholder="例如：知乎搜索">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-item">
-                                <label class="form-label">权重 (0-1)</label>
-                                <input type="number" id="ceWeight" step="0.1" min="0" max="1" value="0.7" style="max-width:140px;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label">URL 模板 *（使用 {q} 作为关键词占位符）</label>
-                        <input type="text" id="ceTemplate" placeholder="https://www.zhihu.com/search?q={q}">
-                    </div>
-                    <div class="switch-row">
-                        <span style="font-size:13px;">启用该搜索源</span>
-                        <label class="switch">
-                            <input type="checkbox" id="ceEnabled" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="btn-group" style="margin:14px 0 0;">
-                        <button class="btn btn-main" id="ceSaveBtn">✓ 保存</button>
-                        <button class="btn" id="ceResetBtn">重置表单</button>
-                    </div>
-                </div>
-
-                <div class="admin-table ce" id="ceTable">
-                    <div class="at-row at-head">
-                        <div>名称</div>
-                        <div>URL 模板</div>
-                        <div>权重</div>
-                        <div>操作</div>
-                    </div>
-                </div>
-            </div>
-            </div><!-- /adminContent -->
         </section>
     </main>
     </div><!-- /se-main -->
@@ -1161,11 +1127,30 @@
 <div class="toast-container" id="toastContainer"></div>
 <div class="drop-zone-hint" id="dropHint">⬇ 拖到这里可快速加入资料收集器</div>
 
+<!-- 标签输入模态框 -->
+<div class="tag-modal-overlay" id="tagModal">
+    <div class="tag-modal">
+        <h3>🏷️ 添加到资料收集器（带标签）</h3>
+        <div class="tm-item-info" id="tagItemInfo"></div>
+        <label>标签（逗号分隔，可从已有标签选择）</label>
+        <input type="text" id="tagInput" placeholder="例如：技术, 收藏, 参考资料">
+        <div class="tm-hint">💡 已有标签：<span id="existingTagsList">加载中...</span></div>
+        <label>分类（可选）</label>
+        <select id="tagCategory">
+            <option value="">选择分类...</option>
+        </select>
+        <div class="tm-actions">
+            <button class="btn" id="tagCancelBtn">取消</button>
+            <button class="btn btn-main" id="tagConfirmBtn">✓ 保存到收集器</button>
+        </div>
+    </div>
+</div>
+
 <script>
 // ============ 工具函数 ============
-const SCRAPER_STORAGE_KEY = 'scraper_collector_items_v1';
-const SCRAPER_CATS_KEY = 'scraper_collector_categories_v1';
-const SCRAPER_ALBUMS_KEY = 'scraper_collector_albums_v1';
+const SCRAPER_STORAGE_KEY = 'collector_items';
+const SCRAPER_CATS_KEY = 'collector_categories';
+const SCRAPER_ALBUMS_KEY = 'collector_albums';
 
 function $(s, p=document) { return p.querySelector(s); }
 function $$(s, p=document) { return Array.from(p.querySelectorAll(s)); }
@@ -1252,6 +1237,9 @@ function setupSidebar() {
 
     $('#openScraperBtn').addEventListener('click', () => {
         window.open('../../Service/Scraper/Scraper.html', '_blank');
+    });
+    $('#openAdminBtn').addEventListener('click', () => {
+        window.open('admin.html', '_blank');
     });
 }
 
@@ -1377,8 +1365,11 @@ function renderSearchResults(data) {
     bindResultCardEvents();
     renderCustomEngines(data.query);
     renderPagination();
-    renderSmartFilters(data);
+    // 必须在 renderSmartFilters 之前设置，否则 applySmartFilters 会读到旧数据并覆盖刚渲染的新结果
     window._currentSearchResults = results;
+    renderSmartFilters(data);
+    // 默认自动保存搜索结果到数据库
+    autoSaveSession();
 }
 
 // ============ 智能筛选器 ============
@@ -1782,6 +1773,26 @@ async function saveCurrentSession() {
     }
 }
 
+// 自动保存搜索结果（静默，不弹 toast）
+let _autoSaveTimer = null;
+function autoSaveSession() {
+    if (_autoSaveTimer) clearTimeout(_autoSaveTimer);
+    _autoSaveTimer = setTimeout(async () => {
+        const results = window._currentSearchResults;
+        if (!results || !results.length) return;
+        const query = lastQuery || '';
+        if (!query) return;
+        try {
+            await fetch(getBaseURL() + '/api/search-sessions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, results })
+            });
+            refreshSavedBadge();
+        } catch(e) {}
+    }, 500);
+}
+
 async function loadSavedSessions() {
     const container = $('#savedSessionsList');
     try {
@@ -1789,7 +1800,7 @@ async function loadSavedSessions() {
         const list = await r.json();
         
         if (!list || !list.length) {
-            container.innerHTML = `<div class="fav-empty"><div class="emoji">💾</div><h3>还没有保存的搜索</h3><p>在搜索结果页面点击"保存结果"按钮保存搜索会话</p></div>`;
+            container.innerHTML = `<div class="fav-empty"><div class="emoji">💾</div><h3>还没有保存的搜索</h3><p>搜索结果会自动保存到数据库</p></div>`;
             return;
         }
         
@@ -1902,24 +1913,32 @@ function renderResultCard(r, idPrefix) {
     const snippet = r.Snippet || r.snippet || '';
     const sourcesJson = JSON.stringify(sources).replace(/"/g,'&quot;');
     const isMultiSource = resultCount > 1;
+    // 提取目标网站域名作为来源标识（不展示搜索引擎标记）
+    let hostname = url;
+    let displayUrl = url;
+    try {
+        const u = new URL(url);
+        hostname = u.hostname;
+        displayUrl = u.hostname + u.pathname;
+    } catch(e) {}
+    const siteBadge = `<a class="engine-badge site-badge" href="${escapeHtml(url)}" target="_blank" rel="noopener" title="目标网站">${escapeHtml(hostname)}</a>`;
+    const hotBadge = isMultiSource ? `<span class="engine-badge hot-badge" title="${resultCount}个来源都收录了此结果">🔥 ${resultCount}来源</span>` : '';
     const weightLabel = resultCount >= 3 ? '🔥🔥 高权重' : (resultCount >= 2 ? '🔥 中权重' : '');
-    const badgesHtml = sources.map(s => `<span class="engine-badge ${escapeHtml(s)}">${escapeHtml(s)}</span>`).join('');
-    const hotBadge = isMultiSource ? `<span class="engine-badge hot-badge" title="${resultCount}个搜索引擎都收录了此结果">🔥 ${resultCount}引擎</span>` : '';
     const weightBadge = weightLabel ? `<span class="engine-badge weight-badge">${weightLabel}</span>` : '';
-    const bottomSources = isMultiSource ? `<div class="rc-bottom-sources"><span class="bs-label">多来源聚合：</span>${badgesHtml}${weightBadge}</div>` : '';
+    const bottomSources = isMultiSource ? `<div class="rc-bottom-sources"><span class="bs-label">目标网站：</span>${siteBadge}${weightBadge}</div>` : '';
     return `
         <div class="result-card ${isMultiSource ? 'multi-source' : ''}" id="${idPrefix}" data-url="${escapeHtml(url)}" data-title="${escapeHtml(title)}" data-snippet="${escapeHtml(snippet)}" data-source="${escapeHtml(sources.join(','))}">
             <div class="rc-top">
                 <a href="${escapeHtml(url)}" target="_blank" class="rc-title" rel="noopener">${escapeHtml(title) || '(无标题)'}${hotBadge}</a>
                 <div class="rc-actions">
-                    <button class="rc-icon-btn drag-btn" title="拖拽到资料收集器" draggable="true" data-url="${escapeHtml(url)}" data-title="${escapeHtml(title)}" data-snippet="${escapeHtml(snippet)}" data-source="${escapeHtml(sources.join(','))}">≡</button>
+                    <button class="rc-icon-btn drag-btn" title="拖拽到资料收集器 / 双击添加标签" draggable="true" data-url="${escapeHtml(url)}" data-title="${escapeHtml(title)}" data-snippet="${escapeHtml(snippet)}" data-source="${escapeHtml(sources.join(','))}">★</button>
                     <button class="rc-icon-btn fav-btn hide-sm" title="收藏" onclick="toggleFavorite(this, ${JSON.stringify({Title:title, URL:url, Snippet:snippet, Source:sources[0], Sources:sources}).replace(/"/g,'&quot;')})">☆</button>
                     <a class="rc-icon-btn hide-sm" title="在新标签打开" href="${escapeHtml(url)}" target="_blank" rel="noopener" style="text-decoration:none;">↗</a>
                 </div>
             </div>
-            <div class="rc-url">${escapeHtml(url)}</div>
+            <div class="rc-url">${escapeHtml(displayUrl)}</div>
             <div class="rc-snippet">${escapeHtml(snippet) || '（无摘要）'}</div>
-            ${bottomSources || `<div class="rc-footer"><div class="rc-tags">${badgesHtml}</div><div style="font-size:11px;color:var(--text-placeholder);">拖拽 ≡ 图标可加入资料收集器</div></div>`}
+            ${bottomSources || `<div class="rc-footer"><div class="rc-tags">${siteBadge}</div><div style="font-size:11px;color:var(--text-placeholder);">拖拽 ★ 图标可加入收藏夹 · 双击添加标签</div></div>`}
         </div>`;
 }
 
@@ -2025,6 +2044,17 @@ function bindResultCardEvents() {
             if (card) card.classList.remove('dragging');
             $('#dropHint').classList.remove('show');
         });
+        // 双击弹出标签输入框
+        btn.addEventListener('dblclick', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            showTagInputModal({
+                title: btn.dataset.title,
+                url: btn.dataset.url,
+                snippet: btn.dataset.snippet,
+                source: btn.dataset.source
+            });
+        });
     });
 
     // 实时检查收藏状态
@@ -2124,17 +2154,19 @@ async function addToScraperCollector(item) {
             toast('资料收集器中已存在该项', 'warning');
             return false;
         }
+        const snippet = item.snippet || '';
         const newItem = {
             id: Date.now() + '_' + Math.random().toString(36).slice(2,6),
             title: item.title || '无标题',
             url: item.url,
-            content: item.snippet || '',
+            selected: snippet,
+            content: snippet,
             note: '来源：' + (item.source || '搜索') + ' - ' + new Date().toLocaleString(),
-            category: '其他',
-            tags: [],
-            albumId: '',
-            albumName: '',
-            priority: 0,
+            category: item.category || '其他',
+            tags: item.tags || ['搜索结果'],
+            albumId: item.albumId || '',
+            albumName: item.albumName || '',
+            priority: item.priority || 0,
             timestamp: Date.now()
         };
         items.unshift(newItem);
@@ -2165,6 +2197,100 @@ async function addToScraperCollector(item) {
         console.error(e);
         toast('加入失败：' + e.message, 'error');
         return false;
+    }
+}
+
+// ============ 标签输入模态框 ============
+let tagModalPendingItem = null;
+
+function showTagInputModal(item) {
+    tagModalPendingItem = item;
+    $('#tagItemInfo').innerHTML = `<div class="tm-title">${escapeHtml(item.title || '(无标题)')}</div><div class="tm-url">${escapeHtml(item.url || '')}</div>`;
+    $('#tagInput').value = '';
+    // 加载已有标签
+    loadExistingTags();
+    // 加载分类
+    loadCategoriesForModal();
+    $('#tagModal').classList.add('show');
+    setTimeout(() => $('#tagInput').focus(), 100);
+}
+
+function closeTagInputModal() {
+    $('#tagModal').classList.remove('show');
+    tagModalPendingItem = null;
+}
+
+function loadExistingTags() {
+    const existingTags = getExistingTags();
+    const list = $('#existingTagsList');
+    if (existingTags.length === 0) {
+        list.textContent = '暂无';
+        return;
+    }
+    list.innerHTML = existingTags.map(t => `<span style="display:inline-block;background:var(--block-bg);padding:2px 8px;border-radius:10px;font-size:11px;margin:2px;cursor:pointer;" onclick="appendTagToInput('${escapeHtml(t)}')">${escapeHtml(t)}</span>`).join('');
+}
+
+function getExistingTags() {
+    try {
+        const raw = localStorage.getItem(SCRAPER_STORAGE_KEY);
+        if (!raw) return [];
+        const items = JSON.parse(raw);
+        const tagSet = new Set();
+        items.forEach(item => {
+            if (item.tags && Array.isArray(item.tags)) {
+                item.tags.forEach(t => tagSet.add(t));
+            }
+        });
+        return Array.from(tagSet).sort();
+    } catch(_) { return []; }
+}
+
+function appendTagToInput(tag) {
+    const input = $('#tagInput');
+    const current = input.value.trim();
+    if (current) {
+        if (current.split(/[,，]/).map(s => s.trim()).includes(tag)) {
+            return;
+        }
+        input.value = current + ', ' + tag;
+    } else {
+        input.value = tag;
+    }
+}
+
+function loadCategoriesForModal() {
+    let cats = [];
+    try { cats = JSON.parse(localStorage.getItem(SCRAPER_CATS_KEY) || '[]'); } catch(_) {}
+    if (!cats.length) {
+        cats = [{ name: '学习', color: '#007aff' }, { name: '工作', color: '#ff9500' }, { name: '娱乐', color: '#af52de' }, { name: '生活', color: '#34c759' }, { name: '旅游', color: '#00bcd4' }, { name: '美食', color: '#ff3b30' }, { name: '其他', color: '#8e8e93' }];
+    }
+    const sel = $('#tagCategory');
+    sel.innerHTML = '<option value="">选择分类...</option>' + cats.map(c => `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('');
+}
+
+function confirmTagAdd() {
+    if (!tagModalPendingItem) return;
+    const tagStr = $('#tagInput').value.trim();
+    const tags = tagStr ? tagStr.split(/[,，]/).map(s => s.trim()).filter(s => s) : ['搜索结果'];
+    const category = $('#tagCategory').value || '其他';
+    const item = {
+        ...tagModalPendingItem,
+        tags: tags,
+        category: category
+    };
+    // 先检查是否已存在
+    try {
+        const raw = localStorage.getItem(SCRAPER_STORAGE_KEY);
+        const items = raw ? JSON.parse(raw) : [];
+        if (items.some(x => x.url === item.url)) {
+            toast('资料收集器中已存在该项', 'warning');
+            closeTagInputModal();
+            return;
+        }
+    } catch(_) {}
+    const ok = addToScraperCollector(item);
+    if (ok) {
+        closeTagInputModal();
     }
 }
 
@@ -2615,6 +2741,21 @@ window.addEventListener('DOMContentLoaded', () => {
     showPointsBadge();
     refreshFavBadge();
 
+    // 标签模态框事件绑定
+    const modal = $('#tagModal');
+    if (modal) {
+        $('#tagCancelBtn').addEventListener('click', closeTagInputModal);
+        $('#tagConfirmBtn').addEventListener('click', confirmTagAdd);
+        $('#tagInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') confirmTagAdd();
+            if (e.key === 'Escape') closeTagInputModal();
+        });
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeTagInputModal();
+        });
+        window.appendTagToInput = appendTagToInput;
+    }
+
     // 搜索框
     $('#heroSearchBtn').addEventListener('click', () => doSearch(1));
     $('#topSearchBtn').addEventListener('click', () => doSearch(1));
@@ -2638,7 +2779,6 @@ window.addEventListener('DOMContentLoaded', () => {
         $('#nlCommandBar').style.display = 'none';
     });
     $('#btnRefreshSearch').addEventListener('click', () => doSearch(currentPage));
-    $('#btnSaveSession').addEventListener('click', saveCurrentSession);
 
     // 智能筛选器
     $('#btnResetFilter').addEventListener('click', resetFilters);
@@ -2691,20 +2831,22 @@ window.addEventListener('DOMContentLoaded', () => {
         loadHistoryUI();
     });
 
-    // 管理面板子 Tab
+    // 管理面板子 Tab（部分元素已迁移至 admin.html，做 null 保护避免中断初始化）
     $$('#adminSubnav button[data-admin-tab]').forEach(b => {
         b.addEventListener('click', () => switchAdminTab(b.dataset.adminTab));
     });
-    $('#adminLogoutBtn').addEventListener('click', () => {
+    const adminLogoutBtn = $('#adminLogoutBtn');
+    if (adminLogoutBtn) adminLogoutBtn.addEventListener('click', () => {
         if (confirm('确定退出管理员面板？')) logoutAdmin();
     });
-    $('#kfSaveBtn').addEventListener('click', saveKF);
-    $('#kfResetBtn').addEventListener('click', resetKF);
-    $('#ceSaveBtn').addEventListener('click', async () => {
+    const kfSaveBtn = $('#kfSaveBtn'); if (kfSaveBtn) kfSaveBtn.addEventListener('click', saveKF);
+    const kfResetBtn = $('#kfResetBtn'); if (kfResetBtn) kfResetBtn.addEventListener('click', resetKF);
+    const ceSaveBtn = $('#ceSaveBtn');
+    if (ceSaveBtn) ceSaveBtn.addEventListener('click', async () => {
         await saveCE();
         _cachedEngines = null; // 清除缓存
     });
-    $('#ceResetBtn').addEventListener('click', resetCE);
+    const ceResetBtn = $('#ceResetBtn'); if (ceResetBtn) ceResetBtn.addEventListener('click', resetCE);
 
     // 每 5 秒刷新积分
     setInterval(showPointsBadge, 5000);

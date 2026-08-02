@@ -22,6 +22,7 @@ func init() {
 		&Baidu{},
 		&Sogou{},
 		&Google{},
+		&CrawlerIndex{},
 	)
 
 	exePath, _ := os.Executable()

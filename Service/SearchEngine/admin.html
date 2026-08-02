@@ -123,6 +123,50 @@
             align-items: center;
         }
 
+        /* 表单样式 */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 720px) {
+            .form-grid-2 { grid-template-columns: 1fr; }
+        }
+        .form-item { display: flex; flex-direction: column; margin-bottom: 12px; }
+        .form-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .form-item input,
+        .form-item textarea,
+        .form-item select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            background: #fff;
+            color: #333;
+            transition: border-color .15s;
+        }
+        .form-item input:focus,
+        .form-item textarea:focus,
+        .form-item select:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+        .form-item textarea { resize: vertical; min-height: 70px; font-family: inherit; }
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            margin-top: 8px;
+        }
+
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table th {
             background: #f5f5f5;
@@ -296,6 +340,132 @@
         }
         .engine-card .name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
         .engine-card .weight { font-size: 12px; color: #888; margin-top: 4px; }
+
+        /* 服务模式开关样式 */
+        .engine-toggle-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .engine-toggle-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+            background: var(--card-bg, #fff);
+            border: 1px solid var(--border, #eee);
+            border-radius: 10px;
+            transition: all .2s;
+        }
+        .engine-toggle-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .engine-toggle-card.disabled { opacity: 0.55; }
+        .engine-toggle-card .et-info { display: flex; flex-direction: column; gap: 2px; }
+        .engine-toggle-card .et-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+        .engine-toggle-card .et-meta { font-size: 11px; color: #888; }
+        .engine-toggle-card .et-badge { font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 6px; }
+        .et-badge.crawler { background: #e8f5e9; color: #2e7d32; }
+        .et-badge.meta { background: #e3f2fd; color: #1565c0; }
+
+        /* 模式开关 (大号 toggle) */
+        .mode-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .mode-switch input { display: none; }
+        .mode-slider {
+            position: relative;
+            width: 46px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 12px;
+            transition: background .25s;
+            flex-shrink: 0;
+        }
+        .mode-slider::before {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px;
+            width: 20px; height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform .25s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .mode-switch input:checked + .mode-slider { background: #4caf50; }
+        .mode-switch input:checked + .mode-slider::before { transform: translateX(22px); }
+        .mode-label { font-size: 13px; font-weight: 600; color: #555; min-width: 50px; }
+        .mode-switch input:checked ~ .mode-label { color: #4caf50; }
+
+        /* 爬虫管理样式 */
+        .crawler-cfg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        .crawler-cfg-grid label {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+            color: #555;
+            gap: 4px;
+        }
+        .crawler-cfg-grid label.checkbox-label {
+            flex-direction: row;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #333;
+        }
+        .crawler-cfg-grid input[type="number"] {
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .crawler-page-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        .crawler-page-row:hover { background: #fafafa; }
+        .crawler-page-row .title { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+        .crawler-page-row .url { font-size: 12px; color: #1976d2; word-break: break-all; }
+        .crawler-page-row .meta { font-size: 11px; color: #999; margin-top: 2px; }
+        .crawler-page-row .snippet { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.4; }
+        .crawler-page-row .actions { display: flex; gap: 4px; }
+        .seed-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto auto;
+            gap: 8px;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+            font-size: 13px;
+        }
+        .seed-row:hover { background: #fafafa; }
+        .seed-row .url { color: #1976d2; word-break: break-all; }
+        .seed-row .name { font-weight: 600; color: #1a1a2e; }
+        .badge-built-in { background: #e3f2fd; color: #1976d2; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+        .badge-custom { background: #fff3e0; color: #f57c00; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+        .pager-btn {
+            padding: 4px 10px;
+            margin: 0 2px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .pager-btn:hover { background: #f0f7ff; }
+        .pager-btn.active { background: #1976d2; color: white; border-color: #1976d2; }
+        .pager-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -358,8 +528,11 @@
                     <button class="tab" onclick="switchTab('history', event)">📜 搜索历史</button>
                     <button class="tab" onclick="switchTab('stats', event)">📊 搜索统计</button>
                     <button class="tab" onclick="switchTab('sessions', event)">🗂️ 搜索会话</button>
+                    <button class="tab" onclick="switchTab('kf', event)">💙 敏感词反馈</button>
                     <button class="tab" onclick="switchTab('sites', event)">🌐 收录站点</button>
                     <button class="tab" onclick="switchTab('engines', event)">⚙️ 搜索引擎</button>
+                    <button class="tab" onclick="switchTab('ce', event)">🔧 自定义搜索源</button>
+                    <button class="tab" onclick="switchTab('crawler', event)">🕷️ 爬虫索引</button>
                 </div>
 
                 <!-- 系统信息 -->
@@ -445,13 +618,215 @@
                     </div>
                 </div>
 
+                <!-- 敏感词反馈管理 -->
+                <div class="tab-content" id="tab-kf">
+                    <div class="info-box">
+                        <strong>💙 敏感词反馈：</strong>当用户搜索包含指定关键词时，展示帮助性提示内容（如心理健康援助、防诈骗提醒等）。
+                    </div>
+                    <!-- 表单 -->
+                    <div class="panel" style="margin-top:16px;">
+                        <div class="panel-header"><h2 id="kfFormTitle">➕ 添加关键词反馈</h2></div>
+                        <div class="panel-body">
+                            <input type="hidden" id="kfId">
+                            <div class="form-grid-2">
+                                <div class="form-item">
+                                    <label>触发关键词 *（模糊匹配）</label>
+                                    <input type="text" id="kfKeyword" placeholder="例如：自杀">
+                                </div>
+                                <div class="form-item">
+                                    <label>提示标题 *</label>
+                                    <input type="text" id="kfTitle" placeholder="例如：💙 请珍惜生命">
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label>提示内容 *</label>
+                                <textarea id="kfContent" rows="3" placeholder="详细的帮助内容..."></textarea>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-item">
+                                    <label>链接文字</label>
+                                    <input type="text" id="kfLinkText" placeholder="例如：了解更多">
+                                </div>
+                                <div class="form-item">
+                                    <label>链接地址</label>
+                                    <input type="url" id="kfLinkUrl" placeholder="https://...">
+                                </div>
+                            </div>
+                            <div class="switch-row">
+                                <span style="font-size:13px;">启用该反馈规则</span>
+                                <label class="mode-switch">
+                                    <input type="checkbox" id="kfEnabled" checked>
+                                    <span class="mode-slider"></span>
+                                </label>
+                            </div>
+                            <div class="action-row" style="margin-top:12px;">
+                                <button class="btn btn-primary" onclick="saveKF()">✓ 保存</button>
+                                <button class="btn btn-secondary" onclick="resetKFForm()">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 列表 -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>📋 已配置规则</h2>
+                            <button class="btn btn-secondary btn-sm" onclick="loadKF()">🔄 刷新</button>
+                        </div>
+                        <div class="panel-body">
+                            <div id="kfList"><div class="empty-state">点击"刷新"加载</div></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 搜索引擎 -->
                 <div class="tab-content" id="tab-engines">
                     <div class="info-box">
-                        <strong>⚙️ 内置搜索引擎：</strong>权重越高优先级越高。自定义引擎可在业务端口 /api/custom-engines 管理。
+                        <strong>⚙️ 服务模式开关：</strong>切换各搜索引擎的启用/禁用状态。禁用后该引擎不再参与元搜索抓取，可节省带宽、加速搜索。设置即时生效（自动清除搜索缓存）。
                     </div>
-                    <div id="enginesList" class="engine-list">
+                    <div id="enginesList" class="engine-toggle-list">
                         <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+
+                <!-- 自定义搜索源管理 -->
+                <div class="tab-content" id="tab-ce">
+                    <div class="info-box">
+                        <strong>🔧 自定义搜索源：</strong>添加第三方搜索引擎，作为元搜索的补充来源。URL 模板中用 <code>{q}</code> 作为关键词占位符。
+                    </div>
+                    <!-- 表单 -->
+                    <div class="panel" style="margin-top:16px;">
+                        <div class="panel-header"><h2 id="ceFormTitle">➕ 添加自定义搜索源</h2></div>
+                        <div class="panel-body">
+                            <input type="hidden" id="ceId">
+                            <div class="form-grid-2">
+                                <div class="form-item">
+                                    <label>搜索引擎名称 *</label>
+                                    <input type="text" id="ceName" placeholder="例如：知乎搜索">
+                                </div>
+                                <div class="form-item">
+                                    <label>权重 (0-1)</label>
+                                    <input type="number" id="ceWeight" step="0.1" min="0" max="1" value="0.7">
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label>URL 模板 *（使用 {q} 作为关键词占位符）</label>
+                                <input type="text" id="ceTemplate" placeholder="https://www.zhihu.com/search?q={q}">
+                            </div>
+                            <div class="switch-row">
+                                <span style="font-size:13px;">启用该搜索源</span>
+                                <label class="mode-switch">
+                                    <input type="checkbox" id="ceEnabled" checked>
+                                    <span class="mode-slider"></span>
+                                </label>
+                            </div>
+                            <div class="action-row" style="margin-top:12px;">
+                                <button class="btn btn-primary" onclick="saveCE()">✓ 保存</button>
+                                <button class="btn btn-secondary" onclick="resetCEForm()">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 列表 -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>📋 已配置搜索源</h2>
+                            <button class="btn btn-secondary btn-sm" onclick="loadCE()">🔄 刷新</button>
+                        </div>
+                        <div class="panel-body">
+                            <div id="ceList"><div class="empty-state">点击"刷新"加载</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 爬虫索引管理 -->
+                <div class="tab-content" id="tab-crawler">
+                    <div class="info-box">
+                        <strong>🕷️ 本地爬虫索引器：</strong>主动爬取预置/收录站点，建立本地全文索引，作为新搜索源 <code>CrawlerIndex</code> 加入主搜索结果。<br>
+                        种子来源：预置中文技术/资讯站点 + 用户提交并审核通过的收录站点。爬虫遵守 <code>robots.txt</code>，默认仅同域爬取。
+                    </div>
+
+                    <!-- 状态卡片 -->
+                    <div id="crawlerStats" class="stats-grid" style="margin-top:16px;">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+
+                    <!-- 配置 + 启停 -->
+                    <div class="panel" style="margin-top:16px;">
+                        <div class="panel-header">
+                            <h2>🚀 爬虫服务开关</h2>
+                            <label class="mode-switch" title="启动/停止爬虫服务">
+                                <input type="checkbox" id="crawlerModeSwitch" onchange="onCrawlerModeChange(this.checked)">
+                                <span class="mode-slider"></span>
+                                <span class="mode-label" id="crawlerModeLabel">已停止</span>
+                            </label>
+                        </div>
+                        <div class="panel-body">
+                            <div class="crawler-cfg-grid" id="crawlerCfgForm">
+                                <label>最大深度
+                                    <input type="number" id="cfgMaxDepth" value="2" min="0" max="5">
+                                </label>
+                                <label>本次页数上限
+                                    <input type="number" id="cfgMaxPages" value="100" min="1" max="2000">
+                                </label>
+                                <label>并发数
+                                    <input type="number" id="cfgConcurrency" value="4" min="1" max="16">
+                                </label>
+                                <label>请求间隔(ms)
+                                    <input type="number" id="cfgRequestDelay" value="500" min="0" max="10000">
+                                </label>
+                                <label>HTTP 超时(ms)
+                                    <input type="number" id="cfgTimeout" value="10000" min="1000" max="60000">
+                                </label>
+                                <label>单域名页数上限
+                                    <input type="number" id="cfgMaxPagesPerDomain" value="20" min="1" max="200">
+                                </label>
+                                <label>正文最大字符
+                                    <input type="number" id="cfgMaxContentLength" value="20000" min="1000" max="100000">
+                                </label>
+                                <label class="checkbox-label"><input type="checkbox" id="cfgSameDomainOnly" checked> 仅同域爬取</label>
+                                <label class="checkbox-label"><input type="checkbox" id="cfgFollowExternal"> 跟随外链</label>
+                            </div>
+                            <div class="action-row" style="margin-top:12px;">
+                                <button class="btn btn-secondary" onclick="loadCrawlerStatus()">🔄 刷新状态</button>
+                                <span style="font-size:12px;color:#888;" id="crawlerRunHint"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 种子管理 -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>🌱 种子管理</h2>
+                            <button class="btn btn-primary btn-sm" onclick="showAddSeedForm()">➕ 添加种子</button>
+                        </div>
+                        <div class="panel-body">
+                            <div id="addSeedForm" style="display:none;margin-bottom:12px;padding:12px;background:#f7f9fc;border-radius:6px;">
+                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;">
+                                    <input type="text" id="seedURL" placeholder="https://example.com" style="padding:8px;border:1px solid #ddd;border-radius:4px;">
+                                    <input type="text" id="seedName" placeholder="名称" style="padding:8px;border:1px solid #ddd;border-radius:4px;">
+                                    <input type="text" id="seedCategory" placeholder="分类" style="padding:8px;border:1px solid #ddd;border-radius:4px;">
+                                    <button class="btn btn-success btn-sm" onclick="addSeed()">添加</button>
+                                </div>
+                            </div>
+                            <div id="seedsList">
+                                <div class="empty-state">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 已索引页面 -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>📚 已索引页面</h2>
+                            <div>
+                                <button class="btn btn-secondary btn-sm" onclick="loadCrawlerPages()">🔄 刷新</button>
+                                <button class="btn btn-danger btn-sm" onclick="clearAllCrawlerPages()">🗑️ 清空索引</button>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="crawlerPagesList">
+                                <div class="empty-state">点击"刷新"加载</div>
+                            </div>
+                            <div id="crawlerPagesPager" style="margin-top:12px;text-align:center;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -571,11 +946,14 @@
         async function apiRequest(endpoint, options = {}) {
             const url = endpoint.startsWith('http') ? endpoint : API_BASE + endpoint;
             const token = getStoredToken();
-            const headers = { 'Content-Type': 'application/json' };
-            if (token) headers['X-Admin-Token'] = token;
-            const defaultOptions = { headers };
+            // 基础 headers
+            const baseHeaders = { 'Content-Type': 'application/json' };
+            if (token) baseHeaders['X-Admin-Token'] = token;
+            // 合并调用方传入的 headers（Token 始终保留，不被覆盖）
+            const finalHeaders = { ...baseHeaders, ...(options.headers || {}) };
+            if (token) finalHeaders['X-Admin-Token'] = token;
             try {
-                const response = await fetch(url, { ...defaultOptions, ...options });
+                const response = await fetch(url, { ...options, headers: finalHeaders });
                 if (response.status === 401 || response.status === 403) {
                     clearStoredToken();
                     updateTokenStatusBtn();
@@ -624,6 +1002,9 @@
             if (tabName === 'sessions') loadSessions();
             if (tabName === 'sites') loadSites();
             if (tabName === 'engines') loadEngines();
+            if (tabName === 'kf') loadKF();
+            if (tabName === 'ce') loadCE();
+            if (tabName === 'crawler') loadCrawlerStatus();
             if (tabName === 'system') loadSystemInfo();
         }
 
@@ -859,22 +1240,52 @@
                 }
                 list.innerHTML = `
                     <table class="data-table">
-                        <thead><tr><th style="width:60px;">ID</th><th>名称</th><th>URL</th><th style="width:80px;">状态</th><th style="width:140px;">操作</th></tr></thead>
+                        <thead><tr><th style="width:60px;">ID</th><th>名称/标签</th><th>URL/描述</th><th style="width:90px;">审核</th><th style="width:70px;">启用</th><th style="width:160px;">操作</th></tr></thead>
                         <tbody>
                         ${data.map(s => `<tr>
                             <td>${s.id}</td>
-                            <td>${escapeHtml(s.name)}</td>
-                            <td><a href="${escapeHtml(s.url)}" target="_blank" style="color:#1976d2;">${escapeHtml(s.url)}</a></td>
-                            <td>${s.approved ? '<span class="badge badge-success">已审核</span>' : '<span class="badge badge-warning">待审核</span>'}</td>
                             <td>
-                                ${!s.approved ? `<button class="btn btn-sm btn-success" onclick="approveSite(${s.id})">✓ 审核</button>` : ''}
-                                <button class="btn btn-sm btn-danger" onclick="deleteSite(${s.id})">🗑️ 删除</button>
+                                <div style="font-weight:600;">${escapeHtml(s.name)}</div>
+                                <div style="font-size:11px;color:#888;margin-top:2px;">${escapeHtml(s.tags || '无标签')}</div>
+                            </td>
+                            <td>
+                                <a href="${escapeHtml(s.url)}" target="_blank" style="color:#1976d2;word-break:break-all;">${escapeHtml(s.url)}</a>
+                                <div style="font-size:12px;color:#666;margin-top:2px;">${escapeHtml(s.description || '')}</div>
+                            </td>
+                            <td>${s.approved ? '<span class="badge badge-success">已审核</span>' : '<span class="badge badge-warning">待审核</span>'}</td>
+                            <td>${s.enabled ? '<span class="badge badge-success">启用</span>' : '<span class="badge badge-danger">禁用</span>'}</td>
+                            <td>
+                                ${!s.approved ? `<button class="btn btn-sm btn-success" onclick="approveSite(${s.id})">✓ 审核</button>` : `<button class="btn btn-sm btn-secondary" onclick="unapproveSite(${s.id})">取消审核</button>`}
+                                ${s.enabled ? `<button class="btn btn-sm btn-warning" onclick="toggleSite(${s.id}, false)">禁用</button>` : `<button class="btn btn-sm btn-primary" onclick="toggleSite(${s.id}, true)">启用</button>`}
+                                <button class="btn btn-sm btn-danger" onclick="deleteSite(${s.id})">🗑️</button>
                             </td>
                         </tr>`).join('')}
                         </tbody></table>`;
             } catch (e) {
-                document.getElementById('sitesList').innerHTML = '<div class="empty-state">加载失败</div>';
+                document.getElementById('sitesList').innerHTML = '<div class="empty-state">加载失败：' + escapeHtml(e.message) + '</div>';
             }
+        }
+
+        async function unapproveSite(id) {
+            try {
+                await apiRequest('/admin/indexed-sites', {
+                    method: 'PUT',
+                    body: JSON.stringify({ id, approved: false })
+                });
+                showToast('已取消审核', 'success');
+                loadSites();
+            } catch (e) { showToast('操作失败', 'error'); }
+        }
+
+        async function toggleSite(id, enabled) {
+            try {
+                await apiRequest('/admin/indexed-sites', {
+                    method: 'PUT',
+                    body: JSON.stringify({ id, enabled })
+                });
+                showToast(enabled ? '已启用' : '已禁用', 'success');
+                loadSites();
+            } catch (e) { showToast('操作失败', 'error'); }
         }
 
         async function approveSite(id) {
@@ -897,7 +1308,181 @@
             } catch (e) { showToast('删除失败', 'error'); }
         }
 
-        // ===== 搜索引擎 =====
+        // ===== 敏感词反馈管理 =====
+        function resetKFForm() {
+            document.getElementById('kfId').value = '';
+            document.getElementById('kfKeyword').value = '';
+            document.getElementById('kfTitle').value = '';
+            document.getElementById('kfContent').value = '';
+            document.getElementById('kfLinkText').value = '';
+            document.getElementById('kfLinkUrl').value = '';
+            document.getElementById('kfEnabled').checked = true;
+            document.getElementById('kfFormTitle').textContent = '➕ 添加关键词反馈';
+        }
+
+        function editKF(k) {
+            document.getElementById('kfId').value = k.id;
+            document.getElementById('kfKeyword').value = k.keyword;
+            document.getElementById('kfTitle').value = k.title;
+            document.getElementById('kfContent').value = k.content;
+            document.getElementById('kfLinkText').value = k.link_text || '';
+            document.getElementById('kfLinkUrl').value = k.link_url || '';
+            document.getElementById('kfEnabled').checked = k.enabled;
+            document.getElementById('kfFormTitle').textContent = '✏️ 编辑关键词反馈';
+            document.getElementById('kfFormTitle').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function saveKF() {
+            const id = document.getElementById('kfId').value;
+            const keyword = document.getElementById('kfKeyword').value.trim();
+            const title = document.getElementById('kfTitle').value.trim();
+            const content = document.getElementById('kfContent').value.trim();
+            if (!keyword) return showToast('请填写关键词', 'warning');
+            if (!title) return showToast('请填写提示标题', 'warning');
+            if (!content) return showToast('请填写提示内容', 'warning');
+            const payload = {
+                id: id ? parseInt(id) : 0,
+                keyword, title, content,
+                link_text: document.getElementById('kfLinkText').value.trim(),
+                link_url: document.getElementById('kfLinkUrl').value.trim(),
+                enabled: document.getElementById('kfEnabled').checked
+            };
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const r = await apiRequest('/admin/keyword-feedback', { method, body: JSON.stringify(payload) });
+                showToast(r.message || (id ? '已更新' : '已添加'), 'success');
+                resetKFForm();
+                loadKF();
+            } catch (e) { showToast('保存失败：' + e.message, 'error'); }
+        }
+
+        async function deleteKF(id) {
+            if (!confirm('确定删除该规则？')) return;
+            try {
+                const r = await apiRequest('/admin/keyword-feedback', {
+                    method: 'POST',
+                    body: JSON.stringify({ delete: true, id })
+                });
+                showToast(r.message || '已删除', 'success');
+                loadKF();
+            } catch (e) { showToast('删除失败', 'error'); }
+        }
+
+        async function loadKF() {
+            try {
+                const list = await apiRequest('/admin/keyword-feedback');
+                const c = document.getElementById('kfList');
+                if (!list || list.length === 0) {
+                    c.innerHTML = '<div class="empty-state">暂无规则</div>';
+                    return;
+                }
+                c.innerHTML = '<table class="data-table"><thead><tr>' +
+                    '<th>关键词</th><th>提示内容</th><th>链接</th><th style="width:70px;">状态</th><th style="width:140px;">操作</th>' +
+                    '</tr></thead><tbody>' +
+                    list.map(k => `<tr>
+                        <td><strong>${escapeHtml(k.keyword)}</strong></td>
+                        <td>
+                            <div style="font-weight:600;">${escapeHtml(k.title)}</div>
+                            <div style="font-size:12px;color:#666;margin-top:2px;">${escapeHtml(k.content)}</div>
+                        </td>
+                        <td>${k.link_url ? `<a href="${escapeHtml(k.link_url)}" target="_blank" style="color:#1976d2;">${escapeHtml(k.link_text || '链接')}</a>` : '<span style="color:#ccc;">—</span>'}</td>
+                        <td>${k.enabled ? '<span class="badge badge-success">启用</span>' : '<span class="badge badge-danger">禁用</span>'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick='editKF(${JSON.stringify(k).replace(/'/g,"&#39;")})'>✏️ 编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteKF(${k.id})">🗑️ 删除</button>
+                        </td>
+                    </tr>`).join('') +
+                    '</tbody></table>';
+            } catch (e) {
+                document.getElementById('kfList').innerHTML = '<div class="empty-state">加载失败：' + escapeHtml(e.message) + '</div>';
+            }
+        }
+
+        // ===== 自定义搜索源管理 =====
+        function resetCEForm() {
+            document.getElementById('ceId').value = '';
+            document.getElementById('ceName').value = '';
+            document.getElementById('ceTemplate').value = '';
+            document.getElementById('ceWeight').value = '0.7';
+            document.getElementById('ceEnabled').checked = true;
+            document.getElementById('ceFormTitle').textContent = '➕ 添加自定义搜索源';
+        }
+
+        function editCE(e) {
+            document.getElementById('ceId').value = e.id;
+            document.getElementById('ceName').value = e.name;
+            document.getElementById('ceTemplate').value = e.url_template;
+            document.getElementById('ceWeight').value = e.weight;
+            document.getElementById('ceEnabled').checked = e.enabled;
+            document.getElementById('ceFormTitle').textContent = '✏️ 编辑自定义搜索源';
+            document.getElementById('ceFormTitle').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function saveCE() {
+            const id = document.getElementById('ceId').value;
+            const name = document.getElementById('ceName').value.trim();
+            const tpl = document.getElementById('ceTemplate').value.trim();
+            const weight = parseFloat(document.getElementById('ceWeight').value || '0.7');
+            if (!name) return showToast('请填写名称', 'warning');
+            if (!tpl) return showToast('请填写 URL 模板', 'warning');
+            if (!tpl.includes('{q}')) return showToast('URL 模板需包含 {q} 占位符', 'warning');
+            const payload = {
+                id: id ? parseInt(id) : 0,
+                name, url_template: tpl, weight,
+                enabled: document.getElementById('ceEnabled').checked
+            };
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const r = await apiRequest('/admin/custom-engines', { method, body: JSON.stringify(payload) });
+                showToast(r.message || (id ? '已更新' : '已添加'), 'success');
+                resetCEForm();
+                loadCE();
+            } catch (e) { showToast('保存失败：' + e.message, 'error'); }
+        }
+
+        async function deleteCE(id) {
+            if (!confirm('确定删除该搜索源？')) return;
+            try {
+                const r = await apiRequest('/admin/custom-engines', {
+                    method: 'POST',
+                    body: JSON.stringify({ delete: true, id })
+                });
+                showToast(r.message || '已删除', 'success');
+                loadCE();
+            } catch (e) { showToast('删除失败', 'error'); }
+        }
+
+        async function loadCE() {
+            try {
+                const list = await apiRequest('/admin/custom-engines');
+                const c = document.getElementById('ceList');
+                if (!list || list.length === 0) {
+                    c.innerHTML = '<div class="empty-state">暂无自定义搜索源</div>';
+                    return;
+                }
+                c.innerHTML = '<table class="data-table"><thead><tr>' +
+                    '<th>名称</th><th>URL 模板</th><th style="width:60px;">权重</th><th style="width:70px;">状态</th><th style="width:140px;">操作</th>' +
+                    '</tr></thead><tbody>' +
+                    list.map(e => {
+                        const testUrl = e.url_template.replace('{q}', encodeURIComponent('测试'));
+                        return `<tr>
+                            <td><strong>${escapeHtml(e.name)}</strong></td>
+                            <td><a href="${escapeHtml(testUrl)}" target="_blank" style="color:#1976d2;font-family:monospace;font-size:12px;word-break:break-all;">${escapeHtml(e.url_template)}</a></td>
+                            <td style="text-align:center;font-weight:600;color:#1976d2;">${e.weight}</td>
+                            <td>${e.enabled ? '<span class="badge badge-success">启用</span>' : '<span class="badge badge-danger">禁用</span>'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary" onclick='editCE(${JSON.stringify(e).replace(/'/g,"&#39;")})'>✏️ 编辑</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteCE(${e.id})">🗑️ 删除</button>
+                            </td>
+                        </tr>`;
+                    }).join('') +
+                    '</tbody></table>';
+            } catch (e) {
+                document.getElementById('ceList').innerHTML = '<div class="empty-state">加载失败：' + escapeHtml(e.message) + '</div>';
+            }
+        }
+
+        // ===== 搜索引擎（模式开关）=====
         async function loadEngines() {
             try {
                 const data = await apiRequest('/admin/engines');
@@ -907,12 +1492,347 @@
                     list.innerHTML = '<div class="empty-state">无内置搜索引擎</div>';
                     return;
                 }
-                list.innerHTML = builtin.map(e => `<div class="engine-card">
-                    <div class="name">${escapeHtml(e.name)}</div>
-                    <div class="weight">权重: ${e.weight || '—'}</div>
-                </div>`).join('');
+                list.innerHTML = builtin.map(e => {
+                    const isCrawler = e.name === 'CrawlerIndex';
+                    const badge = isCrawler ? '<span class="et-badge crawler">本地索引</span>' : '<span class="et-badge meta">元搜索</span>';
+                    const meta = isCrawler ? '本地爬虫索引 · 权重 ' + (e.weight || '—') : '元搜索抓取 · 权重 ' + (e.weight || '—');
+                    return `<div class="engine-toggle-card${e.enabled ? '' : ' disabled'}">
+                        <div class="et-info">
+                            <div class="et-name">${escapeHtml(e.name)}${badge}</div>
+                            <div class="et-meta">${escapeHtml(meta)}</div>
+                        </div>
+                        <label class="mode-switch" title="${e.enabled ? '点击禁用' : '点击启用'}">
+                            <input type="checkbox" ${e.enabled ? 'checked' : ''} onchange="toggleEngine('${escapeHtml(e.name)}', this.checked, this)">
+                            <span class="mode-slider"></span>
+                            <span class="mode-label">${e.enabled ? '运行中' : '已停止'}</span>
+                        </label>
+                    </div>`;
+                }).join('');
             } catch (e) {
                 document.getElementById('enginesList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        async function toggleEngine(name, enabled, checkboxEl) {
+            // 即时反馈
+            const card = checkboxEl.closest('.engine-toggle-card');
+            const label = checkboxEl.parentElement.querySelector('.mode-label');
+            if (label) label.textContent = enabled ? '运行中' : '已停止';
+            if (card) card.classList.toggle('disabled', !enabled);
+            try {
+                const r = await apiRequest('/admin/engines/toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, enabled })
+                });
+                showToast(r.message || (enabled ? '已启用' : '已禁用'), 'success');
+            } catch (e) {
+                // 失败回滚
+                checkboxEl.checked = !enabled;
+                if (label) label.textContent = !enabled ? '运行中' : '已停止';
+                if (card) card.classList.toggle('disabled', enabled);
+                showToast('操作失败：' + e.message, 'error');
+            }
+        }
+
+        // 爬虫模式开关切换
+        async function onCrawlerModeChange(checked) {
+            const label = document.getElementById('crawlerModeLabel');
+            const sw = document.getElementById('crawlerModeSwitch');
+            try {
+                if (checked) {
+                    const cfg = collectCrawlerConfig();
+                    const r = await apiRequest('/admin/crawler/start', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ config: cfg, use_db_seeds: true })
+                    });
+                    label.textContent = '运行中';
+                    showToast(r.message || '爬虫已启动', 'success');
+                } else {
+                    const r = await apiRequest('/admin/crawler/stop', { method: 'POST' });
+                    label.textContent = '已停止';
+                    showToast(r.message || '爬虫已停止', 'success');
+                }
+                loadCrawlerStatus();
+            } catch (e) {
+                // 回滚
+                sw.checked = !checked;
+                label.textContent = checked ? '已停止' : '运行中';
+                showToast('操作失败：' + e.message, 'error');
+            }
+        }
+
+        // ===== 爬虫索引管理 =====
+        let crawlerPagesOffset = 0;
+        const crawlerPagesLimit = 20;
+
+        async function loadCrawlerStatus() {
+            try {
+                const data = await apiRequest('/admin/crawler/status');
+                renderCrawlerStats(data.stats, data.config);
+                if (data.config) fillCrawlerConfig(data.config);
+                // 同步爬虫开关状态
+                const sw = document.getElementById('crawlerModeSwitch');
+                const lbl = document.getElementById('crawlerModeLabel');
+                if (sw && lbl) {
+                    const running = !!(data.stats && data.stats.running);
+                    sw.checked = running;
+                    lbl.textContent = running ? '运行中' : '已停止';
+                }
+                if (data.stats && data.stats.running) {
+                    document.getElementById('crawlerRunHint').textContent = '运行中... 已抓取 ' + data.stats.pages_crawled + ' 页';
+                    setTimeout(() => { if (document.getElementById('tab-crawler').classList.contains('active')) loadCrawlerStatus(); }, 3000);
+                } else {
+                    document.getElementById('crawlerRunHint').textContent = '';
+                }
+            } catch (e) {
+                document.getElementById('crawlerStats').innerHTML = '<div class="empty-state">加载失败：' + escapeHtml(e.message) + '</div>';
+            }
+            loadCrawlerSeeds();
+        }
+
+        function renderCrawlerStats(stats, cfg) {
+            if (!stats) stats = {};
+            const statusClass = stats.running ? 'success' : 'warning';
+            const statusText = stats.running ? '运行中' : '已停止';
+            const html = `
+                <div class="stat-card ${statusClass}">
+                    <div class="label">运行状态</div>
+                    <div class="value">${statusText}</div>
+                </div>
+                <div class="stat-card info">
+                    <div class="label">已索引页面</div>
+                    <div class="value">${stats.total_indexed || 0}</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="label">本次已抓取</div>
+                    <div class="value">${stats.pages_crawled || 0}</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="label">失败次数</div>
+                    <div class="value">${stats.pages_failed || 0}</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="label">待处理任务</div>
+                    <div class="value">${stats.pending_tasks || 0}</div>
+                </div>
+                <div class="stat-card info">
+                    <div class="label">运行时长</div>
+                    <div class="value" style="font-size:18px;">${escapeHtml(stats.elapsed || '—')}</div>
+                </div>
+                <div class="stat-card" style="grid-column: span 2;">
+                    <div class="label">当前/最后抓取 URL</div>
+                    <div style="font-size:12px;color:#1976d2;word-break:break-all;margin-top:4px;">${escapeHtml(stats.current_url || '—')}</div>
+                    <div style="font-size:11px;color:#999;margin-top:4px;">最后抓取时间: ${escapeHtml(stats.last_crawl_at || '—')}</div>
+                </div>
+            `;
+            document.getElementById('crawlerStats').innerHTML = html;
+        }
+
+        function fillCrawlerConfig(cfg) {
+            if (!cfg) return;
+            if (cfg.max_depth != null) document.getElementById('cfgMaxDepth').value = cfg.max_depth;
+            if (cfg.max_pages != null) document.getElementById('cfgMaxPages').value = cfg.max_pages;
+            if (cfg.concurrency != null) document.getElementById('cfgConcurrency').value = cfg.concurrency;
+            if (cfg.request_delay_ms != null) document.getElementById('cfgRequestDelay').value = cfg.request_delay_ms;
+            if (cfg.timeout_ms != null) document.getElementById('cfgTimeout').value = cfg.timeout_ms;
+            if (cfg.max_pages_per_domain != null) document.getElementById('cfgMaxPagesPerDomain').value = cfg.max_pages_per_domain;
+            if (cfg.max_content_length != null) document.getElementById('cfgMaxContentLength').value = cfg.max_content_length;
+            document.getElementById('cfgSameDomainOnly').checked = cfg.same_domain_only !== false;
+            document.getElementById('cfgFollowExternal').checked = cfg.follow_external === true;
+        }
+
+        function collectCrawlerConfig() {
+            return {
+                max_depth: parseInt(document.getElementById('cfgMaxDepth').value) || 2,
+                max_pages: parseInt(document.getElementById('cfgMaxPages').value) || 100,
+                concurrency: parseInt(document.getElementById('cfgConcurrency').value) || 4,
+                request_delay_ms: parseInt(document.getElementById('cfgRequestDelay').value) || 0,
+                timeout_ms: parseInt(document.getElementById('cfgTimeout').value) || 10000,
+                max_pages_per_domain: parseInt(document.getElementById('cfgMaxPagesPerDomain').value) || 20,
+                max_content_length: parseInt(document.getElementById('cfgMaxContentLength').value) || 20000,
+                same_domain_only: document.getElementById('cfgSameDomainOnly').checked,
+                follow_external: document.getElementById('cfgFollowExternal').checked,
+            };
+        }
+
+        async function startCrawler() {
+            const cfg = collectCrawlerConfig();
+            try {
+                const r = await apiRequest('/admin/crawler/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ config: cfg, use_db_seeds: true })
+                });
+                showToast(r.message || '爬虫已启动', 'success');
+                loadCrawlerStatus();
+            } catch (e) {
+                showToast('启动失败：' + e.message, 'error');
+            }
+        }
+
+        async function stopCrawler() {
+            try {
+                const r = await apiRequest('/admin/crawler/stop', { method: 'POST' });
+                showToast(r.message || '爬虫已停止', 'success');
+                loadCrawlerStatus();
+            } catch (e) {
+                showToast('停止失败：' + e.message, 'error');
+            }
+        }
+
+        async function loadCrawlerSeeds() {
+            try {
+                const seeds = await apiRequest('/admin/crawler/seeds');
+                const list = document.getElementById('seedsList');
+                if (!Array.isArray(seeds) || seeds.length === 0) {
+                    list.innerHTML = '<div class="empty-state">暂无种子</div>';
+                    return;
+                }
+                list.innerHTML = seeds.map(s => `
+                    <div class="seed-row">
+                        <div>
+                            <div class="name">${escapeHtml(s.name || '')} ${s.built_in ? '<span class="badge-built-in">内置</span>' : '<span class="badge-custom">自定义</span>'}</div>
+                            <div class="url">${escapeHtml(s.url)}</div>
+                        </div>
+                        <div>${escapeHtml(s.category || '—')}</div>
+                        <div>${s.enabled ? '✅ 启用' : '⛔ 禁用'}</div>
+                        <div>
+                            <button class="btn btn-${s.enabled ? 'secondary' : 'success'} btn-sm" onclick="toggleSeed(${s.id}, ${!s.enabled})">${s.enabled ? '禁用' : '启用'}</button>
+                        </div>
+                        <div>
+                            ${s.built_in ? '<span style="color:#ccc;">不可删除</span>' : `<button class="btn btn-danger btn-sm" onclick="deleteSeed(${s.id})">删除</button>`}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                document.getElementById('seedsList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        function showAddSeedForm() {
+            const f = document.getElementById('addSeedForm');
+            f.style.display = f.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function addSeed() {
+            const url = document.getElementById('seedURL').value.trim();
+            const name = document.getElementById('seedName').value.trim();
+            const category = document.getElementById('seedCategory').value.trim();
+            if (!url) { showToast('URL 不能为空', 'error'); return; }
+            try {
+                const r = await apiRequest('/admin/crawler/seeds', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, name, category, enabled: true })
+                });
+                showToast(r.message || '已添加', 'success');
+                document.getElementById('seedURL').value = '';
+                document.getElementById('seedName').value = '';
+                document.getElementById('seedCategory').value = '';
+                loadCrawlerSeeds();
+            } catch (e) {
+                showToast('添加失败：' + e.message, 'error');
+            }
+        }
+
+        async function toggleSeed(id, enable) {
+            try {
+                await apiRequest('/admin/crawler/seeds', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, enabled: enable })
+                });
+                showToast(enable ? '已启用' : '已禁用', 'success');
+                loadCrawlerSeeds();
+            } catch (e) {
+                showToast('操作失败：' + e.message, 'error');
+            }
+        }
+
+        async function deleteSeed(id) {
+            if (!confirm('确认删除该种子？')) return;
+            try {
+                await apiRequest('/admin/crawler/seeds/' + id, { method: 'DELETE' });
+                showToast('已删除', 'success');
+                loadCrawlerSeeds();
+            } catch (e) {
+                showToast('删除失败：' + e.message, 'error');
+            }
+        }
+
+        async function loadCrawlerPages() {
+            try {
+                const data = await apiRequest(`/admin/crawler/pages?limit=${crawlerPagesLimit}&offset=${crawlerPagesOffset}`);
+                const list = document.getElementById('crawlerPagesList');
+                const items = data.items || [];
+                if (items.length === 0) {
+                    list.innerHTML = '<div class="empty-state">暂无已索引页面，启动爬虫开始抓取</div>';
+                    document.getElementById('crawlerPagesPager').innerHTML = '';
+                    return;
+                }
+                list.innerHTML = items.map(p => `
+                    <div class="crawler-page-row">
+                        <div>
+                            <div class="title">${escapeHtml(p.title || '(无标题)')}</div>
+                            <div class="url"><a href="${escapeHtml(p.url)}" target="_blank">${escapeHtml(p.url)}</a></div>
+                            <div class="meta">${escapeHtml(p.domain || '')} · 深度${p.depth} · ${p.content_length}字节 · ${escapeHtml(p.crawled_at || '')}</div>
+                            ${p.snippet ? `<div class="snippet">${escapeHtml(p.snippet)}</div>` : ''}
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-danger btn-sm" onclick="deleteCrawlerPage(${p.id})">删除</button>
+                        </div>
+                    </div>
+                `).join('');
+                renderPager(data.total || 0);
+            } catch (e) {
+                document.getElementById('crawlerPagesList').innerHTML = '<div class="empty-state">加载失败</div>';
+            }
+        }
+
+        function renderPager(total) {
+            const pager = document.getElementById('crawlerPagesPager');
+            const pages = Math.ceil(total / crawlerPagesLimit);
+            const cur = Math.floor(crawlerPagesOffset / crawlerPagesLimit) + 1;
+            if (pages <= 1) { pager.innerHTML = `<span style="color:#888;font-size:12px;">共 ${total} 条</span>`; return; }
+            let html = `<span style="color:#888;font-size:12px;margin-right:8px;">共 ${total} 条</span>`;
+            html += `<button class="pager-btn" ${cur <= 1 ? 'disabled' : ''} onclick="goCrawlerPage(${cur - 1})">上一页</button>`;
+            const start = Math.max(1, cur - 3);
+            const end = Math.min(pages, cur + 3);
+            for (let i = start; i <= end; i++) {
+                html += `<button class="pager-btn ${i === cur ? 'active' : ''}" onclick="goCrawlerPage(${i})">${i}</button>`;
+            }
+            html += `<button class="pager-btn" ${cur >= pages ? 'disabled' : ''} onclick="goCrawlerPage(${cur + 1})">下一页</button>`;
+            pager.innerHTML = html;
+        }
+
+        function goCrawlerPage(page) {
+            crawlerPagesOffset = (page - 1) * crawlerPagesLimit;
+            loadCrawlerPages();
+        }
+
+        async function deleteCrawlerPage(id) {
+            if (!confirm('确认删除该页面？')) return;
+            try {
+                await apiRequest('/admin/crawler/pages/' + id, { method: 'DELETE' });
+                showToast('已删除', 'success');
+                loadCrawlerPages();
+            } catch (e) {
+                showToast('删除失败：' + e.message, 'error');
+            }
+        }
+
+        async function clearAllCrawlerPages() {
+            if (!confirm('确认清空所有爬虫索引？此操作不可恢复！')) return;
+            try {
+                await apiRequest('/admin/crawler/pages', { method: 'DELETE' });
+                showToast('索引已清空', 'success');
+                crawlerPagesOffset = 0;
+                loadCrawlerPages();
+                loadCrawlerStatus();
+            } catch (e) {
+                showToast('清空失败：' + e.message, 'error');
             }
         }
 

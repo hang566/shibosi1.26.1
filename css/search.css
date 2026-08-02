@@ -331,6 +331,20 @@
     color: #00B42A;
 }
 
+.se-result-source.se-site-link {
+    background: rgba(25,118,210,0.12);
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.se-result-source.se-site-link:hover {
+    background: rgba(25,118,210,0.24);
+    text-decoration: underline;
+}
+
 .se-hot-badge {
     display: inline-block;
     font-size: 10px;

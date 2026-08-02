@@ -6,7 +6,9 @@ var seCustomEnginesCache = null;
 async function redirectToSearch() {
     var engines = {
         "bilibili": "https://search.bilibili.com/all?keyword=",
+        "jiuejing": "https://juejin.cn/search?query=",
         "douyin": "https://www.douyin.com/root/search/",
+        "zxxk": "https://search.zxxk.com/doc/?kw=",
         "baidu": "https://www.baidu.com/s?wd=",
         "sogou": "https://www.sogou.com/web?query=",
         "360": "https://www.so.com/s?ie=UTF-8&q=",
@@ -106,8 +108,10 @@ function renderSearchResults(data) {
     var html = '';
     data.results.forEach(function(r, idx) {
         var displayUrl = r.URL;
+        var hostname = r.URL;
         try {
             var u = new URL(r.URL);
+            hostname = u.hostname;
             displayUrl = u.hostname + u.pathname;
         } catch(e) {}
 
@@ -120,13 +124,10 @@ function renderSearchResults(data) {
         var sources = r.Sources && r.Sources.length > 0 ? r.Sources : (r.Source ? [r.Source] : []);
         var resultCount = r.ResultCount || sources.length;
         var isMultiSource = resultCount > 1;
-        var sourcesHtml = '';
-        if (sources.length > 0) {
-            sourcesHtml = '<div class="se-result-sources">' + sources.map(function(s) {
-                return '<span class="se-result-source">' + escapeHtml(s) + '</span>';
-            }).join('') + '</div>';
-        }
-        var hotBadge = isMultiSource ? '<span class="se-hot-badge" title="' + resultCount + '个搜索引擎都收录了此结果">🔥 ' + resultCount + '引擎</span>' : '';
+        // 不展示搜索引擎标记，改为展示目标网站域名作为来源标识
+        var siteBadge = '<a class="se-result-source se-site-link" href="' + escapeHtml(r.URL) + '" target="_blank" rel="noopener" title="目标网站">' + escapeHtml(hostname) + '</a>';
+        var sourcesHtml = '<div class="se-result-sources">' + siteBadge + '</div>';
+        var hotBadge = isMultiSource ? '<span class="se-hot-badge" title="' + resultCount + '个搜索引擎都收录了此结果">🔥 ' + resultCount + '来源</span>' : '';
 
         html += '<div class="se-result-card' + (isMultiSource ? ' se-multi-source' : '') + '">' +
             '<div class="se-result-title-row">' +
